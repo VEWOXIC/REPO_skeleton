@@ -5,6 +5,10 @@ from data_processing import Data_Handler
 
 class Basic_EXP(object):
     def __init__(self, model_cfg, data_cfg, exp_cfg) -> None:
+        
+        self.model_cfg=model_cfg
+        self.data_cfg=data_cfg
+        self.exp_cfg=exp_cfg
 
         self.model=self._build_model(model_cfg)
 
@@ -37,6 +41,6 @@ class Basic_EXP(object):
     def _get_optim(self):
         pass
     def train(self):
-        pass
+        train_loader=self._create_loader(self.exp_cfg, )
     def test(self):
         pass
