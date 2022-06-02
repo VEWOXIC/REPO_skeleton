@@ -1,5 +1,0 @@
-{"model_name":"dummyformer",
-    "batchsize":3,
-    "lookback":64,
-    "horizon":64,
-    "channel":3}
