@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from torch.utils.data import DataLoader
-from data_processing import Data_Handler
+from data_processing.Data_Handler import Data_Handler
 from utils import data_utils
 import pandas as pd
 from torch import nn
@@ -40,9 +40,9 @@ class Basic_EXP(object):
         data_dict['valid']=df.values[100:150]
         data_dict['test']=df.values[150:] # should be decided according to data_cfg split by ratio or absolute number
         
-        train_handler=Data_Handler.Data_Handler(data_dict['train'], data_cfg['horizon'],data_cfg['lookback'])
-        test_handler=Data_Handler.Data_Handler(data_dict['test'], data_cfg['horizon'],data_cfg['lookback'])
-        valid_handler=Data_Handler.Data_Handler(data_dict['valid'], data_cfg['horizon'],data_cfg['lookback'])
+        train_handler=Data_Handler(data_dict['train'], data_cfg['horizon'],data_cfg['lookback'])
+        test_handler=Data_Handler(data_dict['test'], data_cfg['horizon'],data_cfg['lookback'])
+        valid_handler=Data_Handler(data_dict['valid'], data_cfg['horizon'],data_cfg['lookback'])
 
         return train_handler,test_handler,valid_handler
 
