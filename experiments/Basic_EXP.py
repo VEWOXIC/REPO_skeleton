@@ -5,7 +5,7 @@ from data_processing import Data_Handler
 
 class Basic_EXP(object):
     def __init__(self, model_cfg, data_cfg, exp_cfg) -> None:
-        
+
         self.model_cfg=model_cfg
         self.data_cfg=data_cfg
         self.exp_cfg=exp_cfg
@@ -40,7 +40,25 @@ class Basic_EXP(object):
         return DataLoader(datahandler) # TODO
     def _get_optim(self):
         pass
+    def _get_lossfunc(self):
+        pass
     def train(self):
-        train_loader=self._create_loader(self.exp_cfg, )
+        # TODO: just for demo use, TO BE implemented
+
+        # TODO: get train and valid loader
+        train_loader=self._create_loader(self.exp_cfg, self.train_handler)
+        valid_loader=self._create_loader(self.exp_cfg, self.valid_handler)
+
+        # TODO: get loss function and optimizer according to the exp_cfg
+        loss_func=self._get_lossfunc()
+        optimizer=self._get_optim()
+        #
+
+        # train_loop
+        for input, observation in train_loader:
+            prediction=self.model(input)
+            loss=loss_func(observation, prediction)
+            loss.backward() # xxxxx
+
     def test(self):
         pass
