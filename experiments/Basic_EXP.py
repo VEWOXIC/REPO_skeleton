@@ -4,6 +4,8 @@ from torch.utils.data import DataLoader
 from data_processing import Data_Handler
 from utils import data_utils
 import pandas as pd
+from torch import nn
+from torch import optim
 
 class Basic_EXP(object):
     def __init__(self, model_cfg, data_cfg, exp_cfg) -> None:
@@ -46,11 +48,13 @@ class Basic_EXP(object):
 
     def _create_loader(self, exp_cfg, datahandler,istrain=False):
         # batchify
-        return DataLoader(datahandler,exp_cfg['batchsize'],shuffle=istrain) # TODO
+        return DataLoader(datahandler,exp_cfg['batchsize'],shuffle=istrain,drop_last=True) # TODO
     def _get_optim(self):
-        pass
+        # TODO: just for demo
+        return optim.Adam(self.model.parameters(), lr=self.exp_cfg['lr'])
     def _get_lossfunc(self):
-        pass
+        # TODO: just for demo
+        return nn.L1Loss()
     def train(self):
         # TODO: just for demo use, TO BE implemented
         epochs=self.exp_cfg['epochs']
@@ -66,9 +70,13 @@ class Basic_EXP(object):
         # train_loop
         for i in range(epochs):
             for input, observation in train_loader:
+                optimizer.zero_grad()
+
                 prediction=self.model(input)
                 loss=loss_func(observation, prediction)
+
                 loss.backward() # xxxxx
+                optimizer.step()
 
     def test(self):
         pass
