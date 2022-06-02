@@ -12,7 +12,6 @@ class Data_Handler(Dataset):
         # need to be implemented
     def __getitem__(self, index):
         # to be implemented
-        print(self.data[index:index+self.lookback].shape, self.data[index+self.lookback:index+self.lookback+self.horizon].shape)
         
         return self.data[index:index+self.lookback], self.data[index+self.lookback:index+self.lookback+self.horizon]
     def __len__(self):
