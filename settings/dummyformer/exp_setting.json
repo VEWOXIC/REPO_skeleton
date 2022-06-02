@@ -1,3 +1,4 @@
 {
-    "batchsize":3
+    "batchsize":3,
+    "epochs":20
 }

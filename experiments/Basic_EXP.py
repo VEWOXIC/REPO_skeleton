@@ -53,7 +53,7 @@ class Basic_EXP(object):
         pass
     def train(self):
         # TODO: just for demo use, TO BE implemented
-
+        epochs=self.exp_cfg['epochs']
         # TODO: get train and valid loader
         train_loader=self._create_loader(self.exp_cfg, self.train_handler)
         valid_loader=self._create_loader(self.exp_cfg, self.valid_handler)
@@ -64,10 +64,11 @@ class Basic_EXP(object):
         #
 
         # train_loop
-        for input, observation in train_loader:
-            prediction=self.model(input)
-            loss=loss_func(observation, prediction)
-            loss.backward() # xxxxx
+        for i in range(epochs):
+            for input, observation in train_loader:
+                prediction=self.model(input)
+                loss=loss_func(observation, prediction)
+                loss.backward() # xxxxx
 
     def test(self):
         pass
