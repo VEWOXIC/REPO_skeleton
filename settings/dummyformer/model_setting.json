@@ -1,6 +1,0 @@
-{
-    "model_name":"dummyformer",
-    "lookback":10,
-    "horizon":10,
-    "channel":3
-}

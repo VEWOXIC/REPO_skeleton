@@ -1,6 +1,0 @@
-{   "lookback":10,
-    "horizon":10,
-    "train_ratio":0.5,
-    "valid_ratio":0.25,
-    "test_ratio":0.25
-}
