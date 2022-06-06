@@ -8,7 +8,7 @@
             "shuffle": true,
             "drop_last": true
         },
-        "validate":{
+        "valid":{
             "batchsize":128,
             "shuffle": false,
             "drop_last": false
@@ -26,7 +26,7 @@
             "RSE": false,
             "CORR": false
         },
-        "device":"gpu"
+        "device":"cpu"
     },
 
     "model":{
@@ -36,6 +36,7 @@
 
     "data":{   
         "dataset_name":"dummy_dataset",
+        "path":"datasets/dummy_dataset.csv",
         "lookback":10,
         "horizon":10,
         "channel":3,

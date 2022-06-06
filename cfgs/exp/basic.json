@@ -8,7 +8,7 @@
             "shuffle": true,
             "drop_last": true
         },
-        "validate":{
+        "valid":{
             "batchsize":128,
             "shuffle": false,
             "drop_last": false
@@ -25,7 +25,8 @@
             "MAPE": false,
             "RSE": false,
             "CORR": false
-        }
+        },
+        "device":"gpu"
     },
 
     "model":{
@@ -35,6 +36,7 @@
 
     "data":{   
         "dataset_name":"dummy_dataset",
+        "path":"datasets/dummy_dataset.csv",
         "lookback":10,
         "horizon":10,
         "channel":3,
@@ -42,7 +44,8 @@
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target":0
+        "target":0,
+        "scalar":"StandardScalar"
     }
     
 }

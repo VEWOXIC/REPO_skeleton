@@ -15,7 +15,8 @@ class LinearLayer(nn.Module):
         self.linears.append(nn.Linear(self.seq_len,self.pred_len))
 
     def forward(self, x):
+        x = x.permute(0,2,1)
         for i in range(self.num_layer-1):
             x = self.linears[i](x)
         x = self.linears[-1](x)
-        return x
+        return x.permute(0,2,1)

@@ -22,7 +22,7 @@ class Dataset_Custom(Dataset):
         # transformer based methods have label_len
     
     def __read_data__(self):
-        self.scalar = data_utils.get_scalar(self.cfg['data']['scalar'])
+        self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
         self.data = pd.read_csv(path)
         
@@ -31,8 +31,9 @@ class Dataset_Custom(Dataset):
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
-        self.scaler.fit(self.data[boarder["train"][0], boarder["train"][1]].values)
-        self.data = self.data[boarder[self.flag][0], boarder[self.flag][1]]
+        train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
+        self.scaler.fit(train_data)
+        self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = self.scaler.transform(self.data.values)
         # 单变量/多变量
         
