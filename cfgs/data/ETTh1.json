@@ -1,0 +1,12 @@
+{   
+    "dataset_name":"ETTh1",
+    "path":"./datasets/ETTh1.csv",
+    "lookback":48,
+    "horizon":24,
+    "channel":3,
+    "train_ratio":0.6,
+    "valid_ratio":0.2,
+    "test_ratio":0.2,
+    "multivariate":true,
+    "target":0
+}

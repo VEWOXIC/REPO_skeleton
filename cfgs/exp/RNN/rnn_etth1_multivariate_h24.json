@@ -1,0 +1,79 @@
+{
+    "exp":{
+        "train":{
+            "batchsize":16,
+            "epochs":20,
+            "lr":9e-3,
+            "lr_adj":0,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "valid":{
+            "batchsize":128,
+            "shuffle": false,
+            "drop_last": false
+        },
+        "test":{
+            "batchsize":128,
+            "shuffle": false,
+            "drop_last": false
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": false,
+            "MAPE": false,
+            "RSE": false,
+            "CORR": false
+        },
+        "device":"cpu"
+    },
+
+    "model":{
+        "model_name":"RNN",
+        "hidden_size": 64,
+        "num_layers": 1,
+        "dropout": 0,
+        "bidirectional": false,
+        "teacher_forcing_ratio": 0,
+        
+        "scaler": "standard",
+        "load_external": true,
+        "normal_external": false,
+        "ext_scaler": "none",
+        "add_time_in_day": true,
+        "add_day_in_week": false,
+        
+        "max_epoch": 100,
+        "learner": "adam",
+        "learning_rate": 0.01,
+        "lr_decay": true,
+        "lr_scheduler": "multisteplr",
+        "lr_decay_ratio": 0.1,
+        "steps": [5, 20, 40, 70],
+        "clip_grad_norm": true,
+        "max_grad_norm": 5,
+        "use_early_stop": true,
+        "patience": 50,
+        "rnn_type": "RNN"
+    },
+
+    "data":{   
+        "dataset_name":"ETTh1",
+        "path":"./datasets/ETTh1.csv",
+        "lookback":48,
+        "horizon":24,
+        "channel":3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target":0,
+        "scalar":"StandardScalar",
+        "num_nodes":1,
+        "feature_dim":7,
+        "output_dim":7
+
+    }
+    
+}

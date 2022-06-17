@@ -5,7 +5,7 @@ from torch import optim
 import numpy as np
 import models
 from utils.metrics import metric
-from data_processing.data_handler import get_dataset
+from data_processing.Data_Handler import get_dataset
 
 class Exp_Basic(object):
     def __init__(self, cfg) -> None:
@@ -14,7 +14,7 @@ class Exp_Basic(object):
         self.model = self._build_model()
         
     def _build_model(self):
-        return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
+        return models.__dict__[self.cfg['model']['model_name']](self.cfg)
 
     def _create_loader(self,flag="train"):
         dataset = get_dataset(self.cfg, flag)
@@ -40,7 +40,7 @@ class Exp_Basic(object):
 
         # TODO: get loss function and optimizer according to the exp_cfg
         loss_func = self._get_lossfunc()
-        optimizer = self._get_optim()
+        #optimizer = self._get_optim()
 
         # train_loop
         for epoch in range(epochs):
@@ -48,12 +48,13 @@ class Exp_Basic(object):
                 input = input.float().to(self.device)
                 target = target.float().to(self.device)
 
-                optimizer.zero_grad()
+                #optimizer.zero_grad()
+                print(input.size())
                 prediction = self.model(input)
                 loss = loss_func(target, prediction)
 
                 loss.backward() 
-                optimizer.step()
+                #optimizer.step()
 
     def test(self):
         test_loader =self._create_loader("test")
@@ -74,4 +75,5 @@ class Exp_Basic(object):
         trues = np.array(trues)
         trues = np.array(trues).reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
+        print(mae, mse, rmse, mape, mspe, rse, corr)
 

@@ -10,7 +10,7 @@ if __name__ == '__main__':
     cfg_name = 'default'
 
     # if os.paths.exists()
-    with open('cfgs/exp/LinearLayer/LinearLayer_dummpy_dataset.json','r') as f:
+    with open('cfgs/exp/RNN/rnn_etth1_multivariate_h24.json','r') as f:
         cfg =json.load(f)
     # else
     

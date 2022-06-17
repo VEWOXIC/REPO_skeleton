@@ -1,0 +1,55 @@
+{
+    "exp":{
+        "train":{
+            "batchsize":16,
+            "epochs":20,
+            "lr":9e-3,
+            "lr_adj":0,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "valid":{
+            "batchsize":128,
+            "shuffle": false,
+            "drop_last": false
+        },
+        "test":{
+            "batchsize":128,
+            "shuffle": false,
+            "drop_last": false
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": false,
+            "MAPE": false,
+            "RSE": false,
+            "CORR": false
+        },
+        "device":"cpu"
+    },
+
+    "model":{
+        "model_name":"SCINet",
+        "horizon": 24, 
+        "features": 7, 
+        "levels": 3, 
+        "h": 4, 
+        "kernel_size": 5
+    },
+
+    "data":{   
+        "dataset_name":"ETTh1",
+        "path":"./datasets/ETTh1.csv",
+        "lookback":48,
+        "horizon":24,
+        "channel":3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target":0,
+        "scalar":"StandardScalar"
+    }
+    
+}
