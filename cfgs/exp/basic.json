@@ -31,7 +31,8 @@
 
     "model":{
         "model_name":"LinearLayer",
-        "num_layers":1
+        "num_layers":1,
+        "UseTimeFeature": false
     },
 
     "data":{   
