@@ -10,10 +10,12 @@ if __name__ == '__main__':
     cfg_name = 'default'
 
     # if os.paths.exists()
-    with open('cfgs/exp/RNN/rnn_etth1_multivariate_h24.json','r') as f:
+    with open('cfgs/exp/scinet/scinet_etth1_multivariate_h24.json','r') as f:
         cfg =json.load(f)
     # else
     
     exp = Exp_Basic(cfg)
     exp.train()
     exp.test()
+
+#cfgs/exp/RNN/rnn_etth1_multivariate_h24.json

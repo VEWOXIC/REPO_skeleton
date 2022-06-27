@@ -1,298 +1,402 @@
-import tensorflow as tf
+
+import math
+import torch.nn.functional as F
+from torch.autograd import Variable
+from torch import nn
+import torch
+import argparse
+import numpy as np
+
+class Splitting(nn.Module):
+    def __init__(self):
+        super(Splitting, self).__init__()
+
+    def even(self, x):
+        return x[:, ::2, :]
+
+    def odd(self, x):
+        return x[:, 1::2, :]
+
+    def forward(self, x):
+        '''Returns the odd and even part'''
+        return (self.even(x), self.odd(x))
 
 
-class InnerConv1DBlock(tf.keras.layers.Layer):
-    def __init__(self, filters: int, h: float, kernel_size: int, neg_slope: float = .01, dropout: float = .5,
-                 **kwargs):
-        if filters <= 0 or h <= 0:
-            raise ValueError('filters and h must be positive')
+class Interactor(nn.Module):
+    def __init__(self, in_planes, splitting=True,
+                 kernel = 5, dropout=0.5, groups = 1, hidden_size = 1, INN = True):
+        super(Interactor, self).__init__()
+        self.modified = INN
+        self.kernel_size = kernel
+        self.dilation = 1
+        self.dropout = dropout
+        self.hidden_size = hidden_size
+        self.groups = groups
+        if self.kernel_size % 2 == 0:
+            pad_l = self.dilation * (self.kernel_size - 2) // 2 + 1 #by default: stride==1 
+            pad_r = self.dilation * (self.kernel_size) // 2 + 1 #by default: stride==1 
 
-        super().__init__(**kwargs)
-        self.conv1d = tf.keras.layers.Conv1D(max(round(h * filters), 1), kernel_size, padding='same')
-        self.leakyrelu = tf.keras.layers.LeakyReLU(neg_slope)
+        else:
+            pad_l = self.dilation * (self.kernel_size - 1) // 2 + 1 # we fix the kernel size of the second layer as 3.
+            pad_r = self.dilation * (self.kernel_size - 1) // 2 + 1
+        self.splitting = splitting
+        self.split = Splitting()
 
-        self.dropout = tf.keras.layers.Dropout(dropout)
+        modules_P = []
+        modules_U = []
+        modules_psi = []
+        modules_phi = []
+        prev_size = 1
 
-        self.conv1d2 = tf.keras.layers.Conv1D(filters, kernel_size, padding='same')
-        self.tanh = tf.keras.activations.tanh
+        size_hidden = self.hidden_size
+        modules_P += [
+            nn.ReplicationPad1d((pad_l, pad_r)),
 
-    def call(self, input_tensor, training=None):
-        x = self.conv1d(input_tensor)
-        x = self.leakyrelu(x)
+            nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
+                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
+            nn.LeakyReLU(negative_slope=0.01, inplace=True),
 
-        if training:
-            x = self.dropout(x)
+            nn.Dropout(self.dropout),
+            nn.Conv1d(int(in_planes * size_hidden), in_planes,
+                      kernel_size=3, stride=1, groups= self.groups),
+            nn.Tanh()
+        ]
+        modules_U += [
+            nn.ReplicationPad1d((pad_l, pad_r)),
+            nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
+                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
+            nn.LeakyReLU(negative_slope=0.01, inplace=True),
+            nn.Dropout(self.dropout),
+            nn.Conv1d(int(in_planes * size_hidden), in_planes,
+                      kernel_size=3, stride=1, groups= self.groups),
+            nn.Tanh()
+        ]
 
-        x = self.conv1d2(x)
-        x = self.tanh(x)
+        modules_phi += [
+            nn.ReplicationPad1d((pad_l, pad_r)),
+            nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
+                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
+            nn.LeakyReLU(negative_slope=0.01, inplace=True),
+            nn.Dropout(self.dropout),
+            nn.Conv1d(int(in_planes * size_hidden), in_planes,
+                      kernel_size=3, stride=1, groups= self.groups),
+            nn.Tanh()
+        ]
+        modules_psi += [
+            nn.ReplicationPad1d((pad_l, pad_r)),
+            nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
+                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
+            nn.LeakyReLU(negative_slope=0.01, inplace=True),
+            nn.Dropout(self.dropout),
+            nn.Conv1d(int(in_planes * size_hidden), in_planes,
+                      kernel_size=3, stride=1, groups= self.groups),
+            nn.Tanh()
+        ]
+        self.phi = nn.Sequential(*modules_phi)
+        self.psi = nn.Sequential(*modules_psi)
+        self.P = nn.Sequential(*modules_P)
+        self.U = nn.Sequential(*modules_U)
+
+    def forward(self, x):
+        if self.splitting:
+            (x_even, x_odd) = self.split(x)
+        else:
+            (x_even, x_odd) = x
+
+        if self.modified:
+            x_even = x_even.permute(0, 2, 1)
+            x_odd = x_odd.permute(0, 2, 1)
+
+            d = x_odd.mul(torch.exp(self.phi(x_even)))
+            c = x_even.mul(torch.exp(self.psi(x_odd)))
+
+            x_even_update = c + self.U(d)
+            x_odd_update = d - self.P(c)
+
+            return (x_even_update, x_odd_update)
+
+        else:
+            x_even = x_even.permute(0, 2, 1)
+            x_odd = x_odd.permute(0, 2, 1)
+
+            d = x_odd - self.P(x_even)
+            c = x_even + self.U(d)
+
+            return (c, d)
+
+
+class InteractorLevel(nn.Module):
+    def __init__(self, in_planes, kernel, dropout, groups , hidden_size, INN):
+        super(InteractorLevel, self).__init__()
+        self.level = Interactor(in_planes = in_planes, splitting=True,
+                 kernel = kernel, dropout=dropout, groups = groups, hidden_size = hidden_size, INN = INN)
+
+    def forward(self, x):
+        (x_even_update, x_odd_update) = self.level(x)
+        return (x_even_update, x_odd_update)
+
+class LevelSCINet(nn.Module):
+    def __init__(self,in_planes, kernel_size, dropout, groups, hidden_size, INN):
+        super(LevelSCINet, self).__init__()
+        self.interact = InteractorLevel(in_planes= in_planes, kernel = kernel_size, dropout = dropout, groups =groups , hidden_size = hidden_size, INN = INN)
+
+    def forward(self, x):
+        (x_even_update, x_odd_update) = self.interact(x)
+        return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
+
+class SCINet_Tree(nn.Module):
+    def __init__(self, in_planes, current_level, kernel_size, dropout, groups, hidden_size, INN):
+        super().__init__()
+        self.current_level = current_level
+
+
+        self.workingblock = LevelSCINet(
+            in_planes = in_planes,
+            kernel_size = kernel_size,
+            dropout = dropout,
+            groups= groups,
+            hidden_size = hidden_size,
+            INN = INN)
+
+
+        if current_level!=0:
+            self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_level-1, kernel_size, dropout, groups, hidden_size, INN)
+            self.SCINet_Tree_even=SCINet_Tree(in_planes, current_level-1, kernel_size, dropout, groups, hidden_size, INN)
+    
+    def zip_up_the_pants(self, even, odd):
+        even = even.permute(1, 0, 2)
+        odd = odd.permute(1, 0, 2) #L, B, D
+        even_len = even.shape[0]
+        odd_len = odd.shape[0]
+        mlen = min((odd_len, even_len))
+        _ = []
+        for i in range(mlen):
+            _.append(even[i].unsqueeze(0))
+            _.append(odd[i].unsqueeze(0))
+        if odd_len < even_len: 
+            _.append(even[-1].unsqueeze(0))
+        return torch.cat(_,0).permute(1,0,2) #B, L, D
+        
+    def forward(self, x):
+        x_even_update, x_odd_update= self.workingblock(x)
+        # We recursively reordered these sub-series. You can run the ./utils/recursive_demo.py to emulate this procedure. 
+        if self.current_level ==0:
+            return self.zip_up_the_pants(x_even_update, x_odd_update)
+        else:
+            return self.zip_up_the_pants(self.SCINet_Tree_even(x_even_update), self.SCINet_Tree_odd(x_odd_update))
+
+class EncoderTree(nn.Module):
+    def __init__(self, in_planes,  num_levels, kernel_size, dropout, groups, hidden_size, INN):
+        super().__init__()
+        self.levels=num_levels
+        self.SCINet_Tree = SCINet_Tree(
+            in_planes = in_planes,
+            current_level = num_levels-1,
+            kernel_size = kernel_size,
+            dropout =dropout ,
+            groups = groups,
+            hidden_size = hidden_size,
+            INN = INN)
+        
+    def forward(self, x):
+
+        x= self.SCINet_Tree(x)
+
         return x
 
-
-class SCIBlock(tf.keras.layers.Layer):
-    def __init__(self, features: int, kernel_size: int, h: int, name='sciblock', **kwargs):
-        """
-        :param features: number of features in the output
-        :param kernel_size: kernel size of the convolutional layers
-        :param h: scaling factor for convolutional module
-        """
-        super().__init__(name=name, **kwargs)
-        self.features = features
-        self.kernel_size = kernel_size
-        self.h = h
-
-        self.conv1ds = {k: InnerConv1DBlock(filters=self.features, h=self.h, kernel_size=self.kernel_size, name=k)
-                        for k in ['psi', 'phi', 'eta', 'rho']}  # regularize?
-
-    def call(self, inputs):
-        F_odd, F_even = inputs[:, ::2], inputs[:, 1::2]
-
-        # Interactive learning as described in the paper
-        F_s_odd = F_odd * tf.math.exp(self.conv1ds['phi'](F_even))
-        F_s_even = F_even * tf.math.exp(self.conv1ds['psi'](F_odd))
-
-        F_prime_odd = F_s_odd + self.conv1ds['rho'](F_s_even)
-        F_prime_even = F_s_even - self.conv1ds['eta'](F_s_odd)
-
-        return F_prime_odd, F_prime_even
-
-    def get_config(self):
-        config = super().get_config()
-        config.update({'features': self.features, 'kernel_size': self.kernel_size, 'h': self.h})
-        return config
-
-
-class Interleave(tf.keras.layers.Layer):
-    """A layer used to reverse the even-odd split operation."""
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _interleave(self, slices):
-        if not slices:
-            return slices
-        elif len(slices) == 1:
-            return slices[0]
-
-        mid = len(slices) // 2
-        even = self._interleave(slices[:mid])
-        odd = self._interleave(slices[mid:])
-
-        shape = tf.shape(even)
-        return tf.reshape(tf.stack([even, odd], axis=3), (shape[0], shape[1] * 2, shape[2]))
-
-    def call(self, inputs):
-        return self._interleave(inputs)
-
-
-class SCINet(tf.keras.layers.Layer):
+class SCINet(nn.Module):
     def __init__(self, cfg):
-        """
-        :param horizon: number of time stamps in output
-        :param levels: height of the binary tree + 1
-        :param h: scaling factor for convolutional module in each SCIBlock
-        :param kernel_size: kernel size of convolutional module in each SCIBlock
-        :param kernel_regularizer: kernel regularizer for the fully connected layer at the end
-        :param activity_regularizer: activity regularizer for the fully connected layer at the end
-        """
+        super(SCINet, self).__init__()
 
-        levels = cfg['model']['levels']
-        if levels < 1:
-            raise ValueError('Must have at least 1 level')
+        self.input_dim = cfg['model']['input_dim']
+        self.input_len = cfg['model']['window_size']
+        self.output_len = cfg['model']['horizon']
+        self.hidden_size = cfg['model']['hidden_size']
+        self.num_levels = cfg['model']['num_levels']
+        self.groups = cfg['model']['groups']
+        self.modified = cfg['model']['modified']
+        self.kernel_size = cfg['model']['kernel']
+        self.dropout = cfg['model']['dropout']
+        self.single_step_output_One = cfg['model']['single_step_output_One']
+        self.concat_len = cfg['model']['concat_len']
+        self.pe = cfg['model']['positionalEcoding']
+        self.RIN=cfg['model']['RIN']
+        self.num_decoder_layer = cfg['model']['num_decoder_layer']
+        self.stacks = cfg['model']['num_stacks']
 
-        super().__init__(cfg)
-        self.horizon = cfg['model']['horizon']
-        self.features = cfg['model']['features']
-        self.levels = cfg['model']['levels']
-        self.h = cfg['model']['h']
-        self.kernel_size = cfg['model']['kernel_size']
-        #self.kernel_regularizer = cfg['model']['kernel_regularizer']
-        #self.activity_regularizer = cfg['model']['activity_regularizer']
-        self.kernel_regularizer = None
-        self.activity_regularizer = None
+        self.blocks1 = EncoderTree(
+            in_planes=self.input_dim,
+            num_levels = self.num_levels,
+            kernel_size = self.kernel_size,
+            dropout = self.dropout,
+            groups = self.groups,
+            hidden_size = self.hidden_size,
+            INN =  self.modified)
 
-        self.interleave = Interleave()
-        self.flatten = tf.keras.layers.Flatten()
-
-        # tree of sciblocks
-        self.sciblocks = [SCIBlock(features=self.features, kernel_size=self.kernel_size, h=self.h)
-                          for _ in range(2 ** self.levels - 1)]
-        self.dense = tf.keras.layers.Dense(
-            self.horizon * self.features,
-            kernel_regularizer=self.kernel_regularizer,
-            activity_regularizer=self.activity_regularizer
-        )
-
-    def build(self, input_shape):
-        if input_shape[1] / 2 ** self.levels % 1 != 0:
-            raise ValueError(f'timestamps {input_shape[1]} must be evenly divisible by a tree with '
-                             f'{self.levels} levels')
-        super().build(input_shape)
-
-    def call(self, inputs):
-        # cascade input down a binary tree of sci-blocks
-        lvl_inputs = [inputs]  # inputs for current level of the tree
-        for i in range(self.levels):
-            i_end = 2 ** (i + 1) - 1
-            i_start = i_end - 2 ** i
-            lvl_outputs = [output for j, tensor in zip(range(i_start, i_end), lvl_inputs)
-                           for output in self.sciblocks[j](tensor)]
-            lvl_inputs = lvl_outputs
-
-        x = self.interleave(lvl_outputs)
-        x += inputs
-
-        # not sure if this is the correct way of doing it. The paper merely said to use a fully connected layer to
-        # produce an output. Can't use TimeDistributed wrapper. It would force the layer's timestamps to match that of
-        # the input -- something SCINet is supposed to solve
-        x = self.flatten(x)
-        x = self.dense(x)
-        x = tf.reshape(x, (-1, self.horizon, self.features))
-
-        return x
-
-    def get_config(self):
-        config = super().get_config()
-        config.update({'horizon': self.horizon, 'levels': self.levels})
-        return config
+        if self.stacks == 2: # we only implement two stacks at most.
+            self.blocks2 = EncoderTree(
+                in_planes=self.input_dim,
+            num_levels = self.num_levels,
+            kernel_size = self.kernel_size,
+            dropout = self.dropout,
+            groups = self.groups,
+            hidden_size = self.hidden_size,
+            INN =  self.modified)
 
 
-class StackedSCINet(tf.keras.layers.Layer):
-    """Layer that implements StackedSCINet as described in the paper.
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.Linear):
+                m.bias.data.zero_()
+        self.projection1 = nn.Conv1d(self.input_len, self.output_len, kernel_size=1, stride=1, bias=False)
+        self.div_projection = nn.ModuleList()
+        self.overlap_len = self.input_len//4
+        self.div_len = self.input_len//6
 
-    When called, outputs a tensor of shape (K, -1, n_steps, n_features) containing the outputs of all K internal
-    SCINets (e.g., output[k-1] is the output of the kth SCINet, where k is in [1, ..., K]).
+        if self.num_decoder_layer > 1:
+            self.projection1 = nn.Linear(self.input_len, self.output_len)
+            for layer_idx in range(self.num_decoder_layer-1):
+                div_projection = nn.ModuleList()
+                for i in range(6):
+                    lens = min(i*self.div_len+self.overlap_len,self.input_len) - i*self.div_len
+                    div_projection.append(nn.Linear(lens, self.div_len))
+                self.div_projection.append(div_projection)
 
-    To use intermediate supervision, pass the layer's output to StackedSCINetLoss as a separate model output.
-    """
+        if self.single_step_output_One: # only output the N_th timestep.
+            if self.stacks == 2:
+                if self.concat_len:
+                    self.projection2 = nn.Conv1d(self.concat_len + self.output_len, 1,
+                                                kernel_size = 1, bias = False)
+                else:
+                    self.projection2 = nn.Conv1d(self.input_len + self.output_len, 1,
+                                                kernel_size = 1, bias = False)
+        else: # output the N timesteps.
+            if self.stacks == 2:
+                if self.concat_len:
+                    self.projection2 = nn.Conv1d(self.concat_len + self.output_len, self.output_len,
+                                                kernel_size = 1, bias = False)
+                else:
+                    self.projection2 = nn.Conv1d(self.input_len + self.output_len, self.output_len,
+                                                kernel_size = 1, bias = False)
 
-    def __init__(self, horizon: int, features: int, stacks: int, levels: int, h: int, kernel_size: int,
-                 kernel_regularizer=None, activity_regularizer=None, name='stacked_scinet', **kwargs):
-        """
-        :param horizon: number of time stamps in output
-        :param stacks: number of stacked SCINets
-        :param levels: number of levels for each SCINet
-        :param h: scaling factor for convolutional module in each SCIBlock
-        :param kernel_size: kernel size of convolutional module in each SCIBlock
-        :param kernel_regularizer: kernel regularizer for each SCINet
-        :param activity_regularizer: activity regularizer for each SCINet
-        """
-        if stacks < 2:
-            raise ValueError('Must have at least 2 stacks')
+        # For positional encoding
+        self.pe_hidden_size = self.input_dim
+        if self.pe_hidden_size % 2 == 1:
+            self.pe_hidden_size += 1
+    
+        num_timescales = self.pe_hidden_size // 2
+        max_timescale = 10000.0
+        min_timescale = 1.0
 
-        super().__init__(name=name, **kwargs)
-        self.stacks = stacks
-        self.scinets = [SCINet(horizon=horizon, features=features, levels=levels, h=h,
-                               kernel_size=kernel_size, kernel_regularizer=kernel_regularizer,
-                               activity_regularizer=activity_regularizer) for _ in range(stacks)]
+        log_timescale_increment = (
+                math.log(float(max_timescale) / float(min_timescale)) /
+                max(num_timescales - 1, 1))
+        temp = torch.arange(num_timescales, dtype=torch.float32)
+        inv_timescales = min_timescale * torch.exp(
+            torch.arange(num_timescales, dtype=torch.float32) *
+            -log_timescale_increment)
+        self.register_buffer('inv_timescales', inv_timescales)
 
-    def call(self, inputs):  # sample_weights=None
-        outputs = []
-        for scinet in self.scinets:
-            x = scinet(inputs)
-            outputs.append(x)  # keep each stack's output for intermediate supervision
-            inputs = tf.concat([x, inputs[:, x.shape[1]:, :]], axis=1)  # X_hat_k concat X_(t-(T-tilda)+1:t)
-        return tf.stack(outputs)
+        ### RIN Parameters ###
+        if self.RIN:
+            self.affine_weight = nn.Parameter(torch.ones(1, 1, self.input_dim))
+            self.affine_bias = nn.Parameter(torch.zeros(1, 1, self.input_dim))
+    
+    def get_position_encoding(self, x):
+        max_length = x.size()[1]
+        position = torch.arange(max_length, dtype=torch.float32, device=x.device)  # tensor([0., 1., 2., 3., 4.], device='cuda:0')
+        temp1 = position.unsqueeze(1)  # 5 1
+        temp2 = self.inv_timescales.unsqueeze(0)  # 1 256
+        scaled_time = position.unsqueeze(1) * self.inv_timescales.unsqueeze(0)  # 5 256
+        signal = torch.cat([torch.sin(scaled_time), torch.cos(scaled_time)], dim=1)  #[T, C]
+        signal = F.pad(signal, (0, 0, 0, self.pe_hidden_size % 2))
+        signal = signal.view(1, max_length, self.pe_hidden_size)
+    
+        return signal
 
-    def get_config(self):
-        config = super().get_config()
-        config.update({'stacks': self.stacks})
-        return config
+    def forward(self, x):
+        assert self.input_len % (np.power(2, self.num_levels)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 levels)
+        if self.pe:
+            pe = self.get_position_encoding(x)
+            if pe.shape[2] > x.shape[2]:
+                x += pe[:, :, :-1]
+            else:
+                x += self.get_position_encoding(x)
+
+        ### activated when RIN flag is set ###
+        if self.RIN:
+            print('/// RIN ACTIVATED ///\r',end='')
+            means = x.mean(1, keepdim=True).detach()
+            #mean
+            x = x - means
+            #var
+            stdev = torch.sqrt(torch.var(x, dim=1, keepdim=True, unbiased=False) + 1e-5)
+            x /= stdev
+            # affine
+            # print(x.shape,self.affine_weight.shape,self.affine_bias.shape)
+            x = x * self.affine_weight + self.affine_bias
+
+        # the first stack
+        res1 = x
+        x = self.blocks1(x)
+        x += res1
+        if self.num_decoder_layer == 1:
+            x = self.projection1(x)
+        else:
+            x = x.permute(0,2,1)
+            for div_projection in self.div_projection:
+                output = torch.zeros(x.shape,dtype=x.dtype).cuda()
+                for i, div_layer in enumerate(div_projection):
+                    div_x = x[:,:,i*self.div_len:min(i*self.div_len+self.overlap_len,self.input_len)]
+                    output[:,:,i*self.div_len:(i+1)*self.div_len] = div_layer(div_x)
+                x = output
+            x = self.projection1(x)
+            x = x.permute(0,2,1)
+
+        if self.stacks == 1:
+            ### reverse RIN ###
+            if self.RIN:
+                x = x - self.affine_bias
+                x = x / (self.affine_weight + 1e-10)
+                x = x * stdev
+                x = x + means
+
+            return x
+
+        elif self.stacks == 2:
+            MidOutPut = x
+            if self.concat_len:
+                x = torch.cat((res1[:, -self.concat_len:,:], x), dim=1)
+            else:
+                x = torch.cat((res1, x), dim=1)
+
+            # the second stack
+            res2 = x
+            x = self.blocks2(x)
+            x += res2
+            x = self.projection2(x)
+            
+            ### Reverse RIN ###
+            if self.RIN:
+                MidOutPut = MidOutPut - self.affine_bias
+                MidOutPut = MidOutPut / (self.affine_weight + 1e-10)
+                MidOutPut = MidOutPut * stdev
+                MidOutPut = MidOutPut + means
+
+            if self.RIN:
+                x = x - self.affine_bias
+                x = x / (self.affine_weight + 1e-10)
+                x = x * stdev
+                x = x + means
+
+            return x, MidOutPut
 
 
-class Identity(tf.keras.layers.Layer):
-    """Identity layer used solely for the purpose of naming model outputs and properly displaying outputs when plotting
-    some multi-output models.
-
-    Returns input without changing them.
-    """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def call(self, inputs):
-        return tf.identity(inputs)
-
-
-class StackedSCINetLoss(tf.keras.losses.Loss):
-    """Compute loss for a Stacked SCINet via intermediate supervision.
-
-    `loss = sum of mean normalised difference between each stack's output and ground truth`
-
-    `y_pred` should be the output of a StackedSCINet layer.
-    """
-
-    def __init__(self, name='stacked_scienet_loss', **kwargs):
-        super().__init__(name=name, **kwargs)
-
-    def call(self, y_true, y_pred):
-        stacked_outputs = y_pred
-        horizon = stacked_outputs.shape[2]
-
-        errors = stacked_outputs - y_true
-        loss = tf.linalg.normalize(errors, axis=3)[1]
-        loss = tf.reduce_sum(loss, 2)
-        loss /= horizon
-        loss = tf.reduce_sum(loss)
-
-        return loss
-
-
-# class NetConcatenate(tf.keras.layer.Layer):
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
-#         self.concatenate = tf.keras.layers.Concatenate(axis=1)
-#
-#     def call(self, intermediates, inputs):
-#         return self.concatenate([intermediates, inputs[:, intermediates.shape[1]:, :]])
-
-
-def make_simple_scinet(input_shape, horizon: int, L: int, h: int, kernel_size: int, learning_rate: float,
-                       kernel_regularizer=None, activity_regularizer=None, diagram_path=None):
-    """Compiles a simple SCINet and saves model diagram if given a path.
-
-    Intended to be a demonstration of simple model construction. See paper for details on the hyperparameters.
-    """
-    model = tf.keras.Sequential([
-        tf.keras.Input(shape=(input_shape[1], input_shape[2]), name='inputs'),
-        SCINet(horizon, features=input_shape[-1], levels=L, h=h, kernel_size=kernel_size,
-               kernel_regularizer=kernel_regularizer, activity_regularizer=activity_regularizer)
-    ])
-
-    model.summary()
-    if diagram_path:
-        tf.keras.utils.plot_model(model, to_file=diagram_path, show_shapes=True)
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-                  loss='mse',
-                  metrics=['mse', 'mae']
-                  )
-
-    return model
-
-
-def make_simple_stacked_scinet(input_shape, horizon: int, K: int, L: int, h: int, kernel_size: int,
-                               learning_rate: float, kernel_regularizer=None, activity_regularizer=None,
-                               diagram_path=None):
-    """Compiles a simple StackedSCINet and saves model diagram if given a path.
-
-    Intended to be a demonstration of simple model construction. See paper for details on the hyperparameters.
-    """
-    inputs = tf.keras.Input(shape=(input_shape[1], input_shape[2]), name='lookback_window')
-    x = StackedSCINet(horizon=horizon, features=input_shape[-1], stacks=K, levels=L, h=h,
-                      kernel_size=kernel_size, kernel_regularizer=kernel_regularizer,
-                      activity_regularizer=activity_regularizer)(inputs)
-    outputs = Identity(name='outputs')(x[-1])
-    intermediates = Identity(name='intermediates')(x)
-    model = tf.keras.Model(inputs=inputs, outputs=[outputs, intermediates])
-
-    model.summary()
-    if diagram_path:
-        tf.keras.utils.plot_model(model, to_file=diagram_path, show_shapes=True)
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-                  loss={
-                      # 'outputs': 'mse',
-                      'intermediates': StackedSCINetLoss()
-                  },
-                  metrics={'outputs': ['mse', 'mae']}
-                  )
-
-    return model
+def get_variable(x):
+    x = Variable(x)
+    return x.cuda() if torch.cuda.is_available() else x

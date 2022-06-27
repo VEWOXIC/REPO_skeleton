@@ -50,6 +50,7 @@ class RNN(nn.Module):
         #src = batch['X'].clone()  # [batch_size, input_window, num_nodes, feature_dim]
         #target = batch['y']  # [batch_size, output_window, num_nodes, feature_dim]
         src = x.permute(1, 0, 2)  # [input_window, batch_size, num_nodes, feature_dim]
+        print(src.size())
         #target = target.permute(1, 0, 2, 3)  # [output_window, batch_size, num_nodes, output_dim]
 
         batch_size = src.shape[1]
@@ -75,6 +76,7 @@ class RNN(nn.Module):
             src = torch.cat((src[1:, :, :], out.reshape(
                 batch_size, self.num_nodes * self.feature_dim).unsqueeze(0)), dim=0)
         outputs = torch.stack(outputs)
+        print(outputs.size())
         # outputs = [output_window, batch_size, num_nodes, output_dim]
         return outputs.permute(1, 0, 2)
 

@@ -62,6 +62,7 @@ class Exp_Basic(object):
         self.model.eval()
         preds, trues = [], []
         for input, target in test_loader:
+            print("test", input.size())
             input = input.float().to(self.device)
             target = target.float().to(self.device)
             prediction = self.model(input)
