@@ -5,7 +5,7 @@ from torch import optim
 import numpy as np
 import models
 from utils.metrics import metric
-from data_processing.data_handler import get_dataset
+from data_processing.Data_Handler import get_dataset
 import time
 
 class Exp_Basic(object):
@@ -51,7 +51,6 @@ class Exp_Basic(object):
             iter_count = 0
 
             for input, target, input_time, target_time in train_loader:
-                input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 optimizer.zero_grad()

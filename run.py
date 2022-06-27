@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
     # if os.paths.exists()
-    with open('cfgs/exp/LinearLayer/LinearLayer_ETTh1_example.json','r') as f:
+    with open('cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json','r') as f:
         cfg =json.load(f)
     # else
     
