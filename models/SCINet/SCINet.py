@@ -6,7 +6,6 @@ import torch
 import argparse
 import numpy as np
 
-
 class Splitting(nn.Module):
     def __init__(self):
         super(Splitting, self).__init__()
@@ -24,7 +23,7 @@ class Splitting(nn.Module):
 
 class Interactor(nn.Module):
     def __init__(self, in_planes, splitting=True,
-                 kernel=5, dropout=0.5, groups=1, hidden_size=1, INN=True):
+                 kernel = 5, dropout=0.5, groups = 1, hidden_size = 1, INN = True):
         super(Interactor, self).__init__()
         self.modified = INN
         self.kernel_size = kernel
@@ -53,12 +52,12 @@ class Interactor(nn.Module):
             nn.ReplicationPad1d((pad_l, pad_r)),
 
             nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
-                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups=self.groups),
+                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
 
             nn.Dropout(self.dropout),
             nn.Conv1d(int(in_planes * size_hidden), in_planes,
-                      kernel_size=3, stride=1, groups=self.groups),
+                      kernel_size=3, stride=1, groups= self.groups),
             nn.Tanh()
         ]
         modules_U += [

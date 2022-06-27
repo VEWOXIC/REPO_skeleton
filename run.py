@@ -24,3 +24,5 @@ if __name__ == '__main__':
     exp.test()
     after_evaluation = datetime.now().timestamp()
     print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+
+#cfgs/exp/RNN/rnn_etth1_multivariate_h24.json
