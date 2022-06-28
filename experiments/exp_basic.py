@@ -42,7 +42,7 @@ class Exp_Basic(object):
 
         # TODO: get loss function and optimizer according to the exp_cfg
         loss_func = self._get_lossfunc()
-        #optimizer = self._get_optim()
+        optimizer = self._get_optim()
 
         # train_loop
         for epoch in range(epochs):
@@ -62,43 +62,6 @@ class Exp_Basic(object):
                 optimizer.step()
                 loss_total += float(loss)
 
-                # if self.cfg['model']['model_name'] == 'MTGNN':
-                    
-                #     for input, target, input_time, target_time in train_loader:
-                #         input = input.numpy()
-                #         target = target.numpy()
-                #         input = np.expand_dims(input, axis=-1)
-                #         target = np.expand_dims(target, axis=-1)
-                #         input = [input]
-                #         target = [target]
-                #         input.append(input_time)
-                #         target.append(target_time)
-                        
-                #         input = np.concatenate(input,axis=-1)
-                #         target = np.concatenate(target,axis=-1)
-                #         trainx = torch.from_numpy(input).to(self.device)
-                #         trainx = trainx.transpose(1,3)
-                #         trainy = torch.from_numpy(target).to(self.device)
-                #         trainy = trainy.transpose(1,3)
-                #         if iter_count%100 == 0:
-                #        	    perm = np.random.permutation(range(self.cfg['model']['num_nodes']))
-                #         num_sub = int(self.cfg['model']['num_nodes'])
-                #         idx = perm[0:]
-                #         idx = torch.tensor(idx).to(self.device)
-                #         tx = trainx[:,:,idx,:]
-                #         ty = trainy[:,:,idx,:]
-                #         tx = tx.float()
-                #         ty = ty.float()
-                #         optimizer.zero_grad()
-                #         prediction = self.model(tx,idx)
-                #         ty = ty[:,0,:,:]
-                #         prediction = prediction.transpose(1,3)
-                #         real = torch.unsqueeze(ty,dim=1)
-                #         loss = loss_func(real, prediction)
-                #         iter_count += 1
-                #         loss.backward()
-                #         optimizer.step()
-                #         loss_total += float(loss)
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / iter_count))
@@ -122,32 +85,6 @@ class Exp_Basic(object):
             preds.append(prediction)
             trues.append(target)
 
-        # if self.cfg['model']['model_name'] == "MTGNN":
-        #     for input, target, input_time, target_time in loader:
-        #         input = input.numpy()
-        #         target = target.numpy()
-        #         input = np.expand_dims(input, axis=-1)
-        #         target = np.expand_dims(target, axis=-1)
-        #         input = [input]
-        #         target = [target]
-        #         input.append(input_time)
-        #         target.append(target_time)
-        #         input = np.concatenate(input,axis=-1)
-        #         target = np.concatenate(target,axis=-1)
-        #         testx = torch.from_numpy(input).to(self.device)
-        #         testx = testx.transpose(1,3)
-        #         testy = torch.from_numpy(target).to(self.device)
-        #         testy = testy.transpose(1,3)
-        #         testy = testy[:,0,:,:]
-        #         testx = testx.float()
-        #         testy = testy.float()
-        #         output = self.model(testx)
-        #         output = output.transpose(1,3)
-        #         real = torch.unsqueeze(testy, dim=1)
-        #         prediction = output.detach().cpu().numpy()
-        #         target = real.detach().cpu().numpy()
-        #         preds.append(prediction)
-        #         trues.append(target)
 
         preds, trues = np.array(preds),np.array(trues)
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
