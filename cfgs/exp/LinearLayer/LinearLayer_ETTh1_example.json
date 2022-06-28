@@ -2,31 +2,31 @@
     "exp":{
         "train":{
             "batchsize":8,
-            "epochs":20,
-            "lr":0.0001,
-            "lr_adj":0,
+            "epochs":10,
+            "lr":0.001,
+            "lr_adj":1,
             "shuffle": true,
             "drop_last": true
         },
         "valid":{
-            "batchsize":128,
-            "shuffle": false,
-            "drop_last": false
+            "batchsize":8,
+            "shuffle": true,
+            "drop_last": true
         },
         "test":{
-            "batchsize":128,
+            "batchsize":8,
             "shuffle": false,
-            "drop_last": false
+            "drop_last": true
         },
         "metrics":{
             "MSE": true,
             "MAE": true,
-            "RMSE": false,
-            "MAPE": false,
-            "RSE": false,
-            "CORR": false
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
         },
-        "device":"cuda"
+        "device":"cpu"
     },
 
     "model":{
@@ -35,19 +35,18 @@
         "UseTimeFeature": false
     },
 
-    "data":{   
-        "dataset_name":"dummy_dataset",
-        "path":"datasets/dummy_dataset.csv",
-        "lookback":10,
-        "horizon":10,
-        "channel":3,
+    "data": {
+        "dataset_name":"ETTh1",
+        "path":"./datasets/ETTh1.csv",
+        "lookback":48,
+        "horizon":24,
+        "channel":7,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target":0,
+        "target":"OT",
         "scalar":"StandardScalar",
         "freq":"h"
     }
-    
 }

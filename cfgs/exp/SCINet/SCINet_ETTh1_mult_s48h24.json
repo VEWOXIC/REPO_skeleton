@@ -26,9 +26,8 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cuda"
+        "device":"cuda",
     },
-
     "model": {
         "model_name":"SCINet",
         "horizon": 24,
@@ -46,7 +45,8 @@
         "positionalEcoding": false,
         "modified": true,
         "input_len_seg": 0,
-        "RIN": false
+        "RIN": false,
+        "UseTimeFeature": false
     },
 
     "data": {
@@ -60,6 +60,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target":"OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar",
+        "freq": "h"
     }
 }

@@ -30,7 +30,7 @@
         "device":"cuda"
     },
 
-    "model": { 
+    "model": {
         "model_name":"MTGNN",
         "gcn_true": true,
         "buildA_true": true,
@@ -45,18 +45,20 @@
         "residual_channels": 32,
         "skip_channels": 64,
         "end_channels": 128,
-        "seq_length": 48, 
+        "seq_length": 48,
         "in_dim": 2,
         "out_dim": 24,
         "layers": 3,
         "propalpha": 0.05,
         "tanhalpha": 3,
-        "layer_norm_affline": false
+        "layer_norm_affline": false,
+        "UseTimeFeature": true
     },
 
     "data": {
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
+        "freq": "h",
         "lookback":48,
         "horizon":24,
         "channel":7,

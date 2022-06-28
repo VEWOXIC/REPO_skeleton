@@ -15,5 +15,6 @@
         "positionalEcoding": false,
         "modified": true,
         "input_len_seg": 0,
-        "RIN": false
+        "RIN": false,
+        "UseTimeFeature": false
 }
