@@ -30,7 +30,8 @@
         "device":"cuda"
     },
 
-    "model": {
+
+    "model": { 
         "model_name":"MTGNN",
         "gcn_true": true,
         "buildA_true": true,
@@ -45,7 +46,7 @@
         "residual_channels": 32,
         "skip_channels": 64,
         "end_channels": 128,
-        "seq_length": 48,
+        "seq_length": 48, 
         "in_dim": 2,
         "out_dim": 24,
         "layers": 3,
@@ -70,3 +71,4 @@
         "scalar":"StandardScalar"
     }
 }
+

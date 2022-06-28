@@ -24,8 +24,6 @@ class Dataset_Custom(Dataset):
         # need to be implemented
         # transformer based methods have label_len
 
-        # 以下是add time in a day的function   還有以下代碼的命名以及if else有點針對,等等我會稍微改一下代碼讓這些處理更general
-
     def add_timeFeature(self, data):
         data['date'] = pd.to_datetime(data.date)
         data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
@@ -41,6 +39,7 @@ class Dataset_Custom(Dataset):
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
+
 
         self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 

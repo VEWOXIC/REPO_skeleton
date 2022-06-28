@@ -28,6 +28,7 @@
         },
         "device":"cuda"
     },
+
     "model": {
         "model_name":"SCINet",
         "horizon": 24,
@@ -64,3 +65,4 @@
         "freq": "h"
     }
 }
+

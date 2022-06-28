@@ -6,6 +6,7 @@ import numpy as np
 import models
 from utils.metrics import metric
 from data_processing.Data_Handler import get_dataset
+
 import time
 
 class Exp_Basic(object):
@@ -62,6 +63,7 @@ class Exp_Basic(object):
                 optimizer.step()
                 loss_total += float(loss)
 
+
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / iter_count))
 
@@ -83,6 +85,7 @@ class Exp_Basic(object):
             target = target.detach().cpu().numpy()
             preds.append(prediction)
             trues.append(target)
+
 
         preds, trues = np.array(preds),np.array(trues)
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
