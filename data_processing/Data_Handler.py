@@ -23,15 +23,13 @@ class Dataset_Custom(Dataset):
         self.__read_data__()
         # need to be implemented
         # transformer based methods have label_len
-        
-        # 以下是add time in a day的function   還有以下代碼的命名以及if else有點針對,等等我會稍微改一下代碼讓這些處理更general 
 
     def add_timeFeature(self, data):
         data['date'] = pd.to_datetime(data.date)
         data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
         data_stamp = data_stamp.transpose(1, 0)
         return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
-        
+
     def __read_data__(self):
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
@@ -46,14 +44,14 @@ class Dataset_Custom(Dataset):
         self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
-        
+
         train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
         self.scaler.fit(train_data)
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = self.scaler.transform(self.data.values)
 
         # 单变量/多变量
-       
+
     def __getitem__(self, index):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
@@ -63,6 +61,6 @@ class Dataset_Custom(Dataset):
         timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]
 
         return x, y, timestamp_x, timestamp_y
-    
+
     def __len__(self):
         return self.data.shape[0]-self.horizon-self.lookback+1

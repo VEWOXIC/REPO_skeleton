@@ -62,6 +62,7 @@
         "multivariate":true,
         "target":"OT",
         "scalar":"StandardScalar",
-        "freq":"h"
+        "freq": "h"
     }
 }
+

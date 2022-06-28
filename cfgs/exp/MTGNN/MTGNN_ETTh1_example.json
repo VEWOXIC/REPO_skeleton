@@ -30,6 +30,7 @@
         "device":"cuda"
     },
 
+
     "model": { 
         "model_name":"MTGNN",
         "gcn_true": true,
@@ -58,6 +59,7 @@
     "data": {
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
+        "freq": "h",
         "lookback":48,
         "horizon":24,
         "channel":7,
@@ -69,3 +71,4 @@
         "scalar":"StandardScalar"
     }
 }
+

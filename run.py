@@ -8,10 +8,10 @@ import time
 
 if __name__ == '__main__':
     # if os.paths.exists()
-    with open('cfgs/exp/LinearLayer/LinearLayer_ETTh1_example.json','r') as f:
+    with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
         cfg =json.load(f)
     # else
-    
+
     exp = Exp_Basic(cfg)
     before_train = datetime.now().timestamp()
     print("===================Train-Start=========================")
