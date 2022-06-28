@@ -26,7 +26,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cuda",
+        "device":"cuda"
     },
     "model": {
         "model_name":"SCINet",
