@@ -1,20 +1,13 @@
-"""
-early stop
-save
-load
-"""
 from functools import partial
-from logging import getLogger
 import torch
 from pip._internal.utils.misc import ensure_dir
 from torch import optim
 import numpy as np
 from sklearn.metrics import r2_score, explained_variance_score
-
+import os 
 
 # optimizer selection
 def build_optimizer(cfg, model):
-    logger = getLogger()
     if cfg['exp']['train']['optimizer'] == 'adam':
         optimizer = optim.Adam(model.parameters(), lr=cfg['exp']['train']['lr'])
     elif cfg['exp']['train']['optimizer'] == 'sgd':
@@ -26,14 +19,13 @@ def build_optimizer(cfg, model):
     elif cfg['exp']['train']['optimizer'] == 'sparse_adam':
         optimizer = torch.optim.SparseAdam(model.parameters(), lr=cfg['exp']['train']['lr'])
     else:
-        logger.warning('Received unrecognized optimizer, set default Adam optimizer')
+        print('Received unrecognized optimizer, set default Adam optimizer')
         optimizer = optim.Adam(model.parameters(), lr=cfg['exp']['train']['lr'])
     return optimizer
 
 
 # loss_function selection
 def build_train_loss(cfg):
-    logger = getLogger()
     if cfg['exp']['train']['loss'] == 'mae':
         lf = masked_mae_torch
     elif cfg['exp']['train']['loss'] == 'mse':
@@ -61,48 +53,65 @@ def build_train_loss(cfg):
     elif cfg['exp']['train']['loss'] == 'evar':
         lf = explained_variance_score_torch
     else:
-        logger.warning('Received none train loss func and will use the loss func defined in the model.')
+        print('Received none train loss func and will use the loss func defined in the model.')
         lf = masked_mae_torch
     return lf
 
+# save model
+def save_model(cfg, cache_name, model, optimizer, best_metrics):
+    torch.save({
+                'model': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'best_metrics': best_metrics
+                },
+                cache_name + '/' + 'checkpoints.pth'
+                )
 
-def save_model(cfg, cache_name, model, optimizer):
-    cache_dir = '/cache/{}/model_cache'.format(cfg['data']['exp_id'])
-    ensure_dir(cache_dir)
-    logger = getLogger()
-    logger.info("Saved model at " + cache_name)
-    torch.save((model.state_dict(), optimizer.state_dict()), cache_name)
-
-
+# load model
 def load_model(cache_name, model, optimizer):
-    logger = getLogger()
-    logger.info("Loaded model at " + cache_name)
-    model_state, optimizer_state = torch.load(cache_name)
-    model.load_state_dict(model_state)
-    optimizer.load_state_dict(optimizer_state)
+    print("Loaded model at " + cache_name + '/' + 'checkpoints.pth')
+    checkpoint = torch.load(cache_name + '/' + 'checkpoints.pth')
+    model.load_state_dict(checkpoint['model'])
+    optimizer.load_state_dict(checkpoint['optimizer'])
     return model, optimizer
 
-'''
-def save_model_with_epoch(cfg, epoch):
-    cache_dir = '/cache/{}/model_cache'.format(cfg['data']['exp_id'])
-    config = dict()
-    config['model_state_dict'] = self.model.state_dict()
-    config['optimizer_state_dict'] = self.optimizer.state_dict()
-    config['epoch'] = epoch
-    model_path = cache_dir + '/' + self.config['model'] + '_' + self.config['dataset'] + '_epoch%d.tar' % epoch
-    torch.save(config, model_path)
-    logger.info("Saved model at {}".format(epoch))
-    return model_path
+# early stop
+class EarlyStopping:
+    def __init__(self, cfg):
+        self.patience = cfg['exp']['train']['patience']
+        self.verbose = cfg['exp']['train']['verbose']
+        self.counter = 0
+        self.best_score = None
+        self.early_stop = False
+        self.val_loss_min = np.Inf
+        self.delta = cfg['exp']['train']['delta']
 
+    def __call__(self, val_loss, model, optimizer, path):
+        score = -val_loss
+        if self.best_score is None:
+            self.best_score = score
+            self.save_checkpoint(val_loss, model, optimizer, path)
+        elif score < self.best_score + self.delta:
+            self.counter += 1
+            print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
+            if self.counter >= self.patience:
+                self.early_stop = True
+        else:
+            self.best_score = score
+            self.save_checkpoint(val_loss, model, optimizer, path)
+            self.counter = 0
 
-def load_model_with_epoch(epoch):
-    model_path = self.cache_dir + '/' + self.config['model'] + '_' + self.config['dataset'] + '_epoch%d.tar' % epoch
-    assert os.path.exists(model_path), 'Weights at epoch %d not found' % epoch
-    checkpoint = torch.load(model_path, map_location='cpu')
-    self.model.load_state_dict(checkpoint['model_state_dict'])
-    self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    self._logger.info("Loaded model at {}".format(epoch))
-'''
+    def save_checkpoint(self, val_loss, model, optimizer, path):
+        if self.verbose:
+            print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
+        torch.save({
+                'model': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                },
+                path + '/' + 'checkpoints.pth'
+                )
+        self.val_loss_min = val_loss
+
 
 def masked_mae_loss(y_pred, y_true):
     mask = (y_true != 0).float()
@@ -256,3 +265,4 @@ def explained_variance_score_np(preds, labels):
     preds = preds.flatten()
     labels = labels.flatten()
     return explained_variance_score(labels, preds)
+
