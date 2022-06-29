@@ -8,12 +8,16 @@ import utils.exp_utils
 import time
 
 class Exp_Basic(object):
-    def __init__(self, cfg) -> None:
+    def __init__(self, cfg, file_name) -> None:
+        self.optimizer = None
+        self.loss_func = None
         self.cfg = cfg
+        self.file_name = file_name
         self.device = torch.device(cfg['exp']['device'])
         self.model = self._build_model()
         self.model.to(self.device)
-        
+
+
     def _build_model(self):
         return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
@@ -30,6 +34,9 @@ class Exp_Basic(object):
     def _get_lossfunc(self):
         return utils.exp_utils.build_train_loss(self.cfg)
 
+    def load_model(self):
+        self.model, self.optimizer = utils.exp_utils.load_model(self.file_name, self.model, self.optimizer)
+
     def train(self):
         # TODO: just for demo, TO BE implemented
         epochs = self.cfg['exp']['train']['epochs']
@@ -37,8 +44,8 @@ class Exp_Basic(object):
         train_loader = self._create_loader("train")
         valid_loader = self._create_loader("valid")
 
-        loss_func = self._get_lossfunc()
-        optimizer = self._get_optim()
+        self.loss_func = self._get_lossfunc()
+        self.optimizer = self._get_optim()
 
         # train_loop
         for epoch in range(epochs):
@@ -50,18 +57,20 @@ class Exp_Basic(object):
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
-                optimizer.zero_grad()
+                self.optimizer.zero_grad()
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
-                loss = loss_func(target, prediction)
+                loss = self.loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
-                optimizer.step()
+                self.optimizer.step()
                 loss_total += float(loss)
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / iter_count))
 
             self.test(valid_loader)
+        if self.cfg['exp']['train']['saved_model']:
+            utils.exp_utils.save_model(self.cfg, self.file_name, self.model, self.optimizer)
 
     def test(self, data_loader=None):
         if data_loader is None:
