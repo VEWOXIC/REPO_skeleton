@@ -1,12 +1,16 @@
 {
     "exp":{
         "train":{
+            "training": true,
+            "saved_model": true,
             "batchsize":8,
             "epochs":20,
             "lr":0.0001,
             "lr_adj":0,
             "shuffle": true,
-            "drop_last": true
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae"
         },
         "valid":{
             "batchsize":128,
@@ -26,7 +30,7 @@
             "RSE": false,
             "CORR": false
         },
-        "device":"cuda"
+        "device":"cuda",
     },
 
     "model":{
@@ -35,7 +39,8 @@
         "UseTimeFeature": false
     },
 
-    "data":{   
+    "data":{
+        "exp_id": false,
         "dataset_name":"dummy_dataset",
         "path":"datasets/dummy_dataset.csv",
         "lookback":10,
