@@ -33,7 +33,7 @@
             "RSE": false,
             "CORR": false
         },
-        "device":"cuda"
+        "device":"cuda",
     },
 
     "model":{
@@ -41,6 +41,7 @@
         "num_layers":1,
         "UseTimeFeature": false
     },
+
 
     "data":{  
         "dataset_name":"dummy_dataset",

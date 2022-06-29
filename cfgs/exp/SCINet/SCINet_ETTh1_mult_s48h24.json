@@ -33,7 +33,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cuda"
+        "device":"cuda",
     },
 
     "model": {

@@ -33,7 +33,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cpu",
     },
 
     "model":{
@@ -43,6 +43,7 @@
     },
 
     "data": {
+        "exp_id": false,
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
         "lookback":48,
