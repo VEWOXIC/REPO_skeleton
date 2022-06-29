@@ -11,7 +11,10 @@
             "drop_last": true,
             "step_size": 100,
             "optimizer": "adam",
-            "loss": "mae"
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "valid":{
             "batchsize":8,
@@ -60,7 +63,6 @@
     },
 
     "data": {
-        "exp_id": false,
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
         "freq": "h",

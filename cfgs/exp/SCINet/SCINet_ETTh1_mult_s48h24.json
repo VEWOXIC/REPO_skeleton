@@ -10,7 +10,10 @@
             "shuffle": true,
             "drop_last": true,
             "optimizer": "adam",
-            "loss": "mae"
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "valid":{
             "batchsize":8,
