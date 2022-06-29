@@ -1,24 +1,28 @@
-import torch
-import numpy as np
+
 import json
+import os
+import random
 from experiments.exp_basic import *
 from datetime import datetime
-import os
-import time
+
 
 if __name__ == '__main__':
-    # if os.paths.exists()
-    with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
+    with open('cfgs/exp/LinearLayer/LinearLayer_ETTh1_example.json','r') as f:
         cfg =json.load(f)
-    # else
 
-    exp = Exp_Basic(cfg)
-    before_train = datetime.now().timestamp()
-    print("===================Train-Start=========================")
-    exp.train()
-    after_train = datetime.now().timestamp()
-    print(f'Training took {(after_train - before_train) / 60} minutes')
-    print("===================Train-End=========================")
+    model_save_dir = 'cache/{}/{}/{}'.format(cfg['model']['model_name'], cfg['data']['dataset_name'], cfg['data']['horizon'])
+    if not os.path.exists(model_save_dir):
+        os.makedirs(model_save_dir)
+    exp = Exp_Basic(cfg, model_save_dir)
+    if cfg['exp']['train']['training'] or not os.path.exists(model_save_dir):
+        before_train = datetime.now().timestamp()
+        print(f"===================Train-Start=========================")
+        exp.train()
+        after_train = datetime.now().timestamp()
+        print(f'Training took {(after_train - before_train) / 60} minutes')
+        print("===================Train-End=========================")
+    else:
+        exp.load_model()
 
     before_evaluation = datetime.now().timestamp()
     exp.test()
