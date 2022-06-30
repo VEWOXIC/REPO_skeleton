@@ -40,7 +40,7 @@ class Dataset_Custom(Dataset):
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
-        if self.cfg['model']['UseTimeFeatrue']:
+        if self.cfg['model']['UseTimeFeature']:
             self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
