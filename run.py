@@ -1,3 +1,4 @@
+
 import json
 import os
 import random
@@ -6,7 +7,6 @@ from datetime import datetime
 
 
 if __name__ == '__main__':
-
     with open('cfgs/exp/LinearLayer/LinearLayer_ETTh1_example.json','r') as f:
         cfg =json.load(f)
 

@@ -37,6 +37,7 @@
         "device":"cuda"
     },
 
+
     "model": { 
         "model_name":"MTGNN",
         "gcn_true": true,
@@ -63,6 +64,7 @@
     },
 
     "data": {
+        "exp_id" : 1,
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
         "freq": "h",
