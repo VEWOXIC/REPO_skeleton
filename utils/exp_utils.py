@@ -1,6 +1,5 @@
 from functools import partial
 import torch
-from pip._internal.utils.misc import ensure_dir
 from torch import optim
 import numpy as np
 from sklearn.metrics import r2_score, explained_variance_score
