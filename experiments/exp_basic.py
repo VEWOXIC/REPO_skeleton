@@ -50,6 +50,8 @@ class Exp_Basic(object):
             epoch_start_time = time.time()
             loss_total = 0
             iter_count = 0
+            self.adjust_learning_rate(optimizer, epoch)
+
 
             for input, target, input_time, target_time in train_loader:
                 input, target, input_time, target_time = \
@@ -94,3 +96,10 @@ class Exp_Basic(object):
         print("mae:", mae, " mse:",mse," rmse:",rmse)
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr)
+    def adjust_learning_rate(self,optimizer, epoch):
+        if(epoch+1)%self.cfg['model']['lr_decay_step'] == 0:
+            print("adjusting learning rate")
+            print("lr: ",optimizer.param_groups[0]['lr'])
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = param_group['lr'] * self.cfg['model']['lr_decay_rate']
+                print('new lr:', param_group['lr'])
