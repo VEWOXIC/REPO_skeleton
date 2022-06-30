@@ -8,16 +8,15 @@ import utils.exp_utils
 import time
 
 class Exp_Basic(object):
-
     def __init__(self, cfg, file_dir) -> None:
         self.cfg = cfg
-        self.file_name = file_name
         self.device = torch.device(cfg['exp']['device'])
         self.file_dir = file_dir
         self.model = self._build_model()
         self.model.to(self.device)
         self.loss_func = self._get_lossfunc()
         self.optimizer = self._get_optim()
+    
 
 
     def _build_model(self):
@@ -39,7 +38,6 @@ class Exp_Basic(object):
     def load_model(self):
         self.model, self.optimizer = utils.exp_utils.load_model(self.file_dir, self.model, self.optimizer)
 
-
     def train(self):
         # TODO: just for demo, TO BE implemented
         epochs = self.cfg['exp']['train']['epochs']
@@ -49,7 +47,6 @@ class Exp_Basic(object):
         min_val_loss = float('inf')
         early_stopping = utils.exp_utils.EarlyStopping(self.cfg)
         
-
         # train_loop
         for epoch in range(epochs):
             epoch_start_time = time.time()
@@ -86,7 +83,6 @@ class Exp_Basic(object):
         print("Loading the best model.....") 
         self.load_model()
         
-
 
     def test(self, data_loader=None):
         if data_loader is None:
