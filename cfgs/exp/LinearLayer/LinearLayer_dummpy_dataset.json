@@ -8,7 +8,7 @@
             "lr":0.0001,
             "lr_adj":0,
             "shuffle": true,
-            "drop_last": true，
+            "drop_last": true,
             "optimizer": "adam",
             "loss": "mae",
             "patience": 7,
