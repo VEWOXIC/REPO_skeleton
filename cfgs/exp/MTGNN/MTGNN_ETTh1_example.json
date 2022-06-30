@@ -30,7 +30,6 @@
         "device":"cuda"
     },
 
-
     "model": { 
         "model_name":"MTGNN",
         "gcn_true": true,
@@ -53,13 +52,14 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
+        "lr_decay_rate": 0.5,
+        "lr_decay_step": 2,
         "UseTimeFeature": true
     },
 
     "data": {
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
-        "freq": "h",
         "lookback":48,
         "horizon":24,
         "channel":7,
@@ -68,7 +68,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar",
+        "freq": "h"
     }
 }
-
