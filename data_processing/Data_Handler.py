@@ -4,6 +4,7 @@ from torch.utils.data import Dataset
 from utils import data_utils
 from utils.timefeatures import time_features
 import pandas as pd
+from torch.autograd import Variable
 
 
 def get_dataset(cfg, flag):
@@ -31,6 +32,7 @@ class Dataset_Custom(Dataset):
         return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
 
     def __read_data__(self):
+        print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
         self.data = pd.read_csv(path)

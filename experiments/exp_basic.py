@@ -4,6 +4,7 @@ from torch import nn
 from torch import optim
 import numpy as np
 import models
+from utils import trainer
 from utils.metrics import metric
 from data_processing.Data_Handler import get_dataset
 
@@ -16,10 +17,12 @@ class Exp_Basic(object):
         self.model = self._build_model()
         self.model.to(self.device)
         
+        
     def _build_model(self):
-        return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
+        return models.gtnet(self.cfg)
 
     def _create_loader(self,flag="train"):
+        print("create loader...")
         dataset = get_dataset(self.cfg, flag)
         batch_size = self.cfg["exp"][flag]['batchsize']
         shuffle = self.cfg["exp"][flag]['shuffle']
@@ -44,7 +47,11 @@ class Exp_Basic(object):
         # TODO: get loss function and optimizer according to the exp_cfg
         loss_func = self._get_lossfunc()
         optimizer = self._get_optim()
-
+        
+        print("start training...")
+        his_loss =[]
+        val_time = []
+        train_time = []
         # train_loop
         for epoch in range(epochs):
             epoch_start_time = time.time()
