@@ -115,7 +115,7 @@ class EarlyStopping:
 
 def masked_mae_loss(y_pred, y_true):
     mask = (y_true != 0).float()
-    mask /= (mask.mean()+ (1e-5))
+    mask /= (mask.mean()+ (1e-4) )
     loss = torch.abs(y_pred - y_true)
     loss = loss * mask
     loss[loss != loss] = 0
