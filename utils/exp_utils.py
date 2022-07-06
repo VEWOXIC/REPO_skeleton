@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.metrics import r2_score, explained_variance_score
 import os 
 import torch.nn as nn
+from numpy import inf
 
 # optimizer selection
 def build_optimizer(cfg, model):
@@ -129,12 +130,12 @@ def masked_mae_torch(preds, labels, null_val=np.nan):
     else:
         mask = labels.ne(null_val)
     mask = mask.float()
-    mask /= (torch.mean(mask) + 1e-7)
+    mask /= torch.mean(mask) 
     mask = torch.where(torch.isnan(mask), torch.zeros_like(mask), mask)
     loss = torch.abs(torch.sub(preds, labels))
     loss = loss * mask
     loss = torch.where(torch.isnan(loss), torch.zeros_like(loss), loss)
-    return torch.mean(loss)
+    return torch.mean(loss) if torch.mean(loss) != inf else 0
 
 
 def log_cosh_loss(preds, labels):
