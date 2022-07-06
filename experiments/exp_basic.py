@@ -64,6 +64,7 @@ class Exp_Basic(object):
                 loss.backward() 
                 self.optimizer.step()
                 loss_total += float(loss)
+                
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / iter_count))

@@ -1,10 +1,10 @@
 from functools import partial
 import torch
-from pip._internal.utils.misc import ensure_dir
 from torch import optim
 import numpy as np
 from sklearn.metrics import r2_score, explained_variance_score
 import os 
+import torch.nn as nn
 
 # optimizer selection
 def build_optimizer(cfg, model):
@@ -115,7 +115,7 @@ class EarlyStopping:
 
 def masked_mae_loss(y_pred, y_true):
     mask = (y_true != 0).float()
-    mask /= mask.mean()
+    mask /= (mask.mean()+ (1e-5))
     loss = torch.abs(y_pred - y_true)
     loss = loss * mask
     loss[loss != loss] = 0

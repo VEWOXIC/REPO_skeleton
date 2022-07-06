@@ -33,15 +33,30 @@ class Dataset_Custom(Dataset):
     def __read_data__(self):
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
-        self.data = pd.read_csv(path)
-
+        file_dir = path.split('/')
+        file_name = file_dir[-1]
+        file_type = file_name.split('.')[-1]
+        if file_type == 'csv':
+            self.data = pd.read_csv(path)
+        elif file_type == 'txt':
+            fin = open(path)
+            rawdat = np.loadtxt(fin, delimiter=',')
+            self.data = pd.DataFrame(rawdat)
+        elif file_type == 'npz':
+            data = np.load(path)
+            data = data['data'][:,:,0]
+            self.data = pd.DataFrame(data)
+        
+        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
+        self.data = pd.DataFrame(self.data)
+        
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
-
-        self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
+        if self.cfg['model']['UseTimeFeature']:
+            self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
 
@@ -56,10 +71,13 @@ class Dataset_Custom(Dataset):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
         y = self.data[index+self.lookback:index+self.lookback+self.horizon]
-
-        timestamp_x = self.data_stamp[index:index+self.lookback]
-        timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]
-
+        if self.cfg['model']['UseTimeFeature']:
+            timestamp_x = self.data_stamp[index:index+self.lookback]
+            timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]
+        else:
+            timestamp_x = 0
+            timestamp_y = 0
+            
         return x, y, timestamp_x, timestamp_y
 
     def __len__(self):
