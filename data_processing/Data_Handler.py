@@ -12,6 +12,7 @@ def get_dataset(cfg, flag):
     return  Dataset_Custom(cfg, flag)
 
 # 如果想一个dataloader对应所有数据，这里需要非常多的函数支持
+
 class Dataset_Custom(Dataset):
     def __init__(self, cfg, flag) -> None:
         super().__init__()
@@ -35,15 +36,32 @@ class Dataset_Custom(Dataset):
         print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
-        self.data = pd.read_csv(path)
+        
+        if(self.cfg['data']['dataType'] == 'csv'):
+            self.data = pd.read_csv(path)
+            
+        elif(self.cfg['data']['dataType'] == 'txt'):
+            fin = open(path)
+            rawdat = np.loadtxt(fin, delimiter=',')
+            self.data = pd.DataFrame(rawdat)
+            
+        elif(self.cfg['data']['dataType'] == 'npz'):
+            data = self.data = np.load(path)
+            data = data['data'][:,:,0]
+            self.data = pd.DataFrame(data)
+
+
+        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
+        self.data = pd.DataFrame(self.data)        
+
 
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
-
-        self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
+        if(self.cfg['model']['UseTimeFeature']):
+            self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
 
@@ -52,16 +70,21 @@ class Dataset_Custom(Dataset):
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = self.scaler.transform(self.data.values)
 
-        # 单变量/多变量
 
+        # 单变量/多变量
+    
     def __getitem__(self, index):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
         y = self.data[index+self.lookback:index+self.lookback+self.horizon]
-
-        timestamp_x = self.data_stamp[index:index+self.lookback]
-        timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]
-
+        
+        if self.cfg['model']['UseTimeFeature']:
+            timestamp_x = self.data_stamp[index:index+self.lookback]
+            timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]
+        else:
+            timestamp_x = 0
+            timestamp_y = 0
+            
         return x, y, timestamp_x, timestamp_y
 
     def __len__(self):

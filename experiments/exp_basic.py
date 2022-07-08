@@ -1,12 +1,11 @@
 import torch
 from torch.utils.data import DataLoader
-from torch import nn
-from torch import optim
 import numpy as np
 import models
-from utils import trainer
 from utils.metrics import metric
 from data_processing.Data_Handler import get_dataset
+import utils.exp_utils
+import time
 
 import time
 
@@ -16,10 +15,12 @@ class Exp_Basic(object):
         self.device = torch.device(cfg['exp']['device'])
         self.model = self._build_model()
         self.model.to(self.device)
+        self.loss_func = self._get_lossfunc()
+        self.optimizer = self._get_optim()
         
         
     def _build_model(self):
-        return models.gtnet(self.cfg)
+        return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
     def _create_loader(self,flag="train"):
         print("create loader...")
@@ -30,12 +31,13 @@ class Exp_Basic(object):
         return DataLoader(dataset,batch_size,shuffle=shuffle,drop_last=drop_last)
 
     def _get_optim(self):
-        # TODO: just for demo， 从utils选择
-        return optim.Adam(self.model.parameters(), lr=self.cfg['exp']['train']['lr'])
+        return utils.exp_utils.build_optimizer(self.cfg, self.model)
 
     def _get_lossfunc(self):
-        # TODO: just for demo， 从utils选择
-        return nn.L1Loss()
+        return utils.exp_utils.build_train_loss(self.cfg)
+
+    def load_model(self):
+        self.model, self.optimizer = utils.exp_utils.load_model(self.file_dir, self.model, self.optimizer)
 
     def train(self):
         # TODO: just for demo, TO BE implemented
@@ -64,12 +66,13 @@ class Exp_Basic(object):
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
-                optimizer.zero_grad()
+                self.optimizer.zero_grad()
+                
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
-                loss = loss_func(target, prediction)
+                loss = self.loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
-                optimizer.step()
+                self.optimizer.step()
                 loss_total += float(loss)
 
 
@@ -106,7 +109,6 @@ class Exp_Basic(object):
     def adjust_learning_rate(self,optimizer, epoch):
         if(epoch+1)%self.cfg['model']['lr_decay_step'] == 0:
             print("adjusting learning rate")
-            print("lr: ",optimizer.param_groups[0]['lr'])
             for param_group in optimizer.param_groups:
                 param_group['lr'] = param_group['lr'] * self.cfg['model']['lr_decay_rate']
                 print('new lr:', param_group['lr'])

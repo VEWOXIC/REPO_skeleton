@@ -1,0 +1,78 @@
+{
+    "exp":{
+        "train":{
+            "batchsize":6,
+            "epochs":10,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "step_size": 100,
+            "loss": "mse",
+            "optimizer": "adam"
+        },
+        "valid":{
+            "batchsize":2,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":2,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+    "model": { 
+        "model_name":"MTGNN",
+        "gcn_true": true,
+        "buildA_true": true,
+        "gcn_depth": 2,
+        "num_nodes": 358,
+        "device": "cuda",
+        "dropout": 0.25,
+        "subgraph_size": 358,
+        "node_dim": 40,
+        "dilation_exponential": 1,
+        "conv_channels": 32,
+        "residual_channels": 32,
+        "skip_channels": 64,
+        "end_channels": 128,
+        "seq_length": 48, 
+        "in_dim": 2,
+        "out_dim": 24,
+        "layers": 3,
+        "propalpha": 0.05,
+        "tanhalpha": 3,
+        "layer_norm_affline": false,
+        "lr_decay_rate": 0.8,
+        "lr_decay_step": 20,
+        "UseTimeFeature": false,
+        "predefined_A": false
+    },
+
+    "data": {
+        "dataset_name":"PEMS04",
+        "path":"./datasets/PEMS04.npz",
+        "dataType":"npz",
+        "lookback":12,
+        "horizon":12,
+        "channel":358,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target": "OT",
+        "scalar":"StandardScalar",
+        "freq": "h"
+    }
+}
