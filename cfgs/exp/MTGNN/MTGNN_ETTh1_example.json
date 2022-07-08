@@ -1,13 +1,20 @@
 {
     "exp":{
         "train":{
+            "training": true,
+            "saved_model": true,
             "batchsize":8,
             "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
             "drop_last": true,
-            "step_size": 100
+            "step_size": 100,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "valid":{
             "batchsize":8,
@@ -57,6 +64,7 @@
     },
 
     "data": {
+        "exp_id" : 1,
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
         "freq": "h",
