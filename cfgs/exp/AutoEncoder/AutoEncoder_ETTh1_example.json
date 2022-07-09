@@ -30,7 +30,7 @@
     },
 
     "model":{
-        "model_name":"RNN",
+        "model_name":"AutoEncoder",
         "hidden_size": 64,
         "num_layers": 1,
         "dropout": 0,
@@ -55,8 +55,9 @@
         "max_grad_norm": 5,
         "use_early_stop": true,
         "patience": 50,
-        "rnn_type": "RNN",
         "num_nodes": 7,
+        "feature_dim":2,
+        "output_dim":1,
         "device":"cpu",
         "UseTimeFeature": true
     },
@@ -73,9 +74,6 @@
         "multivariate":true,
         "target":0,
         "scalar":"StandardScalar",
-        "num_nodes":7,
-        "feature_dim":2,
-        "output_dim":1,
         "freq": "h"
 
     }

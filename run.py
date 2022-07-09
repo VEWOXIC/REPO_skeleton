@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
     # if os.paths.exists()
-    with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
+    with open('cfgs/exp/AutoEncoder/AutoEncoder_ETTh1_example.json','r') as f:
         cfg =json.load(f)
     # else
 
@@ -24,3 +24,6 @@ if __name__ == '__main__':
     exp.test()
     after_evaluation = datetime.now().timestamp()
     print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+
+#cfgs/exp/RNN/rnn_etth1_multivariate_h24.json
+#cfgs/exp/MTGNN/MTGNN_ETTh1_example.json

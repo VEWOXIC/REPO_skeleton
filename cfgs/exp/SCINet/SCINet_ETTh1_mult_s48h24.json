@@ -2,7 +2,7 @@
     "exp":{
         "train":{
             "batchsize":8,
-            "epochs":100,
+            "epochs":5,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -26,7 +26,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cuda"
+        "device":"cpu"
     },
 
     "model": {

@@ -14,7 +14,7 @@ from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
 def get_dataset(cfg, flag):
     # 可能要选择
     if cfg['data']['dataset_name']=="ETTh1":
-        return  Dataset_Custom1(cfg, flag)
+        return  Dataset_Custom(cfg, flag)
     elif cfg['data']['dataset_name']=="dummy_dataset":
         return  Dataset_Custom(cfg, flag)
 

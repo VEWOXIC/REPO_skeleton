@@ -51,11 +51,14 @@ class Exp_Basic(object):
             iter_count = 0
 
             for input, target, input_time, target_time in train_loader:
+                input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 optimizer.zero_grad()
                 print(input.size())
-                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+                prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time, target_time)
+                print("target",target.size())
+                print("prediction",prediction.size())
                 loss = loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
@@ -74,22 +77,26 @@ class Exp_Basic(object):
 
         self.model.eval()
         preds, trues = [], []
+        #print("target", trues)
 
         for input, target, input_time, target_time in data_loader:
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
-            
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+            #print("target", target)
+            prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
+            print("prediction", prediction.shape)
             preds.append(prediction)
             trues.append(target)
 
 
+        #print("an:",preds.size())
         preds, trues = np.array(preds),np.array(trues)
+        print("an:",trues.shape[-2], trues.shape[-1])
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
         print("------------TEST result:------------")
         print("mae:", mae, " mse:",mse," rmse:",rmse)
-        # print("mape:",mape," mspe:",mspe," rse:",rse)
-        # print("corr:",corr)
+        print("mape:",mape," mspe:",mspe," rse:",rse)
+        print("corr:",corr)

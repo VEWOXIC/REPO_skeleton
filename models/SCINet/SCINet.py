@@ -307,8 +307,8 @@ class SCINet(nn.Module):
 
         ### RIN Parameters ###
         if self.RIN:
-            self.affine_weight = nn.Parameter(torch.ones(1, 1, input_dim))
-            self.affine_bias = nn.Parameter(torch.zeros(1, 1, input_dim))
+            self.affine_weight = nn.Parameter(torch.ones(1, 1, self.input_dim))
+            self.affine_bias = nn.Parameter(torch.zeros(1, 1, self.input_dim))
     
     def get_position_encoding(self, x):
         max_length = x.size()[1]
@@ -322,7 +322,7 @@ class SCINet(nn.Module):
     
         return signal
 
-    def forward(self, x):
+    def forward(self, x, target):
         assert self.input_len % (np.power(2, self.num_levels)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 levels)
         if self.pe:
             pe = self.get_position_encoding(x)

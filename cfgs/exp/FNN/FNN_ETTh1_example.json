@@ -30,7 +30,7 @@
     },
 
     "model":{
-        "model_name":"RNN",
+        "model_name":"FNN",
         "hidden_size": 64,
         "num_layers": 1,
         "dropout": 0,
@@ -57,6 +57,8 @@
         "patience": 50,
         "rnn_type": "RNN",
         "num_nodes": 7,
+        "feature_dim":2,
+        "output_dim":1,
         "device":"cpu",
         "UseTimeFeature": true
     },
@@ -74,8 +76,6 @@
         "target":0,
         "scalar":"StandardScalar",
         "num_nodes":7,
-        "feature_dim":2,
-        "output_dim":1,
         "freq": "h"
 
     }
