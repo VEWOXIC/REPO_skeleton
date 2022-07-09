@@ -8,7 +8,7 @@
             "shuffle": true,
             "drop_last": true
         },
-        "valid":{
+        "val":{
             "batchsize":128,
             "shuffle": false,
             "drop_last": false
@@ -26,28 +26,41 @@
             "RSE": false,
             "CORR": false
         },
-        "device":"cuda"
+        "device":"cpu"
     },
 
     "model":{
-        "model_name":"LinearLayer",
-        "num_layers":1,
-        "UseTimeFeature": false
+        "model_name":"Autoformer",
+        "bucket_size":"4",
+        "n_hashes":"4",
+        "enc_in":"7",
+        "dec_in":"7",
+        "c_out":"7",
+        "d_model":"512",
+        "n_heads":"8",
+        "e_layers":"2",
+       "d_layers":"1",
+       "d_ff":"2048",
+       "moving_avg":"25",
+       "factor":"1",
+       "dropout":"0.05",
+       "embed":"timeF",
+       "activation":"gelu"
+       
     },
+   
 
-    "data":{   
-        "dataset_name":"dummy_dataset",
-        "path":"datasets/dummy_dataset.csv",
-        "lookback":10,
-        "horizon":10,
-        "channel":3,
+    "data":{
+        "dataset_name":"ETTH1",
+        "root_path":"./datasets/ETTh1.csv",
+        "lookback":48,
+        "horizon":24,
+        "channel":7,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target":0,
-        "scalar":"StandardScalar",
-        "freq":"h"
+        "target": "OT",
+        "scalar":"StandardScalar"
     }
-    
 }
