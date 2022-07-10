@@ -8,10 +8,9 @@ import numpy as np
 from scipy.signal import butter, lfilter, freqz
 import matplotlib.pyplot as plt
 import torch.fft as fft
-import torch.nn as nn
 from torch.nn import init
 import numbers
-import torch.nn.functional as F
+import statsmodels.api as sm
 
 class RevIN(nn.Module):
     def __init__(self, num_features: int, eps=1e-5, affine=True):
@@ -229,7 +228,7 @@ def lowpass_torch(input, limit):
     # plt.plot(range(len(fft_input)),fft_input)
     return fft.irfft(fft_input * pass1)
 
-import statsmodels.api as sm
+
 x = 2*torch.cos(torch.arange(96)/(2*math.pi)) + 0.5*torch.cos(torch.arange(96)/(4*math.pi)) + torch.arange(96)*0.1
 rd = sm.tsa.seasonal_decompose(x,model='additive', extrapolate_trend='freq',period=21)
 lx = rd.trend
