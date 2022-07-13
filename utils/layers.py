@@ -220,7 +220,7 @@ class DataEmbedding_wo_temp(nn.Module):
         x = self.value_embedding(x) + self.position_embedding(x)
         return self.dropout(x)
 
-
+#低通滤波
 def lowpass_torch(input, limit):
     pass1 = torch.abs(fft.rfftfreq(960)) < limit
     print(pass1)
