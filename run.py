@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
     # if os.paths.exists()
-    with open('cfgs/exp/SCINet/SCINet_PEMS04.json','r') as f:
+    with open('cfgs/exp/SCINet/SCINet_Exchange_rate_predict3.json','r') as f:
         cfg =json.load(f)
     # else
 

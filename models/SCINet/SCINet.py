@@ -308,8 +308,8 @@ class SCINet(nn.Module):
 
         ### RIN Parameters ###
         if self.RIN:
-            self.affine_weight = nn.Parameter(torch.ones(1, 1, input_dim))
-            self.affine_bias = nn.Parameter(torch.zeros(1, 1, input_dim))
+            self.affine_weight = nn.Parameter(torch.ones(1, 1, self.input_dim))
+            self.affine_bias = nn.Parameter(torch.zeros(1, 1, self.input_dim))
     
     def get_position_encoding(self, x):
         max_length = x.size()[1]
