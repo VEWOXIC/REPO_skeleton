@@ -58,7 +58,9 @@ class Exp_Basic(object):
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 self.optimizer.zero_grad()
-                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+                prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
+                print("target:", target.size())
+                print("prediction:", prediction.size())
                 loss = self.loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
@@ -111,7 +113,9 @@ class Exp_Basic(object):
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
         print("------------TEST result:------------")
-        print("mae:", mae, " mse:",mse," rmse:",rmse)
+        print("mae:", mae, "mse:", mse,"rmse:", rmse)
+        print("mape:", mape, "mspe:", mspe,"rse:", rse)
+        print("corr:", corr)
         return mae, [metric(preds, trues)]
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr)

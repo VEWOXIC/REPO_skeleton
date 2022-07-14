@@ -45,6 +45,7 @@ class Dataset_Custom(Dataset):
         file_name = file_dir[-1]
         file_type = file_name.split('.')[-1]
         if file_type == 'csv':
+            #print("csv")
             self.data = pd.read_csv(path)
         elif file_type == 'txt':
             fin = open(path)
@@ -55,8 +56,8 @@ class Dataset_Custom(Dataset):
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
         
-        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
-        self.data = pd.DataFrame(self.data)
+        #self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
+        #self.data = pd.DataFrame(self.data)
         
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])

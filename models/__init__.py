@@ -7,3 +7,5 @@ from .Seq2Seq.Seq2Seq import Seq2Seq
 from .FNN.FNN import FNN
 from .DCRNN.DCRNN import DCRNN
 from .AutoEncoder.AutoEncoder import AutoEncoder
+from .GWNET.GWNET import GWNET
+from .STMGAT.STMGAT import STMGAT

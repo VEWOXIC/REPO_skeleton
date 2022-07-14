@@ -1,0 +1,95 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":8,
+            "epochs":5,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "step_size": 100,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":8,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":8,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cpu"
+    },
+
+    "model":{
+        "model_name":"GWNET",
+        "dropout": 0.3,
+        "blocks": 4,
+        "layers": 4,
+        "gcn_bool": true,
+        "addaptadj": true,
+        "adjtype": "doubletransition",
+        "bidir_adj_mx": false,
+        "randomadj": true,
+        "aptonly": true,
+        "kernel_size": 2,
+        "nhid": 32,
+        "residual_channels": 32,
+        "dilation_channels": 32,
+        "skip_channels": 256,
+        "end_channels": 512,
+      
+        "scaler": "standard",
+        "load_external": false,
+        "normal_external": false,
+        "ext_scaler": "none",
+        "add_time_in_day": false,
+        "add_day_in_week": false,
+      
+        "max_epoch": 100,
+        "learner": "adam",
+        "learning_rate": 0.001,
+        "lr_decay": false,
+        "clip_grad_norm": true,
+        "max_grad_norm": 5,
+        "use_early_stop": false,
+        "device":"cpu",
+        "output_dim":1,
+        "num_nodes": 7,
+        "feature_dim":2,
+        "UseTimeFeature": true
+    },
+
+    "data":{   
+        "dataset_name":"ETTh1",
+        "path":"./datasets/ETTh1.csv",
+        "lookback":48,
+        "horizon":24,
+        "channel":7,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target":0,
+        "scalar":"StandardScalar",
+        "freq": "h"
+
+    }
+    
+}
