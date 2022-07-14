@@ -51,9 +51,7 @@ class Exp_Basic(object):
         optimizer = self._get_optim()
         
         print("start training...")
-        his_loss =[]
-        val_time = []
-        train_time = []
+
         # train_loop
         for epoch in range(epochs):
             epoch_start_time = time.time()
@@ -103,9 +101,9 @@ class Exp_Basic(object):
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
         print("------------TEST result:------------")
-        print("mae:", mae, " mse:",mse," rmse:",rmse)
-        # print("mape:",mape," mspe:",mspe," rse:",rse)
-        # print("corr:",corr)
+        print("mae:", mae, " mse:",mse," rmse:",rmse, " mape:",mape, " mspe:",mspe, " rse:",rse, " corr:",corr)
+        print("-------------------------------------")
+        
     def adjust_learning_rate(self,optimizer, epoch):
         if(epoch+1)%self.cfg['model']['lr_decay_step'] == 0:
             print("adjusting learning rate")
