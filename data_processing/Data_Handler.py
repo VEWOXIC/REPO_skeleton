@@ -36,6 +36,7 @@ class Dataset_Custom(Dataset):
         print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
+
         
         if(self.cfg['data']['dataType'] == 'csv'):
             self.data = pd.read_csv(path)
@@ -55,12 +56,17 @@ class Dataset_Custom(Dataset):
         self.data = pd.DataFrame(self.data)        
 
 
+
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
+
         if(self.cfg['model']['UseTimeFeature']):
+
+        if self.cfg['model']['UseTimeFeature']:
+
             self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
@@ -77,7 +83,7 @@ class Dataset_Custom(Dataset):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
         y = self.data[index+self.lookback:index+self.lookback+self.horizon]
-        
+
         if self.cfg['model']['UseTimeFeature']:
             timestamp_x = self.data_stamp[index:index+self.lookback]
             timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]

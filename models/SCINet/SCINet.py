@@ -324,6 +324,7 @@ class SCINet(nn.Module):
         return signal
 
     def forward(self, x):
+        
         assert self.input_len % (np.power(2, self.num_levels)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 levels)
         if self.pe:
             pe = self.get_position_encoding(x)

@@ -53,8 +53,10 @@ def build_train_loss(cfg):
         lf = r2_score_torch
     elif cfg['exp']['train']['loss'] == 'evar':
         lf = explained_variance_score_torch
+
     elif cfg['exp']['train']['loss'] == 'smooth_l1':
         lf = smooth_l1_loss
+
     else:
         print('Received none train loss func and will use the loss func defined in the model.')
         lf = masked_mae_torch
@@ -269,6 +271,7 @@ def explained_variance_score_np(preds, labels):
     labels = labels.flatten()
     return explained_variance_score(labels, preds)
 
+
 def smooth_l1_loss(input, target, beta=1. / 9, size_average=True):
     """
     very similar to the smooth_l1_loss from pytorch, but with
@@ -280,3 +283,4 @@ def smooth_l1_loss(input, target, beta=1. / 9, size_average=True):
     if size_average:
         return loss.mean()
     return loss.sum()
+
