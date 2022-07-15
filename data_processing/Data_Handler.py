@@ -37,7 +37,22 @@ class Dataset_Custom(Dataset):
     def __read_data__(self):
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']
-        self.data = pd.read_csv(path)
+        file_dir = path.split('/')
+        file_name = file_dir[-1]
+        file_type = file_name.split('.')[-1]
+        if file_type == 'csv':
+            self.data = pd.read_csv(path)
+        elif file_type == 'txt':
+            fin = open(path)
+            rawdat = np.loadtxt(fin, delimiter=',')
+            self.data = pd.DataFrame(rawdat)
+        elif file_type == 'npz':
+            data = np.load(path)
+            data = data['data'][:,:,0]
+            self.data = pd.DataFrame(data)
+        
+        self.data = self.data.fillna(method='ffill')
+        
 
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
