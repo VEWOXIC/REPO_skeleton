@@ -6,7 +6,12 @@
             "lr":0.001,
             "lr_adj":0,
             "shuffle": true,
-            "drop_last": true
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "valid":{
             "batchsize":8,
@@ -26,7 +31,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
     "model":{
@@ -57,7 +62,7 @@
         "patience": 50,
         "rnn_type": "RNN",
         "num_nodes": 7,
-        "device":"cpu",
+        "device":"cuda",
         "UseTimeFeature": true
     },
 
