@@ -52,8 +52,10 @@ class Dataset_Custom(Dataset):
             self.data = pd.DataFrame(data)
 
 
+
         self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
         self.data = pd.DataFrame(self.data)        
+
 
 
 
