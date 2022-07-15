@@ -6,7 +6,12 @@
             "lr":0.001,
             "lr_adj":0,
             "shuffle": true,
-            "drop_last": true
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "valid":{
             "batchsize":8,
