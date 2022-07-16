@@ -1,6 +1,7 @@
 {
     "exp":{
         "train":{
+            "training": true,
             "batchsize":8,
             "epochs":1,
             "lr":0.001,
