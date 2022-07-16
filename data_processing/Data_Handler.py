@@ -4,19 +4,11 @@ from torch.utils.data import Dataset
 from utils import data_utils
 from utils.timefeatures import time_features
 import pandas as pd
-import numpy as np
-import pandas as pd
-from sklearn.base import TransformerMixin
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
 
 
 def get_dataset(cfg, flag):
     # 可能要选择
-    if cfg['data']['dataset_name']=="ETTh1":
-        return  Dataset_Custom(cfg, flag)
-    elif cfg['data']['dataset_name']=="dummy_dataset":
-        return  Dataset_Custom(cfg, flag)
+    return  Dataset_Custom(cfg, flag)
 
 # 如果想一个dataloader对应所有数据，这里需要非常多的函数支持
 class Dataset_Custom(Dataset):
@@ -55,8 +47,7 @@ class Dataset_Custom(Dataset):
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
         
-        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
-        self.data = pd.DataFrame(self.data)
+        self.data = self.data.fillna(method='ffill')
         
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
