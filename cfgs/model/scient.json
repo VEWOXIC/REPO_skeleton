@@ -1,0 +1,10 @@
+{
+    "model_name":"SCINet",
+    "horizon": 24, 
+    "features": 7, 
+    "levels": 3, 
+    "h": 4, 
+    "kernel_size": 5,
+    "kernel_regularizer": "None", 
+    "activity_regularizer": "None"
+}

@@ -412,23 +412,17 @@ def get_variable(x):
 '''
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-
     parser.add_argument('--window_size', type=int, default=96)
     parser.add_argument('--horizon', type=int, default=12)
-
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--groups', type=int, default=1)
-
     parser.add_argument('--hidden-size', default=1, type=int, help='hidden channel of module')
     parser.add_argument('--INN', default=1, type=int, help='use INN or basic strategy')
     parser.add_argument('--kernel', default=3, type=int, help='kernel size')
     parser.add_argument('--dilation', default=1, type=int, help='dilation')
     parser.add_argument('--positionalEcoding', type=bool, default=True)
-
     parser.add_argument('--single_step_output_One', type=int, default=0)
-
     args = parser.parse_args()
-
     model = SCINet(output_len=args.horizon, input_len=args.window_size, input_dim=9, hid_size=args.hidden_size,
                    num_stacks=1,
                    num_levels=3, concat_len=0, groups=args.groups, kernel=args.kernel, dropout=args.dropout,
@@ -437,4 +431,3 @@ if __name__ == '__main__':
     x = torch.randn(32, 96, 9).cuda()
     y = model(x)
     print(y.shape)
-'''
