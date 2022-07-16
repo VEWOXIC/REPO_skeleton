@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 if __name__ == '__main__':
-    with open('cfgs/exp/SCINet/SCINet_PEMS08_mult_s12h12.json','r') as f:
+    with open('cfgs/exp/STGCN/STGCN_ETTh1_example.json','r') as f:
         cfg =json.load(f)
 
     model_save_dir = 'cache/{}/{}/{}'.format(cfg['model']['model_name'], cfg['data']['dataset_name'], cfg['data']['horizon'])
