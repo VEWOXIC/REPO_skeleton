@@ -58,7 +58,7 @@ class Exp_Basic(object):
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 self.optimizer.zero_grad()
-                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
                 loss = self.loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
