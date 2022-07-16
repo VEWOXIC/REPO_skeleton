@@ -1,35 +1,42 @@
 {
     "exp":{
         "train":{
-            "batchsize":16,
-            "epochs":20,
-            "lr":9e-3,
-            "lr_adj":0,
+            "training": true,
+            "saved_model": true,
+            "batchsize":8,
+            "epochs":100,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":8,
             "shuffle": true,
             "drop_last": true
         },
-        "valid":{
-            "batchsize":128,
-            "shuffle": false,
-            "drop_last": false
-        },
         "test":{
-            "batchsize":128,
+            "batchsize":8,
             "shuffle": false,
-            "drop_last": false
+            "drop_last": true
         },
         "metrics":{
             "MSE": true,
             "MAE": true,
-            "RMSE": false,
-            "MAPE": false,
-            "RSE": false,
-            "CORR": false
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
-    "model":{
+    "model": {
         "model_name":"SCINet",
         "horizon": 24,
         "window_size": 48,
@@ -46,10 +53,12 @@
         "positionalEcoding": false,
         "modified": true,
         "input_len_seg": 0,
-        "RIN": false
+        "RIN": false,
+        "UseTimeFeature": false
     },
 
-    "data":{   
+    "data": {
+        "exp_id": false,
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
         "lookback":48,
@@ -60,7 +69,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target":"OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar",
+        "freq": "h"
     }
-    
 }
