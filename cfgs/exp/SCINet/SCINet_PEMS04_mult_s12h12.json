@@ -3,8 +3,8 @@
         "train":{
             "training": true,
             "saved_model": true,
-            "batchsize":8,
-            "epochs":20,
+            "batchsize":4,
+            "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -16,12 +16,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":8,
+            "batchsize":4,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":8,
+            "batchsize":4,
             "shuffle": false,
             "drop_last": true
         },
@@ -33,27 +33,44 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
-    "model":{
-        "model_name":"LinearLayer",
-        "num_layers":1,
+    "model": {
+        "model_name":"SCINet",
+        "horizon": 12,
+        "window_size": 12,
+        "input_dim": 307,
+        "hidden_size": 0.0625,
+        "num_stacks": 1,
+        "num_levels": 2,
+        "num_decoder_layer": 1,
+        "concat_len": 0,
+        "groups": 1,
+        "kernel": 5,
+        "dropout": 0,
+        "single_step_output_One": 0,
+        "positionalEcoding": true,
+        "modified": true,
+        "input_len_seg": 0,
+        "RIN": false,
         "UseTimeFeature": false
     },
 
     "data": {
-        "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1.csv",
-        "lookback":48,
-        "horizon":24,
-        "channel":7,
+        "exp_id": false,
+        "dataset_name":"PEMS04",
+        "path":"./datasets/PEMS04.npz",
+        "lookback":12,
+        "horizon":12,
+        "channel":307,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
         "target":"OT",
         "scalar":"StandardScalar",
-        "freq":"h"
+        "freq": "h"
     }
 }
+

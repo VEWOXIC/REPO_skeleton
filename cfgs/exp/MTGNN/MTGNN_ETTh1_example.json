@@ -1,13 +1,20 @@
 {
     "exp":{
         "train":{
+            "training": true,
+            "saved_model": true,
             "batchsize":8,
             "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
             "drop_last": true,
-            "step_size": 100
+            "step_size": 100,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "valid":{
             "batchsize":8,
@@ -29,6 +36,7 @@
         },
         "device":"cuda"
     },
+
 
     "model": { 
         "model_name":"MTGNN",
@@ -52,14 +60,14 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
-        "lr_decay_rate": 0.5,
-        "lr_decay_step": 2,
         "UseTimeFeature": true
     },
 
     "data": {
+        "exp_id" : 1,
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
+        "freq": "h",
         "lookback":48,
         "horizon":24,
         "channel":7,
@@ -68,7 +76,6 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar",
-        "freq": "h"
+        "scalar":"StandardScalar"
     }
 }

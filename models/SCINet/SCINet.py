@@ -308,8 +308,8 @@ class SCINet(nn.Module):
 
         ### RIN Parameters ###
         if self.RIN:
-            self.affine_weight = nn.Parameter(torch.ones(1, 1, self.input_dim))
-            self.affine_bias = nn.Parameter(torch.zeros(1, 1, self.input_dim))
+            self.affine_weight = nn.Parameter(torch.ones(1, 1, input_dim))
+            self.affine_bias = nn.Parameter(torch.zeros(1, 1, input_dim))
     
     def get_position_encoding(self, x):
         max_length = x.size()[1]
@@ -324,6 +324,7 @@ class SCINet(nn.Module):
         return signal
 
     def forward(self, x):
+        
         assert self.input_len % (np.power(2, self.num_levels)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 levels)
         if self.pe:
             pe = self.get_position_encoding(x)
@@ -411,23 +412,17 @@ def get_variable(x):
 '''
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-
     parser.add_argument('--window_size', type=int, default=96)
     parser.add_argument('--horizon', type=int, default=12)
-
     parser.add_argument('--dropout', type=float, default=0.5)
     parser.add_argument('--groups', type=int, default=1)
-
     parser.add_argument('--hidden-size', default=1, type=int, help='hidden channel of module')
     parser.add_argument('--INN', default=1, type=int, help='use INN or basic strategy')
     parser.add_argument('--kernel', default=3, type=int, help='kernel size')
     parser.add_argument('--dilation', default=1, type=int, help='dilation')
     parser.add_argument('--positionalEcoding', type=bool, default=True)
-
     parser.add_argument('--single_step_output_One', type=int, default=0)
-
     args = parser.parse_args()
-
     model = SCINet(output_len=args.horizon, input_len=args.window_size, input_dim=9, hid_size=args.hidden_size,
                    num_stacks=1,
                    num_levels=3, concat_len=0, groups=args.groups, kernel=args.kernel, dropout=args.dropout,
