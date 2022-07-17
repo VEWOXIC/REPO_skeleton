@@ -2,11 +2,10 @@
     "exp":{
         "train":{
             "training": true,
-            "saved_model": true,
             "batchsize":8,
             "epochs":100,
             "lr":0.001,
-            "lr_adj":1,
+            "lr_adj":0,
             "shuffle": true,
             "drop_last": true,
             "optimizer": "adam",
@@ -36,29 +35,41 @@
         "device":"cuda"
     },
 
-    "model": {
-        "model_name":"SCINet",
-        "horizon": 24,
-        "window_size": 48,
-        "input_dim": 7,
-        "hidden_size": 4,
-        "num_stacks": 1,
-        "num_levels": 3,
-        "num_decoder_layer": 1,
-        "concat_len": 0,
-        "groups": 1,
-        "kernel": 3,
-        "dropout": 0.5,
-        "single_step_output_One": 0,
-        "positionalEcoding": false,
-        "modified": true,
-        "input_len_seg": 0,
-        "RIN": false,
-        "UseTimeFeature": false
+    "model":{
+        "model_name":"Seq2Seq",
+        "hidden_size": 64,
+        "num_layers": 1,
+        "dropout": 0,
+        "bidirectional": false,
+        "teacher_forcing_ratio": 0,
+        
+        "scaler": "standard",
+        "load_external": true,
+        "normal_external": false,
+        "ext_scaler": "none",
+        "add_time_in_day": true,
+        "add_day_in_week": false,
+        
+        "max_epoch": 100,
+        "learner": "adam",
+        "learning_rate": 0.01,
+        "lr_decay": true,
+        "lr_scheduler": "multisteplr",
+        "lr_decay_ratio": 0.1,
+        "steps": [5, 20, 40, 70],
+        "clip_grad_norm": true,
+        "max_grad_norm": 5,
+        "use_early_stop": true,
+        "patience": 50,
+        "rnn_type": "RNN",
+        "num_nodes": 7,
+        "feature_dim":2,
+        "output_dim":1,
+        "device":"cuda",
+        "UseTimeFeature": true
     },
 
-    "data": {
-        "exp_id": false,
+    "data":{   
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
         "lookback":48,
@@ -68,8 +79,11 @@
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target":"OT",
+        "target":0,
         "scalar":"StandardScalar",
+        "num_nodes":7,
         "freq": "h"
+
     }
+    
 }

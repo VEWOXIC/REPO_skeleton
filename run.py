@@ -7,6 +7,7 @@ from datetime import datetime
 
 
 if __name__ == '__main__':
+
     with open('cfgs/exp/TransformerModel/TransformerModel_PEMS08_s12h12.json','r') as f:
         cfg =json.load(f)
 
