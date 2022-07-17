@@ -116,10 +116,10 @@ class Exp_Basic(object):
     def adjust_learning_rate(self,optimizer, epoch, cfg):
         lr = cfg['exp']['train']['lr']
         lr_adj = cfg['exp']['train']['lr_adj']
-        if lr_adj==1:
+        if lr_adj==0:
             lr_adjust = {epoch: lr * (0.95 ** (epoch // 1))}
 
-        elif lr_adj==2:
+        elif lr_adj==1:
             lr_adjust = {
                 0: 0.0001, 5: 0.0005, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
                 , 70: 0.000001
