@@ -4,6 +4,7 @@ from torch.utils.data import Dataset
 from utils import data_utils
 from utils.timefeatures import time_features
 import pandas as pd
+from torch.autograd import Variable
 
 
 def get_dataset(cfg, flag):
@@ -11,6 +12,7 @@ def get_dataset(cfg, flag):
     return  Dataset_Custom(cfg, flag)
 
 # 如果想一个dataloader对应所有数据，这里需要非常多的函数支持
+
 class Dataset_Custom(Dataset):
     def __init__(self, cfg, flag) -> None:
         super().__init__()
@@ -31,8 +33,12 @@ class Dataset_Custom(Dataset):
         return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
 
     def __read_data__(self):
+        print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
-        path = self.cfg["data"]['path']
+        path = self.cfg["data"]['path']     
+
+
+
         file_dir = path.split('/')
         file_name = file_dir[-1]
         file_type = file_name.split('.')[-1]
@@ -48,13 +54,14 @@ class Dataset_Custom(Dataset):
             self.data = pd.DataFrame(data)
         
         self.data = self.data.fillna(method='ffill')
-        
+
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
         if self.cfg['model']['UseTimeFeature']:
+
             self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
@@ -64,12 +71,14 @@ class Dataset_Custom(Dataset):
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = self.scaler.transform(self.data.values)
 
-        # 单变量/多变量
 
+        # 单变量/多变量
+    
     def __getitem__(self, index):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
         y = self.data[index+self.lookback:index+self.lookback+self.horizon]
+
         if self.cfg['model']['UseTimeFeature']:
             timestamp_x = self.data_stamp[index:index+self.lookback]
             timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]

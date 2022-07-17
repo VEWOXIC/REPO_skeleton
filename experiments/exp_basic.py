@@ -52,7 +52,8 @@ class Exp_Basic(object):
             epoch_start_time = time.time()
             loss_total = 0
             iter_count = 0
-
+            self.adjust_learning_rate(self.optimizer, epoch, self.cfg)
+            
             for input, target, input_time, target_time in train_loader:
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
@@ -111,3 +112,25 @@ class Exp_Basic(object):
         return mae, [metric(preds, trues)]
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr)
+        
+    def adjust_learning_rate(self,optimizer, epoch, cfg):
+        lr = cfg['exp']['train']['lr']
+        lr_adj = cfg['exp']['train']['lr_adj']
+        if lr_adj==1:
+            lr_adjust = {epoch: lr * (0.95 ** (epoch // 1))}
+
+        elif lr_adj==2:
+            lr_adjust = {
+                0: 0.0001, 5: 0.0005, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
+                , 70: 0.000001
+            }
+
+        if epoch in lr_adjust.keys():
+            lr = lr_adjust[epoch]
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = lr
+            print('Updating learning rate to {}'.format(lr))
+        else:
+            for param_group in optimizer.param_groups:
+                lr = param_group['lr']
+        return lr
