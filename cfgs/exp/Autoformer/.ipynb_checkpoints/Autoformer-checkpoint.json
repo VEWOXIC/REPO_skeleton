@@ -1,12 +1,18 @@
 {
     "exp":{
         "train":{
+            "training": true,
             "batchsize":8,
             "epochs":20,
             "lr":0.0001,
             "lr_adj":0,
             "shuffle": true,
-            "drop_last": true
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
         },
         "val":{
             "batchsize":128,
@@ -26,7 +32,7 @@
             "RSE": false,
             "CORR": false
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
     "model":{
@@ -45,8 +51,8 @@
        "factor":"1",
        "dropout":"0.05",
        "embed":"timeF",
-       "activation":"gelu"
-       
+       "activation":"gelu",
+       "UseTimeFeature": false
     },
    
 
@@ -61,6 +67,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar",
+        "freq": "h"
     }
 }
