@@ -8,7 +8,7 @@ import utils.exp_utils
 import time
 
 class Exp_Basic(object):
-    def __init__(self, cfg) -> None:
+    def __init__(self, cfg, model_save_dir) -> None:
         file_dir = cfg['data']['path']
         self.cfg = cfg
         self.device = torch.device(cfg['exp']['device'])
