@@ -1,0 +1,5 @@
+{
+    "model_name":"RNN",
+    "num_layers":1,
+    "UseTimeFeature": false
+}
