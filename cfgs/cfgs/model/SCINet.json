@@ -1,0 +1,20 @@
+{
+        "model_name":"SCINet",
+        "horizon": 24,
+        "window_size": 48,
+        "input_dim": 7,
+        "hidden_size": 4,
+        "num_stacks": 1,
+        "num_levels": 3,
+        "num_decoder_layer": 1,
+        "concat_len": 0,
+        "groups": 1,
+        "kernel": 3,
+        "dropout": 0.5,
+        "single_step_output_One": 0,
+        "positionalEcoding": false,
+        "modified": true,
+        "input_len_seg": 0,
+        "RIN": false,
+        "UseTimeFeature": false
+}
