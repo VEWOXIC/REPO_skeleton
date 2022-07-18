@@ -1,3 +1,4 @@
+from locale import normalize
 import torch
 import numpy as np
 from torch.utils.data import Dataset
@@ -21,6 +22,7 @@ class Dataset_Custom(Dataset):
         self.lookback = cfg['data']['lookback']
         self.horizon = cfg['data']['horizon']
         self.timeStampFreq = cfg['data']['freq'] # Choose a time feature
+        self.normalize = cfg['data']['normalize']
 
         self.__read_data__()
         # need to be implemented
@@ -52,9 +54,48 @@ class Dataset_Custom(Dataset):
             data = np.load(path)
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
-        
-        self.data = self.data.fillna(method='ffill')
 
+
+        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values      
+        
+        #normalize data from SCINet's financial dataloader
+        self.scale = np.ones(self.data.shape[1])
+        self.bias =  np.zeros(self.data.shape[1])
+        self.scale = torch.from_numpy(self.scale).float()
+        self.bias = torch.from_numpy(self.bias).float()
+        self.scale = self.scale.cuda()
+        self.scale = Variable(self.scale)
+        self.bias = self.bias.cuda()
+        self.bias = Variable(self.bias)
+        
+        
+        if(self.normalize == 0):#dafault
+            print("default norm")
+            print("data:", self.data)
+        elif(self.normalize == 1):#max
+            print("normalized by the maximum value of entire matrix.")
+            self.data = self.data / np.max(self.data)
+            print("data:", self.data)
+        elif(self.normalize == 2):
+            print("# normlized by the maximum value of each row (sensor).")
+            for i in range(self.data.shape[1]):
+                self.scale[i] = np.max(np.abs(self.data[:, i]))
+                print("scale[", i, "]:", self.scale[i])
+                self.data[:, i] = self.data[:, i] / self.scale[i].cpu().numpy()
+            print("data:", self.data)
+        elif (self.normalize == 3):
+            print("normlized by the mean/std value of each row (sensor).")
+            for i in range(self.data.shape[1]):
+                self.scale[i] = np.std(self.data[:, i]) #std
+                self.bias[i] = np.mean(self.data[:, i])
+                print("mean:", self.scale)
+                print("bias:", self.bias)
+                self.data[:, i] = (self.data[:, i] - self.bias[i].cpu().numpy()) / self.scale[i].cpu().numpy()
+            print("data:", self.data)
+
+        
+        self.data = pd.DataFrame(self.data)
+        
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test

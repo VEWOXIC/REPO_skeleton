@@ -7,11 +7,11 @@ from datetime import datetime
 
 
 if __name__ == '__main__':
-
-
-    with open('cfgs/exp/TransformerModel/TransformerModel_PEMS08_s12h12.json','r') as f:
-
+    # if os.paths.exists()
+    with open('cfgs/exp/SCINet/SCINet_exchange_rate_mult_s168h3.json','r') as f:
         cfg =json.load(f)
+    # else
+
 
     model_save_dir = 'cache/{}/{}/{}'.format(cfg['model']['model_name'], cfg['data']['dataset_name'], cfg['data']['horizon'])
     if not os.path.exists(model_save_dir):
