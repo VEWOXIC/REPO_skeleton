@@ -33,30 +33,6 @@ class Exp_Basic(object):
     def _get_lossfunc(self):
         # TODO: just for demo， 从utils选择
         return nn.L1Loss()
-    def _process_one_batch(self, batch_x,batch_x_mark,batch_y, batch_y_mark):
-        batch_x = batch_x.float().to(self.device)
-        batch_x_mark = batch_x_mark.float().to(self.device)
-        batch_y_mark = batch_y_mark.float().to(self.device)
-     
-        # decoder input
-        dec_inp = torch.zeros([batch_y.shape[0], self.cfg['model']['pred_len'], batch_y.shape[-1]]).float()
-        dec_inp = torch.cat([batch_y[:,:self.cfg['model']['label_len'],:], dec_inp], dim=1).float().to(self.device)
-        # encoder - decoder
-        if self.cfg['model']['use_amp']:
-            with torch.cuda.amp.autocast():
-                if self.cfg['model']['output_attention']:
-                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-                else:
-                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-        else:
-            if self.cfg['model']['output_attention']:
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-            else:
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-        f_dim =  0
-        batch_y = batch_y[:,-self.cfg['model']['pred_len']:,f_dim:].to(self.device)
-        return outputs, batch_y
-
 
     def train(self):
         # TODO: just for demo, TO BE implemented
@@ -75,14 +51,19 @@ class Exp_Basic(object):
             loss_total = 0
             iter_count = 0
 
-            for i,(input, target, input_time, target_time) in enumerate(train_loader):
+            for input, target, input_time, target_time in train_loader:
+                input, target, input_time, target_time = \
+                    input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
+
+                target = target[:, -self.cfg['model']['pred_len']:, :]
                 optimizer.zero_grad()
-                prediction,true=self._process_one_batch(input,input_time,target, target_time)
-                loss = loss_func(true, prediction)
+                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+                loss = loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
                 optimizer.step()
                 loss_total += float(loss)
+
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / iter_count))
@@ -100,6 +81,7 @@ class Exp_Basic(object):
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
+            target = target[:, -self.cfg['model']['pred_len']:, :]
             prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
