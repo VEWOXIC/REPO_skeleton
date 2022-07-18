@@ -30,7 +30,7 @@
     },
 
     "model":{
-        "model_name":"Informer",
+        "model_name":"Reformer",
         "bucket_size":4,
         "n_hashes":4,
         "enc_in":7,
@@ -53,13 +53,14 @@
        "use_amp": false,
        "UseTimeFeature": true,
        "distil": true
+    
     },
     "data":{
             "dataset_name":"ETTh1",
             "path":"./datasets/ETTh1.csv",
             "lookback":48,
             "horizon":24,
-            "label_len":24,
+            "label_len": 24,
             "channel":7,
             "train_ratio":0.6,
             "valid_ratio":0.2,

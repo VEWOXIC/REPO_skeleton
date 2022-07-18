@@ -30,7 +30,7 @@
     },
 
     "model":{
-        "model_name":"Informer",
+        "model_name":"Transformer",
         "bucket_size":4,
         "n_hashes":4,
         "enc_in":7,
@@ -53,6 +53,7 @@
        "use_amp": false,
        "UseTimeFeature": true,
        "distil": true
+     
     },
     "data":{
             "dataset_name":"ETTh1",
