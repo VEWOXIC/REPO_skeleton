@@ -8,12 +8,12 @@
     "d_model":512,
     "distil":"True",
     "n_heads":8,
-    "e_layers":2,
-    "d_layers":1,
-    "d_ff":2048,
+    "e_layers":3,
+    "d_layers":2,
+    "d_ff":512,
     "attn":"prob",
     "factor":5,
-    "embed":"timeF",
+    "embed":"fixed",
     "enc_in":7,
     "freq":"h",
     "dropout":0.0,
@@ -21,7 +21,6 @@
     "dec_in":7,
     "c_out":7,
     "mix":"True",
-    "UseTimeFeature": "False",
-    "use_amp":"False"
+    "UseTimeFeature": "false"
 
 }
