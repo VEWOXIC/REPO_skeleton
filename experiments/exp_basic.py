@@ -9,10 +9,9 @@ import time
 
 class Exp_Basic(object):
     def __init__(self, cfg, model_save_dir) -> None:
-        file_dir = cfg['data']['path']
         self.cfg = cfg
         self.device = torch.device(cfg['exp']['device'])
-        self.file_dir = file_dir
+        self.file_dir = model_save_dir
         self.model = self._build_model()
         self.model.to(self.device)
         self.loss_func = self._get_lossfunc()
