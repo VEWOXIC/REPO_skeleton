@@ -1,24 +1,18 @@
 import torch
 from torch.utils.data import DataLoader
+from torch import nn
+from torch import optim
 import numpy as np
 import models
 from utils.metrics import metric
 from data_processing.Data_Handler import get_dataset
-import utils.exp_utils
-import time
 
 class Exp_Basic(object):
-    def __init__(self, cfg, model_save_dir) -> None:
+    def __init__(self, cfg) -> None:
         self.cfg = cfg
-        self.device = torch.device(cfg['exp']['device'])
-        self.file_dir = model_save_dir
+        self.device = cfg['exp']['device']
         self.model = self._build_model()
-        self.model.to(self.device)
-        self.loss_func = self._get_lossfunc()
-        self.optimizer = self._get_optim()
-    
-
-
+        
     def _build_model(self):
         return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
@@ -27,110 +21,93 @@ class Exp_Basic(object):
         batch_size = self.cfg["exp"][flag]['batchsize']
         shuffle = self.cfg["exp"][flag]['shuffle']
         drop_last = self.cfg["exp"][flag]['drop_last']
-        return DataLoader(dataset, batch_size, shuffle=shuffle, drop_last=drop_last)
+        return DataLoader(dataset,batch_size,shuffle=shuffle,drop_last=drop_last)
 
     def _get_optim(self):
-        return utils.exp_utils.build_optimizer(self.cfg, self.model)
+        # TODO: just for demo， 从utils选择
+        return optim.Adam(self.model.parameters(), lr=self.cfg['exp']['train']['lr'])
 
     def _get_lossfunc(self):
-        return utils.exp_utils.build_train_loss(self.cfg)
-
-    def load_model(self):
-        self.model, self.optimizer = utils.exp_utils.load_model(self.file_dir, self.model, self.optimizer)
+        # TODO: just for demo， 从utils选择
+        return nn.L1Loss()
 
     def train(self):
-        # TODO: just for demo, TO BE implemented
+        # TODO: just for demo use, TO BE implemented
         epochs = self.cfg['exp']['train']['epochs']
         # TODO: get train and valid loader
         train_loader = self._create_loader("train")
-        valid_loader = self._create_loader("valid")
-        min_val_loss = float('inf')
-        early_stopping = utils.exp_utils.EarlyStopping(self.cfg)
-        
+        valid_loader = self._create_loader("val")
+
+        # TODO: get loss function and optimizer according to the exp_cfg
+        loss_func = self._get_lossfunc()
+        optimizer = self._get_optim()
+
         # train_loop
         for epoch in range(epochs):
-            epoch_start_time = time.time()
-            loss_total = 0
-            iter_count = 0
-            self.adjust_learning_rate(self.optimizer, epoch, self.cfg)
-            
-            for input, target, input_time, target_time in train_loader:
-                input, target, input_time, target_time = \
-                    input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
+            for input, target in train_loader:
+                input = input.float().to(self.device)
+                target = target.float().to(self.device)
 
-                self.optimizer.zero_grad()
-                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
-                loss = self.loss_func(target, prediction)
-                iter_count += 1
+                optimizer.zero_grad()
+                prediction = self.model(input)
+                loss = loss_func(target, prediction)
+
                 loss.backward() 
-                self.optimizer.step()
-                loss_total += float(loss)
-                
+                optimizer.step()
 
-            print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
-                    time.time() - epoch_start_time), loss_total / iter_count))
-            
-            val_loss, self.metrics = self.test(valid_loader)
-            early_stopping(val_loss, self.model, self.optimizer, self.file_dir)
-            print() 
-            if early_stopping.early_stop:
-                print("Early stopping")
-                break
-            #if val_loss < min_val_loss:
-            #    if self.cfg['exp']['train']['saved_model']:
-            #        print('Validate loss decreases from {:.4f} to {:.4f}, saving to {}'.format(min_val_loss, val_loss, self.file_dir + '/' + 'checkpoints'))
-            #        utils.exp_utils.save_model(self.cfg, self.file_dir, self.model, self.optimizer, self.metrics)
-            #        min_val_loss = val_loss
-              
-        print("Loading the best model.....") 
-        self.load_model()
-        
+   
 
-    def test(self, data_loader=None):
-        if data_loader is None:
-            data_loader = self._create_loader("test")
-
+    def test(self):
+        test_loader =self._create_loader("test")
+        preds = []
+        trues = []
         self.model.eval()
-        preds, trues = [], []
+        with torch.no_grad():
+            for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(test_loader):
+                batch_x = batch_x.float().to(self.device)
+                batch_y = batch_y.float().to(self.device)
 
-        for input, target, input_time, target_time in data_loader:
-            input, target, input_time, target_time = \
-                input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
-            
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
-            prediction = prediction.detach().cpu().numpy()
-            target = target.detach().cpu().numpy()
-            preds.append(prediction)
-            trues.append(target)
+                batch_x_mark = batch_x_mark.float().to(self.device)
+                batch_y_mark = batch_y_mark.float().to(self.device)
 
+                # decoder input
+                dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len:, :]).float()
+                dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
+                # encoder - decoder
+                if self.args.use_amp:
+                    with torch.cuda.amp.autocast():
+                        if self.args.output_attention:
+                            outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
+                        else:
+                            outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
+                else:
+                    if self.args.output_attention:
+                        outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
 
-        preds, trues = np.array(preds),np.array(trues)
-        preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
-        mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
-        print("------------TEST result:------------")
-        print("mae:", mae, " mse:",mse," rmse:",rmse)
-        return mae, [metric(preds, trues)]
-        # print("mape:",mape," mspe:",mspe," rse:",rse)
-        # print("corr:",corr)
-        
-    def adjust_learning_rate(self,optimizer, epoch, cfg):
-        lr = cfg['exp']['train']['lr']
-        lr_adj = cfg['exp']['train']['lr_adj']
-        if lr_adj==0:
-            lr_adjust = {epoch: lr * (0.95 ** (epoch // 1))}
+                    else:
+                        outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
-        elif lr_adj==1:
-            lr_adjust = {
-                0: 0.0001, 5: 0.0005, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
-                , 70: 0.000001
-            }
+                f_dim = -1 if self.args.features == 'MS' else 0
+                outputs = outputs[:, -self.args.pred_len:, f_dim:]
+                batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
+                outputs = outputs.detach().cpu().numpy()
+                batch_y = batch_y.detach().cpu().numpy()
 
-        if epoch in lr_adjust.keys():
-            lr = lr_adjust[epoch]
-            for param_group in optimizer.param_groups:
-                param_group['lr'] = lr
-            print('Updating learning rate to {}'.format(lr))
-        else:
-            for param_group in optimizer.param_groups:
-                lr = param_group['lr']
-        return 
+                pred = outputs  # outputs.detach().cpu().numpy()  # .squeeze()
+                true = batch_y  # batch_y.detach().cpu().numpy()  # .squeeze()
+
+                preds.append(pred)
+                trues.append(true)
+                if i % 20 == 0:
+                    input = batch_x.detach().cpu().numpy()
+                    gt = np.concatenate((input[0, :, -1], true[0, :, -1]), axis=0)
+                    pd = np.concatenate((input[0, :, -1], pred[0, :, -1]), axis=0)
+
+        preds = np.array(preds)
+        trues = np.array(trues)
+        print('test shape:', preds.shape, trues.shape)
+        preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
+        trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
+        print('test shape:', preds.shape, trues.shape)
+
+   

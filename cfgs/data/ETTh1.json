@@ -1,14 +1,16 @@
 {
-        "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1.csv",
-        "lookback":48,
-        "horizon":24,
-        "channel":7,
-        "train_ratio":0.6,
-        "valid_ratio":0.2,
-        "test_ratio":0.2,
-        "multivariate":true,
-        "target":"OT",
-        "scalar":"StandardScalar",
-        "freq": "h"
+    "dataset_name":"ETTH1",
+    "root_path":"./datasets/",
+    "size":[48, 48, 24],
+    "features":"M",
+    "data_path":"ETTh1.csv",
+    "target":"OT",
+    "scale":true,
+    "timeenc":1,
+    "freq":"h",
+    "cols":null,
+    "inverse":false,
+    "input_len":48,
+    "output_len":24,
+    "input_dim":7
 }

@@ -26,13 +26,12 @@
             "RSE": false,
             "CORR": false
         },
-        "device":"cuda"
+        "device":"cpu"
     },
 
     "model":{
         "model_name":"LinearLayer",
-        "num_layers":1,
-        "UseTimeFeature": false
+        "num_layers":1
     },
 
     "data":{   
@@ -46,8 +45,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target":0,
-        "scalar":"StandardScalar",
-        "freq":"h"
+        "scalar":"StandardScalar"
     }
     
 }
