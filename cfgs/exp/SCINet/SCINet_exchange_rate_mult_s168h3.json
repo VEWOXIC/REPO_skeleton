@@ -61,7 +61,6 @@
         "exp_id": false,
         "dataset_name":"electricity",
         "path":"./datasets/exchange_rate.txt",
-        "dataType": "txt",
         "lookback":168,
         "horizon":3,
         "channel":8,        
