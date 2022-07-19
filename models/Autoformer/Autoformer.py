@@ -14,7 +14,7 @@ class Autoformer(nn.Module):
     with inherent O(LlogL) complexity
     """
     def __init__(self, cfg):
-        super(Model, self).__init__()
+        super(Autoformer, self).__init__()
         self.label_len = cfg['model']["label_len"]
         self.pred_len = cfg['model']["pred_len"]
         self.output_attention = cfg['model']["output_attention"]
