@@ -9,6 +9,8 @@ from datetime import datetime
 if __name__ == '__main__':
     with open('cfgs/exp/STMGAT/STMGAT_ETTh1_example.json','r') as f:
         cfg =json.load(f)
+    # else
+
 
     model_save_dir = 'cache/{}/{}/{}'.format(cfg['model']['model_name'], cfg['data']['dataset_name'], cfg['data']['horizon'])
     if not os.path.exists(model_save_dir):

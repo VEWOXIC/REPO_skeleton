@@ -1,24 +1,19 @@
+from locale import normalize
 import torch
 import numpy as np
 from torch.utils.data import Dataset
 from utils import data_utils
 from utils.timefeatures import time_features
 import pandas as pd
-import numpy as np
-import pandas as pd
-from sklearn.base import TransformerMixin
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
+from torch.autograd import Variable
 
 
 def get_dataset(cfg, flag):
     # 可能要选择
-    if cfg['data']['dataset_name']=="ETTh1":
-        return  Dataset_Custom(cfg, flag)
-    elif cfg['data']['dataset_name']=="dummy_dataset":
-        return  Dataset_Custom(cfg, flag)
+    return  Dataset_Custom(cfg, flag)
 
 # 如果想一个dataloader对应所有数据，这里需要非常多的函数支持
+
 class Dataset_Custom(Dataset):
     def __init__(self, cfg, flag) -> None:
         super().__init__()
@@ -27,6 +22,7 @@ class Dataset_Custom(Dataset):
         self.lookback = cfg['data']['lookback']
         self.horizon = cfg['data']['horizon']
         self.timeStampFreq = cfg['data']['freq'] # Choose a time feature
+        self.normalize = cfg['data']['normalize']
 
         self.__read_data__()
         # need to be implemented
@@ -39,8 +35,12 @@ class Dataset_Custom(Dataset):
         return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
 
     def __read_data__(self):
+        print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
-        path = self.cfg["data"]['path']
+        path = self.cfg["data"]['path']     
+
+
+
         file_dir = path.split('/')
         file_name = file_dir[-1]
         file_type = file_name.split('.')[-1]
@@ -55,6 +55,42 @@ class Dataset_Custom(Dataset):
             data = np.load(path)
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
+
+
+        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values      
+        
+        #normalize data from SCINet's financial dataloader
+        self.scale = np.ones(self.data.shape[1])
+        self.bias =  np.zeros(self.data.shape[1])
+        self.scale = torch.from_numpy(self.scale).float()
+        self.bias = torch.from_numpy(self.bias).float()
+        self.scale = self.scale.cuda()
+        self.scale = Variable(self.scale)
+        self.bias = self.bias.cuda()
+        self.bias = Variable(self.bias)
+        
+        
+        if(self.normalize == 0):#dafault
+            print("default norm")
+           
+        elif(self.normalize == 1):#max
+            print("normalized by the maximum value of entire matrix.")
+            self.data = self.data / np.max(self.data)
+           
+        elif(self.normalize == 2):
+            print("# normlized by the maximum value of each row (sensor).")
+            for i in range(self.data.shape[1]):
+                self.scale[i] = np.max(np.abs(self.data[:, i]))
+                self.data[:, i] = self.data[:, i] / self.scale[i].cpu().numpy()
+           
+        elif (self.normalize == 3):
+            print("normlized by the mean/std value of each row (sensor).")
+            for i in range(self.data.shape[1]):
+                self.scale[i] = np.std(self.data[:, i]) #std
+                self.bias[i] = np.mean(self.data[:, i])
+                self.data[:, i] = (self.data[:, i] - self.bias[i].cpu().numpy()) / self.scale[i].cpu().numpy()
+            
+
         
         #self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values
         #self.data = pd.DataFrame(self.data)
@@ -65,6 +101,7 @@ class Dataset_Custom(Dataset):
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
         if self.cfg['model']['UseTimeFeature']:
+
             self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
@@ -74,12 +111,14 @@ class Dataset_Custom(Dataset):
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = self.scaler.transform(self.data.values)
 
-        # 单变量/多变量
 
+        # 单变量/多变量
+    
     def __getitem__(self, index):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
         y = self.data[index+self.lookback:index+self.lookback+self.horizon]
+
         if self.cfg['model']['UseTimeFeature']:
             timestamp_x = self.data_stamp[index:index+self.lookback]
             timestamp_y = self.data_stamp[index+self.lookback:index+self.lookback+self.horizon]

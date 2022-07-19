@@ -475,9 +475,7 @@ class MTGNN(nn.Module):
                 adp = self.predefined_A
 
         x = self.start_conv(input)
-        print("input",input.size())
         skip = self.skip0(F.dropout(input, self.dropout, training=self.training))
-        print("skip",skip.size())
         for i in range(self.layers):
             residual = x
             filter = self.filter_convs[i](x)
@@ -501,13 +499,8 @@ class MTGNN(nn.Module):
                 x = self.norm[i](x, idx)
 
         skip = self.skipE(x) + skip
-        print("skip",skip.size())
         x = F.relu(skip)
-        print("x",x.size())
         x = F.relu(self.end_conv_1(x))
-        print("x",x.size())
         x = self.end_conv_2(x)
-        print("x",x.size())
         prediction = torch.squeeze(x)
-        print("prediction",prediction.size())
-        return prediction
+        return 

@@ -4,7 +4,7 @@
             "training": true,
             "saved_model": true,
             "batchsize":8,
-            "epochs":1,
+            "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -34,7 +34,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
 
@@ -44,7 +44,7 @@
         "buildA_true": true,
         "gcn_depth": 2,
         "num_nodes": 7,
-        "device": "cpu",
+        "device": "cuda",
         "dropout": 0.3,
         "subgraph_size": 7,
         "node_dim": 40,
@@ -79,4 +79,3 @@
         "scalar":"StandardScalar"
     }
 }
-

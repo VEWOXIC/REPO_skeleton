@@ -8,10 +8,10 @@ import utils.exp_utils
 import time
 
 class Exp_Basic(object):
-    def __init__(self, cfg, file_dir) -> None:
+    def __init__(self, cfg, model_save_dir) -> None:
         self.cfg = cfg
         self.device = torch.device(cfg['exp']['device'])
-        self.file_dir = file_dir
+        self.file_dir = model_save_dir
         self.model = self._build_model()
         self.model.to(self.device)
         self.loss_func = self._get_lossfunc()
@@ -20,7 +20,7 @@ class Exp_Basic(object):
 
 
     def _build_model(self):
-        return models.__dict__[self.cfg['model']['model_name']](self.cfg)
+        return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
     def _create_loader(self,flag="train"):
         dataset = get_dataset(self.cfg, flag)
@@ -52,7 +52,8 @@ class Exp_Basic(object):
             epoch_start_time = time.time()
             loss_total = 0
             iter_count = 0
-
+            self.adjust_learning_rate(self.optimizer, epoch, self.cfg)
+            
             for input, target, input_time, target_time in train_loader:
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
@@ -93,23 +94,19 @@ class Exp_Basic(object):
 
         self.model.eval()
         preds, trues = [], []
-        #print("target", trues)
 
         for input, target, input_time, target_time in data_loader:
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
-            #print("target", target)
-            prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
+            
+            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
-            print("prediction", prediction.shape)
             preds.append(prediction)
             trues.append(target)
 
 
-        #print("an:",preds.size())
         preds, trues = np.array(preds),np.array(trues)
-        print("an:",trues.shape[-2], trues.shape[-1])
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
         print("------------TEST result:------------")
@@ -119,3 +116,25 @@ class Exp_Basic(object):
         return mae, [metric(preds, trues)]
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr)
+        
+    def adjust_learning_rate(self,optimizer, epoch, cfg):
+        lr = cfg['exp']['train']['lr']
+        lr_adj = cfg['exp']['train']['lr_adj']
+        if lr_adj==0:
+            lr_adjust = {epoch: lr * (0.95 ** (epoch // 1))}
+
+        elif lr_adj==1:
+            lr_adjust = {
+                0: 0.0001, 5: 0.0005, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
+                , 70: 0.000001
+            }
+
+        if epoch in lr_adjust.keys():
+            lr = lr_adjust[epoch]
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = lr
+            print('Updating learning rate to {}'.format(lr))
+        else:
+            for param_group in optimizer.param_groups:
+                lr = param_group['lr']
+        return lr
