@@ -1,6 +1,8 @@
 {
     "exp":{
         "train":{
+            "training": true,
+            "saved_model": true,
             "batchsize":8,
             "epochs":100,
             "lr":0.001,
@@ -61,6 +63,7 @@
             "horizon":24,
             "label_len":24,
             "channel":7,
+            "normalize": 3,
             "train_ratio":0.6,
             "valid_ratio":0.2,
             "test_ratio":0.2,
