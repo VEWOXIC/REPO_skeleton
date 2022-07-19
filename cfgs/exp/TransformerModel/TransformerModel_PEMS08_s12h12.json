@@ -70,6 +70,7 @@
         "lookback":12,
         "horizon":12,
         "channel":170,
+        "normalize": 3,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,

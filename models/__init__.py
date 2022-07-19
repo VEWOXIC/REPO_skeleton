@@ -11,3 +11,5 @@ from .DCRNN.DCRNN import DCRNN
 from .AutoEncoder.AutoEncoder import AutoEncoder
 from .GWNET.GWNET import GWNET
 from .STMGAT.STMGAT import STMGAT
+#from .Autoformer.Autoformer import Autoformer
+#from .Transformer.Transformer import Transformer
