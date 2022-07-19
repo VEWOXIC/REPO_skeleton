@@ -12,7 +12,7 @@ class Transformer(nn.Module):
     Vanilla Transformer with O(L^2) complexity
     """
     def __init__(self, cfg):
-        super(Model, self).__init__()
+        super(Transformer, self).__init__()
         self.label_len = cfg['model']["label_len"]
         self.pred_len = cfg['model']["pred_len"]
         self.output_attention = cfg['model']["output_attention"]
