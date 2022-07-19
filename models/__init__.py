@@ -9,4 +9,5 @@ from .Seq2Seq.Seq2Seq import Seq2Seq
 from .FNN.FNN import FNN
 from .DCRNN.DCRNN import DCRNN
 from .AutoEncoder.AutoEncoder import AutoEncoder
-
+from .Autoformer import Autoformer
+from .Transformer import Transformer
