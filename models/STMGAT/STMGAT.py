@@ -1,3 +1,4 @@
+import numpy as np
 import torch.nn.functional as F
 from dgl.nn.pytorch import GATConv
 import torch
@@ -59,9 +60,9 @@ class STMGAT(nn.Module):
         receptive_field = self.output_dim
         depth = list(range(self.blocks * self.layers))
         # 1x1 convolution for residual and skip connections (slightly different see docstring)
-        self.residual_convs = ModuleList([Conv1d(self.dilation_channels,
+        self.residual_convs = ModuleList([Conv2d(self.dilation_channels,
                                                  self.residual_channels, (1, 1)) for _ in depth])
-        self.skip_convs = ModuleList([Conv1d(self.dilation_channels,
+        self.skip_convs = ModuleList([Conv2d(self.dilation_channels,
                                              self.skip_channels, (1, 1)) for _ in depth])
         self.bn = ModuleList([BatchNorm2d(self.residual_channels) for _ in depth])
 
@@ -77,7 +78,7 @@ class STMGAT(nn.Module):
                 # dilated convolutions
                 self.filter_convs.append(Conv2d(self.residual_channels,
                                                 self.dilation_channels, (1, self.kernel_size), dilation=D))
-                self.gate_convs.append(Conv1d(self.residual_channels,
+                self.gate_convs.append(Conv2d(self.residual_channels,
                                               self.dilation_channels, (1, self.kernel_size), dilation=D))
                 # batch, channel, height, width
                 # N,C,H,W
@@ -110,7 +111,7 @@ class STMGAT(nn.Module):
         self.end_conv_2 = Conv2d(self.end_channels, self.output_window, (1, 1), bias=True)
 
     def _get_adj(self):
-        adj_mx = self.data_feature.get('adj_mx', 1)
+        adj_mx = np.ones((self.num_nodes, self.num_nodes), dtype=np.float32)
         edge_list = []
         for i in range(adj_mx.shape[0]):
             for j in range(adj_mx.shape[1]):
@@ -149,6 +150,7 @@ class STMGAT(nn.Module):
         # (batch_size, feature_dim, num_nodes, receptive_field)
         x1 = self.start_conv(x)
         x2 = F.leaky_relu(self.cat_feature_conv(x))
+        print('x2', x2.shape)
         # (batch_size, residual_channels, num_nodes, receptive_field)
         x = x1 + x2
         skip = 0
@@ -158,9 +160,11 @@ class STMGAT(nn.Module):
             residual = x
             # dilated convolution
             filter = torch.tanh(self.filter_convs[i](residual))
+            print('filter', filter.shape)
             gate = torch.sigmoid(self.gate_convs[i](residual))
+            print('gate', gate.shape)
             x = filter * gate
-            # print('x', x.shape)
+            print('x', x.shape)
             # (batch_size, dilation_channels, num_nodes, receptive_field-kernel_size+1)
             # parametrized skip connection
             s = self.skip_convs[i](x)
@@ -175,9 +179,10 @@ class STMGAT(nn.Module):
 
             # graph conv and mix
             if self.run_gconv:
-                [batch_size, fea_size, num_of_vertices, step_size] = x.size()  # [64, 40, 207, 12]
+                print(x.size())
+                [batch_size, fea_size, num_of_vertices, step_size] = x.size()  # [64, 40, 207, 12]    #8 40 7 47
                 batched_g = dgl.batch(batch_size * [self.g])
-                h = x.permute(0, 2, 1, 3).reshape(batch_size*num_of_vertices, fea_size*step_size)  # [64*207, 40*12]
+                h = x.permute(0, 2, 1, 3).reshape(batch_size*num_of_vertices, fea_size*step_size)  # [64*207, 40*12]   7*8 40*47
                 h = self.gat_layers[i](batched_g, h).mean(1)  # [64*207, 40*12]
                 h = self.gat_layers1[i](batched_g, h).mean(1)  # [64*207, 40*12]
                 gc = h.reshape(batch_size, num_of_vertices, fea_size, -1)  # [64, 207, 40, 12]
