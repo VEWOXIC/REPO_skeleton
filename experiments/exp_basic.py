@@ -34,7 +34,7 @@ class Exp_Basic(object):
         return utils.exp_utils.build_optimizer(self.cfg, self.model)
 
     def _get_lossfunc(self):
-        return utils.exp_utils.build_train_loss(self.cfg)
+        return utils.exp_utils.build_train_loss
 
     def load_model(self):
         self.model, self.optimizer = utils.exp_utils.load_model(self.file_dir, self.model, self.optimizer)
@@ -61,7 +61,8 @@ class Exp_Basic(object):
 
                 self.optimizer.zero_grad()
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
-                loss = self.loss_func(target, prediction)
+                # loss calculation: get scales and bias, wight ready
+                loss = self.loss_func(self.cfg, target, prediction)
                 iter_count += 1
                 loss.backward() 
                 self.optimizer.step()
@@ -69,11 +70,10 @@ class Exp_Basic(object):
                 
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
-                    time.time() - epoch_start_time), loss_total / iter_count))
+                    time.time() - epoch_start_time), loss_total / (iter_count  * self.cfg['data']['horizon'] * self.cfg['data']['channel'])))
             
-            val_loss, self.metrics = self.test(valid_loader)
-            early_stopping(val_loss, self.model, self.optimizer, self.file_dir)
-            print() 
+            #val_loss, self.metrics = self.test(valid_loader)
+            #early_stopping(val_loss, self.model, self.optimizer, self.file_dir)
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
@@ -114,7 +114,7 @@ class Exp_Basic(object):
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr)
         
-    def adjust_learning_rate(self,optimizer, epoch, cfg):
+    def adjust_learning_rate(self, optimizer, epoch, cfg):
         lr = cfg['exp']['train']['lr']
         lr_adj = cfg['exp']['train']['lr_adj']
         if lr_adj==1:
