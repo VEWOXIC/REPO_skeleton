@@ -7,7 +7,7 @@ from .Embed import DataEmbedding
 import numpy as np
 
 
-class Model(nn.Module):
+class Transformer(nn.Module):
     """
     Vanilla Transformer with O(L^2) complexity
     """
