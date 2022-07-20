@@ -11,7 +11,7 @@
             "shuffle": true,
             "drop_last": true,
             "optimizer": "adam",
-            "loss_function": "smooth_l1_loss",
+            "loss": "smooth_l1_loss",
             "patience": 7,
             "verbose": true,
             "delta": 0

@@ -70,12 +70,13 @@ class Exp_Basic(object):
                 
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
-                    time.time() - epoch_start_time), loss_total / (iter_count  * self.cfg['data']['horizon'] * self.cfg['data']['channel'])))
+                    time.time() - epoch_start_time), loss_total / iter_count))
             
-            #val_loss, self.metrics = self.test(valid_loader)
-            #early_stopping(val_loss, self.model, self.optimizer, self.file_dir)
+            val_loss, self.metrics = self.test(valid_loader)
+            early_stopping_path = self.file_dir[:-4] + "_early_stop.pth"
+            early_stopping(val_loss, self.model, self.optimizer, early_stopping_path)
             if early_stopping.early_stop:
-                print("Early stopping")
+                print("Early stopping, save model to %s" % early_stopping_path)
                 break
             #if val_loss < min_val_loss:
             #    if self.cfg['exp']['train']['saved_model']:

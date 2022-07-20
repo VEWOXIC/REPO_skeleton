@@ -27,62 +27,84 @@ def build_optimizer(cfg, model):
 
 # loss_function selection: input predictions and labels, output loss
 def build_train_loss(cfg, prediction, labels, res = None):
-    
-    if cfg['model']['model_name'] == "SCINet":# loss function for SCINet
         
-        if cfg['exp']['train']['loss_function'] == 'smooth_l1_loss':
-            criterion = smooth_l1_loss
+    if cfg['exp']['train']['loss'] == 'mae':
+        criterion = masked_mae_torch
+    elif cfg['exp']['train']['loss'] == 'mse':
+        criterion = masked_mse_torch
+    elif cfg['exp']['train']['loss'] == 'rmse':
+        criterion = masked_rmse_torch
+    elif cfg['exp']['train']['loss'] == 'mape':
+        criterion = masked_mape_torch
+    elif cfg['exp']['train']['loss'] == 'logcosh':
+        criterion = log_cosh_loss
+    elif cfg['exp']['train']['loss'] == 'huber':
+        criterion = huber_loss
+    elif cfg['exp']['train']['loss'] == 'quantile':
+        criterion = quantile_loss
+    elif cfg['exp']['train']['loss'] == 'masked_mae':
+        criterion = partial(masked_mae_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'masked_mse':
+        criterion = partial(masked_mse_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'masked_rmse':
+        criterion = partial(masked_rmse_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'masked_mape':
+        criterion = partial(masked_mape_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'r2':
+        criterion = r2_score_torch
+    elif cfg['exp']['train']['loss'] == 'evar':
+        criterion = explained_variance_score_torch
+    elif cfg['exp']['train']['loss'] == 'smooth_l1_loss':
+        criterion = smooth_l1_loss
+    else:
+        criterion = nn.MSELoss()
+        
+    scale, bias = torch.ones(prediction.shape).cuda(), torch.zeros(prediction.shape).cuda()
+    weight = cfg['exp']['train']['Lastweight']
+    
+    if cfg['model']['single_step']:# single step    
+        labels_last = labels[:, -1, :].cuda()
+        scale_last = torch.ones(prediction.size(0), cfg['data']['channel']).cuda()
+        bias_last = torch.zeros(prediction.size(0), cfg['data']['channel']).cuda()
+        if cfg['data']['normalize'] == 3:
+                    loss_f = criterion(prediction[:, -1], labels_last)
+                    if cfg['model']['num_stacks'] == 2:
+                        loss_m = criterion(res, labels)/res.shape[1] #average results
         else:
-            criterion = nn.MSELoss()
-            
-        scale, bias = torch.ones(prediction.shape).cuda(), torch.zeros(prediction.shape).cuda()
-        weight = cfg['exp']['train']['Lastweight']
-
-        if cfg['model']['single_step']:# single step    
-            labels_last = labels[:, -1, :].cuda()
-            scale_last = torch.ones(prediction.size(0), cfg['data']['channel']).cuda()
-            bias_last = torch.zeros(prediction.size(0), cfg['data']['channel']).cuda()
-            if cfg['data']['normalize'] == 3:
-                        loss_f = criterion(prediction[:, -1], labels_last)
-                        if cfg['model']['num_stacks'] == 2:
-                            loss_m = criterion(res, labels)/res.shape[1] #average results
-            else:
-                loss_f = criterion(prediction[:, -1] * scale_last + bias_last, labels_last * scale_last + bias_last)
-                if cfg['model']['num_stacks'] == 2:
-                    loss_m = criterion(res * scale + bias, labels * scale + bias)/res.shape[1] #average results
-        else:
-                        if cfg['data']['normalize'] == 3:
-                            if cfg['exp']['train']['Lastweight'] == 1.0:
-                                loss_f = criterion(prediction, labels)
-                                if cfg['model']['num_stacks'] == 2:
-                                    loss_m = criterion(res, labels)
-                            else:
-                                loss_f = criterion(prediction[:, :-1, :], labels[:, :-1, :] ) \
-                                        + weight * criterion(prediction[:, -1:, :], labels[:, -1:, :] )
-                                if cfg['model']['num_stacks'] == 2:
-                                    loss_m = criterion(res[:, :-1, :] , labels[:, :-1, :] ) \
-                                            + weight * criterion(res[:, -1:, :], labels[:, -1:, :] )
+            loss_f = criterion(prediction[:, -1] * scale_last + bias_last, labels_last * scale_last + bias_last)
+            if cfg['model']['num_stacks'] == 2:
+                loss_m = criterion(res * scale + bias, labels * scale + bias)/res.shape[1] #average results
+    else:
+                    if cfg['data']['normalize'] == 3:
+                        if cfg['exp']['train']['Lastweight'] == 1.0:
+                            loss_f = criterion(prediction, labels)
+                            if cfg['model']['num_stacks'] == 2:
+                                loss_m = criterion(res, labels)
                         else:
-                            if cfg['exp']['train']['Lastweight'] == 1.0:
-                                loss_f = criterion(prediction * scale + bias, labels * scale + bias)
-                                if cfg['model']['num_stacks'] == 2:
-                                    loss_m = criterion(res * scale + bias, labels * scale + bias)
-                            else:
-                                loss_f = criterion(prediction[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
+                            loss_f = criterion(prediction[:, :-1, :], labels[:, :-1, :] ) \
+                                    + weight * criterion(prediction[:, -1:, :], labels[:, -1:, :] )
+                            if cfg['model']['num_stacks'] == 2:
+                                loss_m = criterion(res[:, :-1, :] , labels[:, :-1, :] ) \
+                                        + weight * criterion(res[:, -1:, :], labels[:, -1:, :] )
+                    else:
+                        if cfg['exp']['train']['Lastweight'] == 1.0:
+                            loss_f = criterion(prediction * scale + bias, labels * scale + bias)
+                            if cfg['model']['num_stacks'] == 2:
+                                loss_m = criterion(res * scale + bias, labels * scale + bias)
+                        else:
+                            loss_f = criterion(prediction[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
+                                            labels[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
+                                + weight * criterion(prediction[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
+                                                        labels[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
+                            if cfg['model']['num_stacks'] == 2:
+                                loss_m = criterion(res[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
                                                 labels[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
-                                    + weight * criterion(prediction[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
+                                    + weight * criterion(res[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
                                                             labels[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
-                                if cfg['model']['num_stacks'] == 2:
-                                    loss_m = criterion(res[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
-                                                    labels[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
-                                        + weight * criterion(res[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
-                                                                labels[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
-        loss = loss_f
-        if cfg['model']['num_stacks'] == 2:
-            loss += loss_m    
-        return loss
-    else: # loss function for other models
-        return nn.MSELoss()
+    loss = loss_f
+    if cfg['model']['num_stacks'] == 2:
+        loss += loss_m    
+    return loss
 
     
         
@@ -132,7 +154,7 @@ class EarlyStopping:
 
     def save_checkpoint(self, val_loss, model, optimizer, path):
         if self.verbose:
-            print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
+            print('Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
         torch.save({
                 'model': model.state_dict(),
                 'optimizer': optimizer.state_dict(),

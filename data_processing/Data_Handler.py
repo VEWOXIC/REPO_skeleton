@@ -77,7 +77,6 @@ class Dataset_Custom(Dataset):
             print("# normlized by the maximum value of each row (sensor).")
             for i in range(self.data.shape[1]):
                 self.scale[i] = np.max(np.abs(self.data[:, i]))
-                print("scale[", i, "]:", self.scale[i])
                 self.data[:, i] = self.data[:, i] / self.scale[i].cpu().numpy()
         elif (self.normalize == 3):
             print("normlized by the mean/std value of each row (sensor).")
