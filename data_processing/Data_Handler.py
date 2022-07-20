@@ -70,20 +70,27 @@ class Dataset_Custom(Dataset):
         
         if(self.normalize == 0):#dafault
             print("default norm")
+
         elif(self.normalize == 1):#max
             print("normalized by the maximum value of entire matrix.")
             self.data = self.data / np.max(self.data)
+
         elif(self.normalize == 2):
             print("# normlized by the maximum value of each row (sensor).")
             for i in range(self.data.shape[1]):
                 self.scale[i] = np.max(np.abs(self.data[:, i]))
                 self.data[:, i] = self.data[:, i] / self.scale[i].cpu().numpy()
+
         elif (self.normalize == 3):
             print("normlized by the mean/std value of each row (sensor).")
             for i in range(self.data.shape[1]):
                 self.scale[i] = np.std(self.data[:, i]) #std
+
                 self.bias[i] = np.mean(self.data[:, i]) #mean
                 self.data[:, i] = (self.data[:, i] - self.bias[i].cpu().numpy()) / self.scale[i].cpu().numpy()
+
+
+
         
         self.data = pd.DataFrame(self.data)
         
