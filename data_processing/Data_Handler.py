@@ -35,11 +35,9 @@ class Dataset_Custom(Dataset):
         return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
 
     def __read_data__(self):
-        print("data handler: read data...")
+        #print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
-
-
 
         file_dir = path.split('/')
         file_name = file_dir[-1]
@@ -55,63 +53,49 @@ class Dataset_Custom(Dataset):
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
 
-
-        self.data = self.data.fillna(method='ffill', limit=len(self.data)).fillna(method='bfill', limit=len(self.data)).values      
-        
-        #normalize data from SCINet's financial dataloader
+        self.data = self.data.fillna(method='ffill')    
         self.scale = np.ones(self.data.shape[1])
         self.bias =  np.zeros(self.data.shape[1])
-        self.scale = torch.from_numpy(self.scale).float()
-        self.bias = torch.from_numpy(self.bias).float()
-        self.scale = self.scale.cuda()
-        self.scale = Variable(self.scale)
-        self.bias = self.bias.cuda()
-        self.bias = Variable(self.bias)
-        
-        
-        if(self.normalize == 0):#dafault
-            print("default norm")
-           
-        elif(self.normalize == 1):#max
-            print("normalized by the maximum value of entire matrix.")
-            self.data = self.data / np.max(self.data)
-           
-        elif(self.normalize == 2):
-            print("# normlized by the maximum value of each row (sensor).")
-            for i in range(self.data.shape[1]):
-                self.scale[i] = np.max(np.abs(self.data[:, i]))
-                self.data[:, i] = self.data[:, i] / self.scale[i].cpu().numpy()
-           
-        elif (self.normalize == 3):
-            print("normlized by the mean/std value of each row (sensor).")
-            for i in range(self.data.shape[1]):
-                self.scale[i] = np.std(self.data[:, i]) #std
-                self.bias[i] = np.mean(self.data[:, i])
-                self.data[:, i] = (self.data[:, i] - self.bias[i].cpu().numpy()) / self.scale[i].cpu().numpy()
-            
-
-        
-        self.data = pd.DataFrame(self.data)
-        
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
         if self.cfg['model']['UseTimeFeature']:
-
             self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
 
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
 
-        train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
-        self.scaler.fit(train_data)
-        self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
-        self.data = self.scaler.transform(self.data.values)
+        self.train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
+        self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
+        self._normalized()
+
+   
+    def _normalized(self):
+
+        if (self.normalize == 0):
+            self.data = self.data
+
+        if (self.normalize == 1):
+            # normalized by the maximum value of entire matrix.
+            self.data = self.data / np.max(self.train_data)
+        
+        if (self.normalize == 2):
+            # normlized by the maximum value of each row (sensor).
+            for i in range(self.cfg['data']['channel']):
+                self.scale[i] = np.max(np.abs(self.train_data[:, i]))
+                self.data[:, i] = self.data[:, i] /  self.scale[i]
+
+        if (self.normalize == 3):
+            # normlized by the mean/std value of each row (sensor).
+            for i in range(self.cfg['data']['channel']):
+                self.scale[i] = np.std(self.train_data[:, i]) #std
+                self.bias[i] = np.mean(self.train_data[:, i])
+                self.data[:, i] = (self.data[:, i] - self.bias[i]) / self.scale[i]
+                
 
 
         # 单变量/多变量
-    
     def __getitem__(self, index):
         # some model use time stamp
         x = self.data[index:index+self.lookback]
