@@ -11,3 +11,11 @@ from .DCRNN.DCRNN import DCRNN
 from .AutoEncoder.AutoEncoder import AutoEncoder
 from .Autoformer.Autoformer import Autoformer
 from .Transformer.Transformer import Transformer
+from .MLP.MLP import MLP
+from .gMLP.gMLP import gMLP
+from .FCN.FCN import FCN
+from .ResNet.ResNet import ResNet
+from .ResCNN.ResCNN import ResCNN
+from .TCN.TCN import TCN
+from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
+from .XCM.XCM import XCM

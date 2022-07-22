@@ -1,0 +1,13 @@
+{
+        "model_name":"gMLP",
+        "num_layers":1,
+        "batchsize":8,
+        "c_in": 48,
+        "c_out": 24,
+        "seq_len": 7,
+        "patch_size": 1,
+        "d_model": 256,
+        "d_ffn": 512,
+        "depth": 6,
+        "UseTimeFeature": false
+}

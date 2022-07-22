@@ -1,0 +1,12 @@
+{
+    "model_name":"XCM",
+    "num_layers":1,
+    "batchsize":8,
+    "c_in": 48,
+    "c_out": 24,
+    "seq_len": 7,
+    "nf": 128,
+    "window_perc": 1.0,
+    "fc_dropoutn": 0.0,
+    "UseTimeFeature": false
+}
