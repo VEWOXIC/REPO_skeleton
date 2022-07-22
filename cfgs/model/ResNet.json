@@ -1,0 +1,10 @@
+{
+        "model_name":"ResNet",
+        "num_layers":1,
+        "batchsize":8,
+        "c_in": 48,
+        "c_out": 24,
+        "nf": 64,
+        "kss": [7, 5, 3],
+        "UseTimeFeature": false
+}
