@@ -503,4 +503,4 @@ class MTGNN(nn.Module):
         x = F.relu(self.end_conv_1(x))
         x = self.end_conv_2(x)
         prediction = torch.squeeze(x)
-        return 
+        return prediction
