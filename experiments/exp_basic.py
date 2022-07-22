@@ -60,7 +60,7 @@ class Exp_Basic(object):
 
                 self.optimizer.zero_grad()
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
-                loss = self.loss_func(target, prediction)
+                loss = self.loss_func(prediction, target)
                 iter_count += 1
                 loss.backward() 
                 self.optimizer.step()
