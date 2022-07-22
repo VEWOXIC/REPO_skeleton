@@ -1,0 +1,12 @@
+{
+        "model_name":"TCN",
+        "num_layers":1,
+        "batchsize":8,
+        "c_in": 48,
+        "c_out": 24,
+        "layers": [25, 25, 25, 25, 25, 25, 25, 25], 
+        "ks": 7, 
+        "conv_dropout": 0.0, 
+        "fc_dropout": 0.0,
+        "UseTimeFeature": false
+}

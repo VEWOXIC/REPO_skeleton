@@ -14,3 +14,11 @@ from .GWNET.GWNET import GWNET
 #from .Autoformer.Autoformer import Autoformer
 #from .Transformer.Transformer import Transformer
 from .TGCN.TGCN import TGCN
+from .MLP.MLP import MLP
+from .gMLP.gMLP import gMLP
+from .FCN.FCN import FCN
+from .ResNet.ResNet import ResNet
+from .ResCNN.ResCNN import ResCNN
+from .TCN.TCN import TCN
+from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
+from .XCM.XCM import XCM

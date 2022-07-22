@@ -4,7 +4,7 @@
             "training": true,
             "saved_model": true,
             "batchsize":8,
-            "epochs":1,
+            "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -37,42 +37,22 @@
     },
 
     "model":{
-        "model_name":"FNN",
-        "hidden_size": 64,
-        "num_layers": 1,
-        "dropout": 0,
-        "bidirectional": false,
-        "teacher_forcing_ratio": 0,
-        
-        "scaler": "standard",
-        "load_external": true,
-        "normal_external": false,
-        "ext_scaler": "none",
-        "add_time_in_day": true,
-        "add_day_in_week": false,
-        
-        "max_epoch": 100,
-        "learner": "adam",
-        "learning_rate": 0.01,
-        "lr_decay": true,
-        "lr_scheduler": "multisteplr",
-        "lr_decay_ratio": 0.1,
-        "steps": [5, 20, 40, 70],
-        "clip_grad_norm": true,
-        "max_grad_norm": 5,
-        "use_early_stop": true,
-        "patience": 50,
-        "rnn_type": "RNN",
-        "num_nodes": 7,
-        "feature_dim":2,
-        "output_dim":1,
-        "device":"cuda",
-        "UseTimeFeature": true
+        "model_name":"XCM",
+        "num_layers":1,
+        "batchsize":8,
+        "c_in": 48,
+        "c_out": 24,
+        "seq_len": 7,
+        "nf": 128,
+        "window_perc": 1.0,
+        "fc_dropoutn": 0.0,
+        "UseTimeFeature": false
     },
 
     "data":{   
         "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1.csv",
+        "path":"./datasets/ETTh1_original.csv",
+        "freq": "h",
         "lookback":48,
         "horizon":24,
         "channel":7,
@@ -81,11 +61,8 @@
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target":0,
-        "scalar":"StandardScalar",
-        "num_nodes":7,
-        "freq": "h"
-
+        "target": "OT",
+        "scalar":"StandardScalar"
     }
     
 }
