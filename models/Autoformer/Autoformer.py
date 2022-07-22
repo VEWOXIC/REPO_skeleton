@@ -75,7 +75,7 @@ class Autoformer(nn.Module):
             projection=nn.Linear(cfg['model']["d_model"], cfg['model']["c_out"], bias=True)
         )
 
-    def forward(self, batch_x, batch_x_mark, batch_y_mark):
+    def forward(self, batch_x, batch_y, batch_x_mark, batch_y_mark):
     # (self, x_enc, x_mark_enc, x_dec, x_mark_dec,
     #             enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None)
         # decoder input
