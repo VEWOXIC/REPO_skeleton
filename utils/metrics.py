@@ -25,7 +25,7 @@ def RMSE(pred, true):
 
 
 def MAPE(pred, true, axis=None):
-    mape = (np.abs(pred - true) / np.abs(true) + 1e-5).astype(np.float64)
+    mape = (np.abs(pred - true) / (np.abs(true) + 1e-5)).astype(np.float64)
     mape = np.where(mape > 5, 0, mape)
     return np.mean(mape, axis)
 
