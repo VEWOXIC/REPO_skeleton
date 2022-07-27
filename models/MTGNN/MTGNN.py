@@ -444,11 +444,14 @@ class MTGNN(nn.Module):
 
         self.idx = torch.arange(self.num_nodes).to(self.device)
 
-    def forward(self, input, target, input_time, target_time):
+    def forward(self, input, target = None, input_time = None, target_time = None):
+        
+        print("input shape: ", input.shape)
+        print("input time shape: ", input_time.shape)
         input = input.cpu()
         input_time = input_time[:, :, 0].cpu()
         input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
+        input_time = np.tile(input_time, self.cfg['data']['channel'])
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
@@ -503,4 +506,4 @@ class MTGNN(nn.Module):
         x = F.relu(self.end_conv_1(x))
         x = self.end_conv_2(x)
         prediction = torch.squeeze(x)
-        return 
+        return prediction

@@ -56,12 +56,14 @@ class Exp_Basic(object):
             
             for input, target, input_time, target_time in train_loader:
                 input, target, input_time, target_time = \
-                    input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
+                input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 self.optimizer.zero_grad()
+                
+                
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
-                # loss calculation: get scales and bias, wight ready
-                loss = self.loss_func(self.cfg, target, prediction)
+ 
+                loss = self.loss_func(self.cfg,target, prediction)
                 iter_count += 1
                 loss.backward() 
                 self.optimizer.step()
@@ -72,10 +74,10 @@ class Exp_Basic(object):
                     time.time() - epoch_start_time), loss_total / iter_count))
             
             val_loss, self.metrics = self.test(valid_loader)
-            early_stopping_path = self.file_dir[:-4] + "_early_stop.pth"
-            early_stopping(val_loss, self.model, self.optimizer, early_stopping_path)
+            early_stopping(val_loss, self.model, self.optimizer, self.file_dir)
+            print() 
             if early_stopping.early_stop:
-                print("Early stopping, save model to %s" % early_stopping_path)
+                print("Early stopping")
                 break
             #if val_loss < min_val_loss:
             #    if self.cfg['exp']['train']['saved_model']:
@@ -98,7 +100,10 @@ class Exp_Basic(object):
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
+            
             prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+            
+            
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)
@@ -114,13 +119,13 @@ class Exp_Basic(object):
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr)
         
-    def adjust_learning_rate(self, optimizer, epoch, cfg):
+    def adjust_learning_rate(self,optimizer, epoch, cfg):
         lr = cfg['exp']['train']['lr']
         lr_adj = cfg['exp']['train']['lr_adj']
-        if lr_adj==0:
+        if lr_adj==1:
             lr_adjust = {epoch: lr * (0.95 ** (epoch // 1))}
 
-        elif lr_adj==1:
+        elif lr_adj==2:
             lr_adjust = {
                 0: 0.0001, 5: 0.0005, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
                 , 70: 0.000001
