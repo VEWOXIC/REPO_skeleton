@@ -39,8 +39,8 @@ class Dataset_Custom(Dataset):
             self.data = self.data.drop(['date'], axis=1)
             return data_stamp, self.data # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
         elif(self.cfg['data']['path'] == "./datasets/yellow_taxi_2022-01.csv"):
-            print("Add time feature for yellow_taxi_2022-01.csv")
-            print("original data shape:", data.shape)
+            # print("Add time feature for yellow_taxi_2022-01.csv")
+            # print("original data shape:", data.shape)
             data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
             data_stamp0 = time_features(pd.to_datetime(data['tpep_pickup_datetime'].values), freq=self.timeStampFreq)
             data_stamp0 = data_stamp0.transpose(1, 0)
@@ -49,9 +49,10 @@ class Dataset_Custom(Dataset):
             data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
             data_stamp1 = data_stamp1.transpose(1, 0)
             self.data = self.data.drop(['tpep_dropoff_datetime'], axis=1)
-            print("data shape after add time feature:", data.shape)
+            # print("data shape after add time feature:", data.shape)
             return np.concatenate((data_stamp0, data_stamp1), axis=1), self.data
-        
+            # conpress data_stamp0 and data_stamp1 into one matrix
+            # return data_stamp0 + data_stamp1, self.data        
     def __read_data__(self):
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
@@ -82,8 +83,8 @@ class Dataset_Custom(Dataset):
         
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
-        num_vali = len(self.data) - num_train - num_test
-        self.boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
+        num_vali = int(len(self.data) * self.cfg["data"]["valid_ratio"])
+        self.boarder = {'train':[0,num_train],'valid':[num_train + 1,num_train+num_vali],'test':[num_train+num_vali + 1,num_train + num_vali + num_test]}
 
         if self.cfg['model']['UseTimeFeature']:
             self.data_stamp , self.data= self.add_timeFeature(self.data)

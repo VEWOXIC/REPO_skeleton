@@ -368,7 +368,7 @@ class MTGNN(nn.Module):
         self.gc = graph_constructor(self.num_nodes, self.subgraph_size, self.node_dim, self.device,
                                     alpha=self.tanhalpha, static_feat=self.static_feat)
 
-        kernel_size = 7
+        kernel_size = 7 # 此处不可更改为channel
         if self.dilation_exponential > 1:
             self.receptive_field = int(1 + (kernel_size - 1) * (self.dilation_exponential ** self.layers - 1) / (
                         self.dilation_exponential - 1))
@@ -446,8 +446,6 @@ class MTGNN(nn.Module):
 
     def forward(self, input, target = None, input_time = None, target_time = None):
         
-        print("input shape: ", input.shape)
-        print("input time shape: ", input_time.shape)
         input = input.cpu()
         input_time = input_time[:, :, 0].cpu()
         input_time = np.expand_dims(input_time, axis=-1)
@@ -463,6 +461,7 @@ class MTGNN(nn.Module):
         trainx = trainx.transpose(1, 3)
         input = trainx.float()
         seq_len = input.size(3)
+        # print("input shape here:", input.shape)
         assert seq_len == self.seq_length, 'input sequence length not equal to preset sequence length'
 
         if self.seq_length < self.receptive_field:
@@ -476,8 +475,10 @@ class MTGNN(nn.Module):
                     adp = self.gc(idx)
             else:
                 adp = self.predefined_A
+                
 
         x = self.start_conv(input)
+        # print("input shape after conv: ", x.shape)
         skip = self.skip0(F.dropout(input, self.dropout, training=self.training))
         for i in range(self.layers):
             residual = x
@@ -505,5 +506,6 @@ class MTGNN(nn.Module):
         x = F.relu(skip)
         x = F.relu(self.end_conv_1(x))
         x = self.end_conv_2(x)
+        # print("x shape:", x.shape)
         prediction = torch.squeeze(x)
         return prediction

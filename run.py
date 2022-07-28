@@ -5,10 +5,12 @@ import random
 from experiments.exp_basic import *
 from datetime import datetime
 
-
 if __name__ == '__main__':
     # if os.paths.exists()
-    with open('cfgs/exp/SCINet/SCINet_exchange_rate_mult_s168h3.json','r') as f:
+    with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
+    # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
         cfg =json.load(f)
     # else
 
@@ -19,7 +21,7 @@ if __name__ == '__main__':
     exp = Exp_Basic(cfg, model_save_dir)
     if cfg['exp']['train']['training'] or not os.path.exists(model_save_dir):
         before_train = datetime.now().timestamp()
-        print(f"===================Train-Start=========================")
+        print("===================Train-Start=========================")
         exp.train()
         after_train = datetime.now().timestamp()
         print(f'Training took {(after_train - before_train) / 60} minutes')
@@ -30,4 +32,4 @@ if __name__ == '__main__':
     before_evaluation = datetime.now().timestamp()
     exp.test()
     after_evaluation = datetime.now().timestamp()
-    print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+    print('Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
