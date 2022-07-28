@@ -179,11 +179,6 @@ class TGCN(nn.Module):
         trainx = trainx.permute(1, 0, 2, 3) # (input_window, batch_size, num_nodes, input_dim)
         trainx = trainx.view(input_window, batch_size, num_nodes * input_dim).to(self.device)
         inputs = trainx.float()
-        # labels = batch['y']
-
-        
-        #inputs = inputs.permute(1, 0, 2, 3)  # (input_window, batch_size, num_nodes, input_dim)
-        #inputs = inputs.view(self.input_window, batch_size, num_nodes * input_dim).to(self.device)
 
         state = torch.zeros(batch_size, self.num_nodes * self.gru_units).to(self.device)
         for t in range(input_window):

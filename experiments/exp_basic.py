@@ -99,7 +99,7 @@ class Exp_Basic(object):
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+            prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)

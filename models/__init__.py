@@ -22,3 +22,5 @@ from .ResCNN.ResCNN import ResCNN
 from .TCN.TCN import TCN
 from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
 from .XCM.XCM import XCM
+from .ATDM.ATDM import ATDM
+from .HGCN.HGCN import HGCN
