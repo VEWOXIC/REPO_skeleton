@@ -46,7 +46,7 @@
 
     "data":{   
         "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1.csv",
+        "path":"./datasets/ETTh1_original.csv",
         "freq": "h",
         "lookback":48,
         "horizon":24,
