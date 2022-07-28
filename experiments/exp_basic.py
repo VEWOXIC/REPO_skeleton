@@ -16,7 +16,6 @@ class Exp_Basic(object):
         self.model.to(self.device)
         self.loss_func = self._get_lossfunc()
         self.optimizer = self._get_optim()
-    
 
 
     def _build_model(self):
@@ -42,11 +41,12 @@ class Exp_Basic(object):
         # TODO: just for demo, TO BE implemented
         epochs = self.cfg['exp']['train']['epochs']
         # TODO: get train and valid loader
+        print("getting train loader")
         train_loader = self._create_loader("train")
+        print("getting valid loader")
         valid_loader = self._create_loader("valid")
         min_val_loss = float('inf')
         early_stopping = utils.exp_utils.EarlyStopping(self.cfg)
-        
         # train_loop
         for epoch in range(epochs):
             epoch_start_time = time.time()

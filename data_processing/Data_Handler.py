@@ -49,10 +49,15 @@ class Dataset_Custom(Dataset):
             data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
             data_stamp1 = data_stamp1.transpose(1, 0)
             self.data = self.data.drop(['tpep_dropoff_datetime'], axis=1)
-            # print("data shape after add time feature:", data.shape)
             return np.concatenate((data_stamp0, data_stamp1), axis=1), self.data
-            # conpress data_stamp0 and data_stamp1 into one matrix
-            # return data_stamp0 + data_stamp1, self.data        
+        elif(self.cfg['data']['path'] == "./datasets/wiki_rolling_nips_train.csv"):
+            # add time featrue in first column
+            data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
+            data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
+            data_stamp = data_stamp.transpose(1, 0)
+            #drop the first column
+            self.data = self.data.drop(self.data.columns[0], axis=1)          
+            return data_stamp, self.data
     def __read_data__(self):
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
@@ -66,7 +71,6 @@ class Dataset_Custom(Dataset):
             fin = open(path)
             rawdat = np.loadtxt(fin, delimiter=',')
             self.data = pd.DataFrame(rawdat)
-            
         elif file_type == 'npz':
             data = np.load(path)
             data = data['data'][:,:,0]
@@ -79,8 +83,7 @@ class Dataset_Custom(Dataset):
             exit()
 
         self.data = self.data.fillna(method='ffill')
-        
-        
+            
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = int(len(self.data) * self.cfg["data"]["valid_ratio"])
@@ -92,7 +95,7 @@ class Dataset_Custom(Dataset):
         self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
         self.data = self.data[self.boarder[self.flag][0]: self.boarder[self.flag][1]].values
         self._normalize()
-        print("data after process is:", self.data)
+        print("data after process is:", self.data.shape, self.data)
         
     def _normalize(self):
         self.scale = np.ones(self.data.shape[1])

@@ -7,8 +7,8 @@ from datetime import datetime
 
 if __name__ == '__main__':
     # if os.paths.exists()
-    with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
+    with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
     # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
         cfg =json.load(f)
@@ -18,6 +18,10 @@ if __name__ == '__main__':
     model_save_dir = 'cache/{}/{}/{}'.format(cfg['model']['model_name'], cfg['data']['dataset_name'], cfg['data']['horizon'])
     if not os.path.exists(model_save_dir):
         os.makedirs(model_save_dir)
+        
+    model_name = cfg['model']['model_name']
+    dataset_name = cfg['data']['dataset_name']
+    print("Start training for model:", model_name, " dataset:", dataset_name)
     exp = Exp_Basic(cfg, model_save_dir)
     if cfg['exp']['train']['training'] or not os.path.exists(model_save_dir):
         before_train = datetime.now().timestamp()
@@ -32,4 +36,4 @@ if __name__ == '__main__':
     before_evaluation = datetime.now().timestamp()
     exp.test()
     after_evaluation = datetime.now().timestamp()
-    print('Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+    print('Test/evaluation took: {} minutes'.format((after_evaluation - before_evaluation) / 60))
