@@ -23,11 +23,11 @@ class Exp_Basic(object):
         return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
     def _create_loader(self,flag="train"):
-        dataset = get_dataset(self.cfg, flag)
+        self.dataset = get_dataset(self.cfg, flag)
         batch_size = self.cfg["exp"][flag]['batchsize']
         shuffle = self.cfg["exp"][flag]['shuffle']
         drop_last = self.cfg["exp"][flag]['drop_last']
-        return DataLoader(dataset, batch_size, shuffle=shuffle, drop_last=drop_last)
+        return DataLoader(self.dataset, batch_size, shuffle=shuffle, drop_last=drop_last)
 
     def _get_optim(self):
         return utils.exp_utils.build_optimizer(self.cfg, self.model)
@@ -109,15 +109,31 @@ class Exp_Basic(object):
         preds, trues = np.array(preds),np.array(trues)
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
-        print("------------TEST result:------------")
-        print("mae:", mae, "mse:", mse,"rmse:", rmse)
-        print("mape:", mape, "mspe:", mspe,"rse:", rse)
-        print("corr:", corr)
-        return mae, [metric(preds, trues)]
-        # print("mape:",mape," mspe:",mspe," rse:",rse)
-        # print("corr:",corr)
         
-    def adjust_learning_rate(self,optimizer, epoch, cfg):
+        print("------------TEST result:------------")
+        print("norm mae:", mae, " norm mse:",mse," norm rmse:",rmse)
+        
+        preds, trues = self.denormalized(preds, trues)
+        de_mae, de_mse, de_rmse, de_mape, de_mspe, de_rse, de_corr = metric(preds, trues)
+        print("denorm mae:", de_mae, " denorm mape:", de_mape," denorm rmse:", de_rmse)
+        print("mape:",mape," mspe:",mspe," rse:",rse)
+        print("corr:",corr)
+        
+        return mae, [metric(preds, trues)]
+         
+         
+    def denormalized(self, preds, trues):
+        if self.cfg['data']['normalize'] == 1:
+            preds *= np.max(self.dataset.train_data)
+            trues *= np.max(self.dataset.train_data)
+        elif self.cfg['data']['normalize'] == 2 or self.cfg['data']['normalize'] == 3:
+            for i in range(self.cfg['data']['channel']):
+                preds[:,:,i] *= self.dataset.scale[i] 
+                trues[:,:,i] *= self.dataset.scale[i] 
+        return preds, trues
+
+        
+    def adjust_learning_rate(self, optimizer, epoch, cfg):
         lr = cfg['exp']['train']['lr']
         lr_adj = cfg['exp']['train']['lr_adj']
         if lr_adj==1:
