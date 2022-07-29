@@ -78,8 +78,8 @@
     "data":{   
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
-        "lookback":48,
-        "horizon":24,
+        "lookback":12,
+        "horizon":12,
         "channel":7,
         "normalize": 3,
         "train_ratio":0.6,

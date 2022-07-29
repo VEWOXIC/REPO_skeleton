@@ -4,7 +4,7 @@
             "training": true,
             "saved_model": true,
             "batchsize":8,
-            "epochs":100,
+            "epochs":5,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -33,7 +33,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cuda"
+        "device":"cpu"
     },
 
     "model":{
@@ -49,7 +49,7 @@
 
     "data":{   
         "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1_original.csv",
+        "path":"./datasets/ETTh1.csv",
         "freq": "h",
         "lookback":48,
         "horizon":24,

@@ -8,7 +8,6 @@ import dgl
 from logging import getLogger
 
 
-
 class STMGAT(nn.Module):
     def __init__(self, cfg):
         nn.Module.__init__(self)
