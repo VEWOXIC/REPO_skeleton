@@ -1,6 +1,7 @@
 from distutils.dep_util import newer
 from locale import normalize
 from sqlite3 import Timestamp
+from click import echo
 import sklearn
 import numpy as np
 from torch.utils.data import Dataset
@@ -73,8 +74,18 @@ class Dataset_Custom(Dataset):
             self.data = pd.DataFrame(rawdat)
         elif file_type == 'npz':
             data = np.load(path)
-            data = data['data'][:,:,0]
-            self.data = pd.DataFrame(data)
+            
+            if(self.cfg['data']['path'] == "./datasets/PEMS-BAY_train.npz"):
+                df= pd.DataFrame.from_dict({item: data[item] for item in data.files}, orient='index')
+                print("PEMS-BAY_train.npz shape:", df.shape)
+                df.to_csv("./datasets/PEMS-BAY_train.csv", index=False)
+                exit()
+            elif(self.cfg['data']['path'] == "./datasets/PEMS-BAY_val.npz"):
+                self.data.to_csv("./datasets/PEMS-BAY_val.csv", index=False)
+                exit()
+            else: 
+                data = data['data'][:,:,0]
+                self.data = pd.DataFrame(data)
         elif file_type == 'parquet':
             data = pd.read_parquet(path)
             self.data = pd.DataFrame(data) 
