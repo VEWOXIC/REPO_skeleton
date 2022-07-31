@@ -64,7 +64,7 @@
         "lookback":168,
         "horizon":3,
         "channel":321,        
-        "normalize": 3,
+        "normalize":2,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
