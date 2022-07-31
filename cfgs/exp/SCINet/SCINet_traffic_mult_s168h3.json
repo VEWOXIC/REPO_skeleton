@@ -1,0 +1,75 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":16,
+            "epochs":150,
+            "lr":0.0005,
+            "lr_adj":2,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":16,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":16,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true 
+        },
+        "device":"cuda"
+    }, 
+
+    "model": {
+        "model_name":"SCINet",
+        "horizon": 3,
+        "window_size": 168,
+        "input_dim": 137,
+        "hidden_size": 1,
+        "num_stacks": 2,
+        "num_levels": 3,
+        "num_decoder_layer": 2,
+        "concat_len": 165,
+        "groups": 1,
+        "kernel": 3,
+        "dropout": 0.5,
+        "single_step_output_One": 0,
+        "positionalEcoding": false,
+        "modified": true,
+        "input_len_seg": 0,
+        "RIN": false,
+        "UseTimeFeature": false
+    },
+
+    "data": {
+        "exp_id": false,
+        "dataset_name":"traffic",
+        "path":"./datasets/traffic.txt",
+        "lookback":168,
+        "horizon":3,
+        "channel":137,        
+        "normalize": 2,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "scalar":"StandardScalar",
+        "freq": "h"
+    }
+}
