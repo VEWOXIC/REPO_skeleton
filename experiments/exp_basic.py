@@ -126,10 +126,16 @@ class Exp_Basic(object):
         if self.cfg['data']['normalize'] == 1:
             preds *= np.max(self.dataset.train_data)
             trues *= np.max(self.dataset.train_data)
-        elif self.cfg['data']['normalize'] == 2 or self.cfg['data']['normalize'] == 3:
+        elif self.cfg['data']['normalize'] == 2:
             for i in range(self.cfg['data']['channel']):
                 preds[:,:,i] *= self.dataset.scale[i] 
                 trues[:,:,i] *= self.dataset.scale[i] 
+        elif self.cfg['data']['normalize'] == 3:
+            for i in range(self.cfg['data']['channel']):
+                preds[:,:,i] *= self.dataset.scale[i] 
+                trues[:,:,i] *= self.dataset.scale[i] 
+                preds[:,:,i] += self.dataset.bias[i] 
+                trues[:,:,i] += self.dataset.bias[i] 
         return preds, trues
 
         
