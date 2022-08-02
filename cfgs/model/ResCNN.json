@@ -1,0 +1,12 @@
+{
+        "model_name":"ResCNN",
+        "num_layers":1,
+        "batchsize":8,
+        "c_in": 48,
+        "c_out": 24,
+        "nf": 64,
+        "coord": false,
+        "separable": false,
+        "zero_norm": false,
+        "UseTimeFeature": false
+}

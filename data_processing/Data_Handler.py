@@ -60,6 +60,8 @@ class Dataset_Custom(Dataset):
             self.data = self.data.drop(self.data.columns[0], axis=1)          
             return data_stamp, self.data
     def __read_data__(self):
+t("data handler: read data...")
+
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
 
@@ -74,6 +76,7 @@ class Dataset_Custom(Dataset):
             self.data = pd.DataFrame(rawdat)
         elif file_type == 'npz':
             data = np.load(path)
+
             
             if(self.cfg['data']['path'] == "./datasets/PEMS-BAY_train.npz"):
                 df= pd.DataFrame.from_dict({item: data[item] for item in data.files}, orient='index')
@@ -101,6 +104,7 @@ class Dataset_Custom(Dataset):
         self.boarder = {'train':[0,num_train],'valid':[num_train + 1,num_train+num_vali],'test':[num_train+num_vali + 1,num_train + num_vali + num_test]}
 
         if self.cfg['model']['UseTimeFeature']:
+
             self.data_stamp , self.data= self.add_timeFeature(self.data)
             
         self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
@@ -120,11 +124,13 @@ class Dataset_Custom(Dataset):
         if (self.normalize == 1):
             # normalized by the maximum value of entire matrix.
             self.data = self.data / np.max(self.train_data)
+
         if (self.normalize == 2):
             # normlized by the maximum value of each row (sensor).
             for i in range(self.cfg['data']['channel']):
                 self.scale[i] = np.max(np.abs(self.train_data[:, i]))
                 self.data[:, i] = self.data[:, i] /  self.scale[i]
+
         if (self.normalize == 3):
             # normlized by the mean/std value of each row (sensor).
             for i in range(self.cfg['data']['channel']):

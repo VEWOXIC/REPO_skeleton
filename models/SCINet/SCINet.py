@@ -399,7 +399,7 @@ class SCINet(nn.Module):
                 x = x * stdev
                 x = x + means
 
-            return x, MidOutPut
+            return x
 
 
 

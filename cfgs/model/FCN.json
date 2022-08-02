@@ -1,0 +1,10 @@
+{
+        "model_name":"FCN",
+        "num_layers":1,
+        "batchsize":4,
+        "c_in": 48,
+        "c_out": 24,
+        "layers":[128, 256, 128],
+        "kss": [7, 5, 3],
+        "UseTimeFeature": false
+}

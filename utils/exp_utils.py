@@ -147,7 +147,18 @@ class EarlyStopping:
                 path + '/' + 'checkpoints.pth'
                 )
         self.val_loss_min = val_loss
-
+        
+def smooth_l1_loss(input, target, beta=1. / 9, size_average=True):
+    """
+    very similar to the smooth_l1_loss from pytorch, but with
+    the extra beta parameter
+    """
+    n = torch.abs(input - target)
+    cond = n < beta
+    loss = torch.where(cond, 0.5 * n ** 2 / beta, n - 0.5 * beta)
+    if size_average:
+        return loss.mean()
+    return loss.sum() 
 
 def masked_mae_loss(y_pred, y_true):
     mask = (y_true != 0).float()

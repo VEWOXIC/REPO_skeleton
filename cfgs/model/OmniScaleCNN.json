@@ -1,0 +1,11 @@
+{
+    "model_name":"OmniScaleCNN",
+    "num_layers":1,
+    "batchsize":8,
+    "c_in": 48,
+    "c_out": 24,
+    "seq_len": 7,
+    "layers": [1024, 229376], 
+    "few_shot": false, 
+    "UseTimeFeature": false
+}

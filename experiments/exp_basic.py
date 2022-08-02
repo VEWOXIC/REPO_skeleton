@@ -22,11 +22,11 @@ class Exp_Basic(object):
         return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
     def _create_loader(self,flag="train"):
-        dataset = get_dataset(self.cfg, flag)
+        self.dataset = get_dataset(self.cfg, flag)
         batch_size = self.cfg["exp"][flag]['batchsize']
         shuffle = self.cfg["exp"][flag]['shuffle']
         drop_last = self.cfg["exp"][flag]['drop_last']
-        return DataLoader(dataset, batch_size, shuffle=shuffle, drop_last=drop_last)
+        return DataLoader(self.dataset, batch_size, shuffle=shuffle, drop_last=drop_last)
 
     def _get_optim(self):
         return utils.exp_utils.build_optimizer(self.cfg, self.model)
@@ -64,8 +64,10 @@ class Exp_Basic(object):
                 # check if there is nan in input
                 assert torch.isnan(input).sum() == 0 # if there is nan in input, it will cause error
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
+
                 assert torch.isnan(prediction).sum() == 0 # if there is nan in prediction, it will cause error
                 loss = self.loss_func(self.cfg,target, prediction)
+
                 iter_count += 1
                 loss.backward() 
                 self.optimizer.step()
@@ -105,7 +107,6 @@ class Exp_Basic(object):
             
             prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target,target_time)
             
-            
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)
@@ -115,13 +116,36 @@ class Exp_Basic(object):
         preds, trues = np.array(preds),np.array(trues)
         preds, trues = preds.reshape(-1, preds.shape[-2], preds.shape[-1]), trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
+        
         print("------------TEST result:------------")
-        print("mae:", mae, " mse:",mse," rmse:",rmse)
+        print("norm mae:", mae, " norm mse:",mse," norm rmse:",rmse)
+        
+        preds, trues = self.denormalized(preds, trues)
+        de_mae, de_mse, de_rmse, de_mape, de_mspe, de_rse, de_corr = metric(preds, trues)
+        print("denorm mae:", de_mae, " denorm mape:", de_mape," denorm rmse:", de_rmse)
+        
         return mae, [metric(preds, trues)]
         # print("mape:",mape," mspe:",mspe," rse:",rse)
-        # print("corr:",corr)
+        # print("corr:",corr) 
+         
+    def denormalized(self, preds, trues):
+        if self.cfg['data']['normalize'] == 1:
+            preds *= np.max(self.dataset.train_data)
+            trues *= np.max(self.dataset.train_data)
+        elif self.cfg['data']['normalize'] == 2:
+            for i in range(self.cfg['data']['channel']):
+                preds[:,:,i] *= self.dataset.scale[i] 
+                trues[:,:,i] *= self.dataset.scale[i] 
+        elif self.cfg['data']['normalize'] == 3:
+            for i in range(self.cfg['data']['channel']):
+                preds[:,:,i] *= self.dataset.scale[i] 
+                trues[:,:,i] *= self.dataset.scale[i] 
+                preds[:,:,i] += self.dataset.bias[i] 
+                trues[:,:,i] += self.dataset.bias[i] 
+        return preds, trues
+
         
-    def adjust_learning_rate(self,optimizer, epoch, cfg):
+    def adjust_learning_rate(self, optimizer, epoch, cfg):
         lr = cfg['exp']['train']['lr']
         lr_adj = cfg['exp']['train']['lr_adj']
         if lr_adj==1:

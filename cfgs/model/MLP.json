@@ -1,0 +1,15 @@
+{
+    "model_name":"MLP",
+    "num_layers":1,
+    "batchsize":8,
+    "c_in": 48,
+    "c_out": 24,
+    "seq_len": 7,
+    "layers": [500,500,500],
+    "ps": [0.1, 0.2, 0.2],
+    "use_bn": false,
+    "bn_final": false,
+    "lin_first": false,
+    "fc_dropout": 0.0,
+    "UseTimeFeature": false
+}
