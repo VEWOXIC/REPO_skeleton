@@ -60,9 +60,11 @@ class Exp_Basic(object):
 
                 self.optimizer.zero_grad()
                 
-                
+                # print("input shape:",input.shape)
+                # check if there is nan in input
+                assert torch.isnan(input).sum() == 0 # if there is nan in input, it will cause error
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
- 
+                assert torch.isnan(prediction).sum() == 0 # if there is nan in prediction, it will cause error
                 loss = self.loss_func(self.cfg,target, prediction)
                 iter_count += 1
                 loss.backward() 
@@ -101,7 +103,7 @@ class Exp_Basic(object):
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
             
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target_time)
+            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target,target_time)
             
             
             prediction = prediction.detach().cpu().numpy()

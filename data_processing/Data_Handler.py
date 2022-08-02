@@ -105,8 +105,12 @@ class Dataset_Custom(Dataset):
             
         self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
         self.data = self.data[self.boarder[self.flag][0]: self.boarder[self.flag][1]].values
+        
+        self.data = np.nan_to_num(self.data)
         self._normalize()
+        
         print("data after process is:", self.data.shape, self.data)
+
         
     def _normalize(self):
         self.scale = np.ones(self.data.shape[1])

@@ -44,7 +44,7 @@
         "gcn_true": true,
         "buildA_true": true,
         "gcn_depth": 2,
-        "num_nodes": 792,
+        "num_nodes": 307,
         "device": "cuda",
         "dropout": 0.3,
         "subgraph_size": 7,
@@ -65,17 +65,17 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
-        "UseTimeFeature": true
+        "UseTimeFeature": false
     },
 
     "data": {
         "exp_id" : 1,
-        "dataset_name":"PEMS-BAY",
-        "path":"./datasets/PEMS-BAY_train.npz",
+        "dataset_name":"PEMS04",
+        "path":"./datasets/PEMS04.npz",
         "freq": "h",
         "lookback":24,
         "horizon":24,
-        "channel":792,
+        "channel":307,
         "normalize": 1,
         "train_ratio":0.6,
         "valid_ratio":0.2,
