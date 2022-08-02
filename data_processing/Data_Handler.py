@@ -109,7 +109,6 @@ class Dataset_Custom(Dataset):
         self.data = np.nan_to_num(self.data)
         self._normalize()
         
-        print("data after process is:", self.data.shape, self.data)
 
         
     def _normalize(self):
