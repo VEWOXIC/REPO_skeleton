@@ -60,7 +60,6 @@ class Dataset_Custom(Dataset):
             self.data = self.data.drop(self.data.columns[0], axis=1)          
             return data_stamp, self.data
     def __read_data__(self):
-t("data handler: read data...")
 
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
