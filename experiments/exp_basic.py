@@ -156,4 +156,4 @@ class Exp_Basic(object):
         else:
             for param_group in optimizer.param_groups:
                 lr = param_group['lr']
-        return 
+        return lr
