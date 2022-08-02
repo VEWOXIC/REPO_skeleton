@@ -1,5 +1,8 @@
+from distutils.dep_util import newer
 from locale import normalize
-import torch
+from sqlite3 import Timestamp
+from click import echo
+import sklearn
 import numpy as np
 from torch.utils.data import Dataset
 from utils import data_utils
@@ -28,14 +31,33 @@ class Dataset_Custom(Dataset):
         # need to be implemented
         # transformer based methods have label_len
 
-    def add_timeFeature(self, data):
-        data['date'] = pd.to_datetime(data.date)
-        data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
-        data_stamp = data_stamp.transpose(1, 0)
-        return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
-
+    def add_timeFeature(self,data):# add time stamp to the data, and drop the date column(s)
+        if(self.cfg['data']['path'] == "./datasets/ETTh1.csv"):
+            data['date'] = pd.to_datetime(data.date)
+            data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
+            data_stamp = data_stamp.transpose(1, 0)
+            #drop the first column
+            return data_stamp, self.data # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
+        elif(self.cfg['data']['path'] == "./datasets/yellow_taxi_2022-01.csv"):
+            # print("Add time feature for yellow_taxi_2022-01.csv")
+            # print("original data shape:", data.shape)
+            data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+            data_stamp0 = time_features(pd.to_datetime(data['tpep_pickup_datetime'].values), freq=self.timeStampFreq)
+            data_stamp0 = data_stamp0.transpose(1, 0)
+            self.data = self.data.drop(['tpep_pickup_datetime'], axis=1)
+            data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+            data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
+            data_stamp1 = data_stamp1.transpose(1, 0)
+            return np.concatenate((data_stamp0, data_stamp1), axis=1)
+        elif(self.cfg['data']['path'] == "./datasets/wiki_rolling_nips_train.csv"):
+            # add time featrue in first column
+            data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
+            data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
+            data_stamp = data_stamp.transpose(1, 0)
+            #drop the first column         
+            return data_stamp
     def __read_data__(self):
-        #print("data handler: read data...")
+
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
 
@@ -52,34 +74,40 @@ class Dataset_Custom(Dataset):
             data = np.load(path)
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
+        elif file_type == 'parquet':
+            data = pd.read_parquet(path)
+            self.data = pd.DataFrame(data) 
+        else:
+            print("Error: file type not supported")
+            exit()
 
-        self.data = self.data.fillna(method='ffill')    
-        self.scale = np.ones(self.data.shape[1])
-        self.bias =  np.zeros(self.data.shape[1])
-        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
-        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
+        self.data = self.data.fillna(method='ffill')
+            
+        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])     
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
         if self.cfg['model']['UseTimeFeature']:
-            self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
-
+            self.data_stamp = self.add_timeFeature(self.data)
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
-
-        self.train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
+        self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
-        self._normalized()
+        
+        self.data = np.nan_to_num(self.data)
+        self._normalize()
+        
+        print("data after process is:", self.data.shape, self.data)
 
-   
-    def _normalized(self):
-
+        
+    def _normalize(self):
+        self.scale = np.ones(self.data.shape[1])
+        self.bias =  np.zeros(self.data.shape[1])
         if (self.normalize == 0):
             self.data = self.data
-
         if (self.normalize == 1):
             # normalized by the maximum value of entire matrix.
             self.data = self.data / np.max(self.train_data)
-        
+
         if (self.normalize == 2):
             # normlized by the maximum value of each row (sensor).
             for i in range(self.cfg['data']['channel']):
@@ -92,8 +120,6 @@ class Dataset_Custom(Dataset):
                 self.scale[i] = np.std(self.train_data[:, i]) #std
                 self.bias[i] = np.mean(self.train_data[:, i])
                 self.data[:, i] = (self.data[:, i] - self.bias[i]) / self.scale[i]
-                
-
 
         # 单变量/多变量
     def __getitem__(self, index):
