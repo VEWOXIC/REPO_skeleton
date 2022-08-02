@@ -25,74 +25,41 @@ def build_optimizer(cfg, model):
     return optimizer
 
 
-# loss_function selection: input predictions and labels, output loss
-def build_train_loss(cfg, prediction, labels, res = None):
-    
+# loss_function selection
+def build_train_loss(cfg):
     if cfg['exp']['train']['loss'] == 'mae':
-        criterion = masked_mae_torch
-    elif cfg['exp']['train']['loss'] == 'mse':
-        criterion = masked_mse_torch
-    elif cfg['exp']['train']['loss'] == 'rmse':
-        criterion = masked_rmse_torch
-    elif cfg['exp']['train']['loss'] == 'mape':
-        criterion = masked_mape_torch
-    elif cfg['exp']['train']['loss'] == 'logcosh':
-        criterion = log_cosh_loss
-    elif cfg['exp']['train']['loss'] == 'huber':
-        criterion = huber_loss
-    elif cfg['exp']['train']['loss'] == 'quantile':
-        criterion = quantile_loss
-    elif cfg['exp']['train']['loss'] == 'masked_mae':
-        criterion = partial(masked_mae_torch, null_val=0)
-    elif cfg['exp']['train']['loss'] == 'masked_mse':
-        criterion = partial(masked_mse_torch, null_val=0)
-    elif cfg['exp']['train']['loss'] == 'masked_rmse':
-        criterion = partial(masked_rmse_torch, null_val=0)
-    elif cfg['exp']['train']['loss'] == 'masked_mape':
-        criterion = partial(masked_mape_torch, null_val=0)
-    elif cfg['exp']['train']['loss'] == 'r2':
-        criterion = r2_score_torch
-    elif cfg['exp']['train']['loss'] == 'evar':
-        criterion = explained_variance_score_torch
+        lf = masked_mae_torch
     elif cfg['exp']['train']['loss'] == 'smooth_l1_loss':
-        criterion = smooth_l1_loss
+        lf = smooth_l1_loss 
+    elif cfg['exp']['train']['loss'] == 'mse':
+        lf = masked_mse_torch
+    elif cfg['exp']['train']['loss'] == 'rmse':
+        lf = masked_rmse_torch
+    elif cfg['exp']['train']['loss'] == 'mape':
+        lf = masked_mape_torch
+    elif cfg['exp']['train']['loss'] == 'logcosh':
+        lf = log_cosh_loss
+    elif cfg['exp']['train']['loss'] == 'huber':
+        lf = huber_loss
+    elif cfg['exp']['train']['loss'] == 'quantile':
+        lf = quantile_loss
+    elif cfg['exp']['train']['loss'] == 'masked_mae':
+        lf = partial(masked_mae_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'masked_mse':
+        lf = partial(masked_mse_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'masked_rmse':
+        lf = partial(masked_rmse_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'masked_mape':
+        lf = partial(masked_mape_torch, null_val=0)
+    elif cfg['exp']['train']['loss'] == 'r2':
+        lf = r2_score_torch
+    elif cfg['exp']['train']['loss'] == 'evar':
+        lf = explained_variance_score_torch
     else:
-        criterion = nn.MSELoss()
-        
-    scale, bias = torch.ones(prediction.shape).cuda(), torch.zeros(prediction.shape).cuda()
-    weight = cfg['exp']['train']['Lastweight']
-    
-    if cfg['model']['single_step']:# single step    
-        labels_last = labels[:, -1, :].cuda()
-        scale_last = torch.ones(prediction.size(0), cfg['data']['channel']).cuda()
-        bias_last = torch.zeros(prediction.size(0), cfg['data']['channel']).cuda()
-        if cfg['data']['normalize'] == 3:
-                    loss_f = criterion(prediction[:, -1], labels_last)
-                    
-        else:
-            loss_f = criterion(prediction[:, -1] * scale_last + bias_last, labels_last * scale_last + bias_last)
-            
-    else:
-                    if cfg['data']['normalize'] == 3:
-                        if cfg['exp']['train']['Lastweight'] == 1.0:
-                            loss_f = criterion(prediction, labels)
+        print('Received none train loss func and will use the loss func defined in the model.')
+        lf = masked_mae_torch
+    return lf
 
-                        else:
-                            loss_f = criterion(prediction[:, :-1, :], labels[:, :-1, :] ) \
-                                    + weight * criterion(prediction[:, -1:, :], labels[:, -1:, :] )
-                    else:
-                        if cfg['exp']['train']['Lastweight'] == 1.0:
-                            loss_f = criterion(prediction * scale + bias, labels * scale + bias)
-                        else:
-                            loss_f = criterion(prediction[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
-                                            labels[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
-                                + weight * criterion(prediction[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
-                                                        labels[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
-    loss = loss_f
-    return loss
-
-    
-        
 # save model
 def save_model(cfg, cache_name, model, optimizer, best_metrics):
     torch.save({
@@ -139,7 +106,7 @@ class EarlyStopping:
 
     def save_checkpoint(self, val_loss, model, optimizer, path):
         if self.verbose:
-            print('Validation loss decreased ({:.6f} --> {:.6f}). Saving model ...'.format(self.val_loss_min, val_loss))
+            print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
         torch.save({
                 'model': model.state_dict(),
                 'optimizer': optimizer.state_dict(),
@@ -313,14 +280,3 @@ def explained_variance_score_np(preds, labels):
     labels = labels.flatten()
     return explained_variance_score(labels, preds)
 
-def smooth_l1_loss(input, target, beta=1. / 9, size_average=True):
-    """
-    very similar to the smooth_l1_loss from pytorch, but with
-    the extra beta parameter
-    """
-    n = torch.abs(input - target)
-    cond = n < beta
-    loss = torch.where(cond, 0.5 * n ** 2 / beta, n - 0.5 * beta)
-    if size_average:
-        return loss.mean()
-    return loss.sum()
