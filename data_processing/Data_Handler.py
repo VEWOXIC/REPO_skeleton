@@ -96,6 +96,7 @@ class Dataset_Custom(Dataset):
         self.data = self.data.fillna(method='ffill')
             
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])     
+        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])     
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
