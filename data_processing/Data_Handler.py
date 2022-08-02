@@ -32,13 +32,13 @@ class Dataset_Custom(Dataset):
         # transformer based methods have label_len
 
     def add_timeFeature(self,data):# add time stamp to the data, and drop the date column(s)
-        if(self.cfg['data']['path'] == "./datasets/ETTh1.csv"):
+        if(self.cfg['data']['dataset_name'] == "ETTh1"):
             data['date'] = pd.to_datetime(data.date)
             data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
             data_stamp = data_stamp.transpose(1, 0)
             #drop the first column
-            return data_stamp, self.data # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
-        elif(self.cfg['data']['path'] == "./datasets/yellow_taxi_2022-01.csv"):
+            return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
+        elif(self.cfg['data']['dataset_name'] == "yellow_taxi_2022-01"):
             # print("Add time feature for yellow_taxi_2022-01.csv")
             # print("original data shape:", data.shape)
             data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
@@ -49,14 +49,14 @@ class Dataset_Custom(Dataset):
             data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
             data_stamp1 = data_stamp1.transpose(1, 0)
             return np.concatenate((data_stamp0, data_stamp1), axis=1)
-        elif(self.cfg['data']['path'] == "./datasets/wiki_rolling_nips_train.csv"):
+        elif(self.cfg['data']['dataset_name'] == "wiki_rolling_nips_train"):
             # add time featrue in first column
             data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
             data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
             data_stamp = data_stamp.transpose(1, 0)
             #drop the first column         
             return data_stamp
-        elif(self.cfg['data']['path'] == "./datasets/metr-la.h5"):
+        elif(self.cfg['data']['dataset_name'] == "metr-la"):
             if cfg['data']['add_time_in_day']:
                 time_ind = (df.index.values - df.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
                 time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
@@ -103,7 +103,7 @@ class Dataset_Custom(Dataset):
         if self.cfg['model']['UseTimeFeature']:
             self.data_stamp = self.add_timeFeature(self.data)
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
-        self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
+        self.train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
         
         self.data = np.nan_to_num(self.data)
