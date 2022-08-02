@@ -16,6 +16,7 @@ class Exp_Basic(object):
         self.model.to(self.device)
         self.loss_func = self._get_lossfunc()
         self.optimizer = self._get_optim()
+    
 
 
     def _build_model(self):
@@ -32,7 +33,7 @@ class Exp_Basic(object):
         return utils.exp_utils.build_optimizer(self.cfg, self.model)
 
     def _get_lossfunc(self):
-        return utils.exp_utils.build_train_loss
+        return utils.exp_utils.build_train_loss(self.cfg)
 
     def load_model(self):
         self.model, self.optimizer = utils.exp_utils.load_model(self.file_dir, self.model, self.optimizer)
@@ -41,12 +42,11 @@ class Exp_Basic(object):
         # TODO: just for demo, TO BE implemented
         epochs = self.cfg['exp']['train']['epochs']
         # TODO: get train and valid loader
-        print("getting train loader")
         train_loader = self._create_loader("train")
-        print("getting valid loader")
         valid_loader = self._create_loader("valid")
         min_val_loss = float('inf')
         early_stopping = utils.exp_utils.EarlyStopping(self.cfg)
+        
         # train_loop
         for epoch in range(epochs):
             epoch_start_time = time.time()
@@ -56,18 +56,11 @@ class Exp_Basic(object):
             
             for input, target, input_time, target_time in train_loader:
                 input, target, input_time, target_time = \
-                input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
+                    input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 self.optimizer.zero_grad()
-                
-                # print("input shape:",input.shape)
-                # check if there is nan in input
-                assert torch.isnan(input).sum() == 0 # if there is nan in input, it will cause error
                 prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
-
-                assert torch.isnan(prediction).sum() == 0 # if there is nan in prediction, it will cause error
-                loss = self.loss_func(self.cfg,target, prediction)
-
+                loss = self.loss_func(prediction, target)
                 iter_count += 1
                 loss.backward() 
                 self.optimizer.step()
@@ -104,9 +97,7 @@ class Exp_Basic(object):
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
-            
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,input_time,target,target_time)
-            
+            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)
@@ -165,4 +156,4 @@ class Exp_Basic(object):
         else:
             for param_group in optimizer.param_groups:
                 lr = param_group['lr']
-        return lr
+        return 
