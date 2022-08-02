@@ -97,17 +97,16 @@ class Dataset_Custom(Dataset):
 
         self.data = self.data.fillna(method='ffill')
             
-        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
-        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
-        num_vali = int(len(self.data) * self.cfg["data"]["valid_ratio"])
-        self.boarder = {'train':[0,num_train],'valid':[num_train + 1,num_train+num_vali],'test':[num_train+num_vali + 1,num_train + num_vali + num_test]}
+        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])     
+        num_vali = len(self.data) - num_train - num_test
+        boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
         if self.cfg['model']['UseTimeFeature']:
 
             self.data_stamp , self.data= self.add_timeFeature(self.data)
             
         self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
-        self.data = self.data[self.boarder[self.flag][0]: self.boarder[self.flag][1]].values
+        self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
         
         self.data = np.nan_to_num(self.data)
         self._normalize()
