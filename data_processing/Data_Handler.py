@@ -88,7 +88,7 @@ class Dataset_Custom(Dataset):
             data = pd.read_parquet(path)
             self.data = pd.DataFrame(data) 
         elif file_type == 'h5':
-            data = pd.read_hdf(path)
+            self.data = pd.read_hdf(path)
         else:
             print("Error: file type not supported")
             exit()
