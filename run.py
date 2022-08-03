@@ -11,7 +11,8 @@ if __name__ == '__main__':
     # with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
     # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
-    with open('cfgs/exp/MTGNN/MTGNN_PEMS04.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_PEMS03.json','r') as f:
+    with open('cfgs/exp/MTGNN/MTGNN_metr_la.json','r') as f:
         cfg =json.load(f)
     # else
 

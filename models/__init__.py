@@ -20,3 +20,4 @@ from .MTGNN.MTGNN import MTGNN
 # from .TCN.TCN import TCN
 # from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
 # from .XCM.XCM import XCM
+# from .TST.TST import TST

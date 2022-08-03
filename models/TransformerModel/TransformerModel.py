@@ -1,9 +1,9 @@
+# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TransformerModel.py
 
 from .layers import *
 from torch import nn
 from torch.nn.modules.transformer import TransformerEncoder, TransformerEncoderLayer
 
-# Cell
 class TransformerModel(nn.Module):
     def __init__(self, cfg):
         super(TransformerModel,self).__init__()

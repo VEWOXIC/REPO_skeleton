@@ -3,7 +3,7 @@
         "train":{
             "training": true,
             "saved_model": true,
-            "batchsize":8,
+            "batchsize":4,
             "epochs":100,
             "lr":0.001,
             "lr_adj":1,
@@ -16,12 +16,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":8,
+            "batchsize":4,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":8,
+            "batchsize":4,
             "shuffle": false,
             "drop_last": true
         },
@@ -36,35 +36,37 @@
         "device":"cuda"
     },
 
-    "model": {
-        "model_name":"TransformerModel",
-        "horizon": 24,
-        "window_size": 48,
-        "c_in": 48,
-        "c_out": 24,
-        "d_model": 24, 
-        "n_head": 1, 
-        "d_ffn": 128, 
-        "n_layers": 1,
+    "model":{
+        "model_name":"TST",
+        "n_layers":3,
+        "batchsize":4,
+        "c_in": 12,
+        "c_out": 12,
+        "seq_len": 170,
+        "d_model": 128,
+        "n_heads": 16,
+        "d_ff": 256,
         "dropout": 0.1,
-        "activation":"relu", 
+        "act": "gelu",
+        "fc_dropout": 0.0,
+        "verbose": false,
         "UseTimeFeature": false
     },
 
-    "data": {
-        "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1_original.csv",
-        "lookback":48,
-        "horizon":24,
-        "channel":7,
+    "data":{   
+        "dataset_name":"PEMS08",
+        "path":"./datasets/PEMS08.npz",
+        "freq": "h",
+        "lookback":12,
+        "horizon":12,
+        "channel":170,
         "normalize": 3,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target":"OT",
-        "scalar":"StandardScalar",
-        "freq": "h"
+        "target": "OT",
+        "scalar":"StandardScalar"
     }
+    
 }
-

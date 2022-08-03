@@ -119,9 +119,7 @@ class Seq2Seq(nn.Module):
 
     def forward(self, input, target, input_time, target_time):
         input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
-        input_time = input_time[:, :, 0].cpu()
-        input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
+        input_time = input_time.cpu()
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
@@ -135,9 +133,7 @@ class Seq2Seq(nn.Module):
 
 
         target = target.cpu()
-        target_time = target_time[:, :, 0].cpu()
-        target_time = np.expand_dims(target_time, axis=-1)
-        target_time = np.tile(target_time, 7)
+        target_time = target_time.cpu()
         target_time = np.expand_dims(target_time, axis=-1)
         target = np.expand_dims(target, axis=-1)
         target = [target]

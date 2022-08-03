@@ -1,4 +1,14 @@
 {
     "model_name":"TransformerModel",
-    "num_layers":1
+    "horizon": 24,
+    "window_size": 48,
+    "c_in": 48,
+    "c_out": 24,
+    "d_model": 24, 
+    "n_head": 1, 
+    "d_ffn": 128, 
+    "n_layers": 1,
+    "dropout": 0.1,
+    "activation":"relu", 
+    "UseTimeFeature": false
 }
