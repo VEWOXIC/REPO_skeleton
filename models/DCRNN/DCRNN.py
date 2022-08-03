@@ -438,9 +438,7 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
         #print("inputs.size",inputs.size())
 
         target = target.cpu()
-        target_time = target_time[:, :, 0].cpu()
-        target_time = np.expand_dims(target_time, axis=-1)
-        target_time = np.tile(target_time, 7)
+        target_time = target_time.cpu()
         target_time = np.expand_dims(target_time, axis=-1)
         target = np.expand_dims(target, axis=-1)
         target = [target]
