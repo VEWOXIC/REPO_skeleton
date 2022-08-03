@@ -250,9 +250,7 @@ class STGCN(nn.Module):
         #x = x.permute(0, 3, 1, 2)  # (batch_size, feature_dim, input_length, num_nodes)
 
         input = input.cpu()
-        input_time = input_time[:, :, 0].cpu()
-        input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
+        input_time = input_time.cpu()
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
