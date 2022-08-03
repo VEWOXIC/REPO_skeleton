@@ -121,10 +121,10 @@ class Dataset_Custom(Dataset):
 
         if self.cfg['model']['UseTimeFeature']:
             self.data_stamp = self.add_timeFeature(self.data)
+            self.data_stamp = self.data_stamp[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
         self.train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
-        self.data_stamp = self.data_stamp[boarder[self.flag][0]: boarder[self.flag][1]]
         self.data = np.nan_to_num(self.data)
         self._normalize()
         
