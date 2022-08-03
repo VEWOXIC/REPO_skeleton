@@ -32,31 +32,7 @@ class Dataset_Custom(Dataset):
         # transformer based methods have label_len
 
     def add_timeFeature(self,data):# add time stamp to the data, and drop the date column(s)
-        if(self.cfg['data']['dataset_name'] == "ETTh1"):
-            data['date'] = pd.to_datetime(data.date)
-            data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
-            data_stamp = data_stamp.transpose(1, 0)
-            #drop the first column
-            return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
-        elif(self.cfg['data']['dataset_name'] == "yellow_taxi_2022-01"):
-            # print("Add time feature for yellow_taxi_2022-01.csv")
-            # print("original data shape:", data.shape)
-            data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
-            data_stamp0 = time_features(pd.to_datetime(data['tpep_pickup_datetime'].values), freq=self.timeStampFreq)
-            data_stamp0 = data_stamp0.transpose(1, 0)
-            self.data = self.data.drop(['tpep_pickup_datetime'], axis=1)
-            data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
-            data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
-            data_stamp1 = data_stamp1.transpose(1, 0)
-            return np.concatenate((data_stamp0, data_stamp1), axis=1)
-        elif(self.cfg['data']['dataset_name'] == "wiki_rolling_nips_train"):
-            # add time featrue in first column
-            data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
-            data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
-            data_stamp = data_stamp.transpose(1, 0)
-            #drop the first column         
-            return data_stamp
-        elif(self.cfg['data']['dataset_name'] == "metr-la"):
+        if(self.cfg['data']['dataset_name'] == "metr-la"):
             num_samples, num_nodes = self.data.shape
             if self.cfg['data']['add_time_in_day']:
                 time_ind = (self.data.index.values - self.data.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
@@ -66,8 +42,48 @@ class Dataset_Custom(Dataset):
             if self.cfg['data']['add_time_in_day']:
                 day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
                 day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
-                day_in_week = day_in_week.squeeze()
                 return day_in_week
+        if self.cfg['data']['dataset_name'] not in ['ETTh1', 'yellow_taxi_2022-01', 'wiki_rolling_nips_train']:
+            print('Cannot add time future in {} dataset'.format(self.cfg['data']['dataset_name']))
+            exit()
+        else:
+            if (self.cfg['data']['dataset_name'] == "ETTh1"):
+                data['date'] = pd.to_datetime(data.date)
+                data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
+                data_stamp = data_stamp.transpose(1, 0)       
+            elif (self.cfg['data']['dataset_name'] == "yellow_taxi_2022-01"):
+                data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+                data_stamp0 = time_features(pd.to_datetime(data['tpep_pickup_datetime'].values), freq=self.timeStampFreq)
+                data_stamp0 = data_stamp0.transpose(1, 0)
+                self.data = self.data.drop(['tpep_pickup_datetime'], axis=1)
+                data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+                data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
+                data_stamp1 = data_stamp1.transpose(1, 0)
+                data_stamp = np.concatenate((data_stamp0, data_stamp1), axis=1)
+            elif (self.cfg['data']['dataset_name'] == "wiki_rolling_nips_train"):
+                # add time featrue in first column
+                data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
+                data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
+                data_stamp = data_stamp.transpose(1, 0)
+                #drop the first column        
+                 
+        if self.cfg['data']['freq'] == 'h':
+            data_stamp = data_stamp[:,0] 
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
+        elif self.cfg['data']['freq'] == 'w':
+            data_stamp = data_stamp[:,0]
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])   
+        elif self.cfg['data']['freq'] == 'm':
+            data_stamp = data_stamp[:,0]
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel']) 
+        elif self.cfg['data']['freq'] == 'y':
+            data_stamp = data_stamp[:,0]
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
+        return data_stamp
             
     def __read_data__(self):
 
