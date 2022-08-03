@@ -446,6 +446,10 @@ class MTGNN(nn.Module):
 
     def forward(self, input, target = None, input_time = None,  target_time = None):
         input = input.cpu()
+
+        input_time = input_time.cpu()
+        input_time = np.expand_dims(input_time, axis=-1)
+        
         input = np.expand_dims(input, axis=-1)
         if not(input_time is None):
             input_time = input_time[:, :, 0].cpu()
