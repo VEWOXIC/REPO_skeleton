@@ -37,6 +37,7 @@ class Dataset_Custom(Dataset):
             data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
             data_stamp = data_stamp.transpose(1, 0)
             #drop the first column
+            self.data = self.data.drop(['date'], axis=1)
             return data_stamp, self.data # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
         elif(self.cfg['data']['path'] == "./datasets/yellow_taxi_2022-01.csv"):
             # print("Add time feature for yellow_taxi_2022-01.csv")
@@ -48,16 +49,17 @@ class Dataset_Custom(Dataset):
             data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
             data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
             data_stamp1 = data_stamp1.transpose(1, 0)
-            return np.concatenate((data_stamp0, data_stamp1), axis=1)
+            self.data = self.data.drop(['tpep_dropoff_datetime'], axis=1)
+            return np.concatenate((data_stamp0, data_stamp1), axis=1), self.data
         elif(self.cfg['data']['path'] == "./datasets/wiki_rolling_nips_train.csv"):
             # add time featrue in first column
             data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
             data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
             data_stamp = data_stamp.transpose(1, 0)
-            #drop the first column         
-            return data_stamp
+            #drop the first column
+            self.data = self.data.drop(self.data.columns[0], axis=1)          
+            return data_stamp, self.data
     def __read_data__(self):
-
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
 
@@ -83,15 +85,16 @@ class Dataset_Custom(Dataset):
 
         self.data = self.data.fillna(method='ffill')
             
-        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])     
-        num_vali = len(self.data) - num_train - num_test
-        boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
+        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
+        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
+        num_vali = int(len(self.data) * self.cfg["data"]["valid_ratio"])
+        self.boarder = {'train':[0,num_train],'valid':[num_train + 1,num_train+num_vali],'test':[num_train+num_vali + 1,num_train + num_vali + num_test]}
 
         if self.cfg['model']['UseTimeFeature']:
-            self.data_stamp = self.add_timeFeature(self.data)
-        self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
+            self.data_stamp , self.data= self.add_timeFeature(self.data)
+            
         self.train_data = self.data[self.boarder["train"][0]: self.boarder["train"][1]].values
-        self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
+        self.data = self.data[self.boarder[self.flag][0]: self.boarder[self.flag][1]].values
         
         self.data = np.nan_to_num(self.data)
         self._normalize()
@@ -107,13 +110,11 @@ class Dataset_Custom(Dataset):
         if (self.normalize == 1):
             # normalized by the maximum value of entire matrix.
             self.data = self.data / np.max(self.train_data)
-
         if (self.normalize == 2):
             # normlized by the maximum value of each row (sensor).
             for i in range(self.cfg['data']['channel']):
                 self.scale[i] = np.max(np.abs(self.train_data[:, i]))
                 self.data[:, i] = self.data[:, i] /  self.scale[i]
-
         if (self.normalize == 3):
             # normlized by the mean/std value of each row (sensor).
             for i in range(self.cfg['data']['channel']):
