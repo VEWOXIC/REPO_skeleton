@@ -57,11 +57,11 @@ class Dataset_Custom(Dataset):
             #drop the first column         
             return data_stamp
         elif(self.cfg['data']['dataset_name'] == "metr-la"):
-            if cfg['data']['add_time_in_day']:
+            if self.cfg['data']['add_time_in_day']:
                 time_ind = (df.index.values - df.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
                 time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
                 return time_in_day
-            if cfg['data']['add_time_in_day']:
+            if self.cfg['data']['add_time_in_day']:
                 day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
                 day_in_week[np.arange(num_samples), :, df.index.dayofweek] = 1
                 return day_in_week
