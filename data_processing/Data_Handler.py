@@ -61,10 +61,12 @@ class Dataset_Custom(Dataset):
             if self.cfg['data']['add_time_in_day']:
                 time_ind = (self.data.index.values - self.data.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
                 time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
+                time_in_day = time_in_day.squeeze()
                 return time_in_day
             if self.cfg['data']['add_time_in_day']:
                 day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
                 day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
+                day_in_week = day_in_week.squeeze()
                 return day_in_week
             
     def __read_data__(self):
