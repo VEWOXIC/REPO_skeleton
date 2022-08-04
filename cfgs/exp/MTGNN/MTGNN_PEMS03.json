@@ -65,7 +65,7 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
-        "UseTimeFeature": false
+        "UseTimeFeature": true
     },
 
     "data": {
@@ -82,6 +82,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar",
+        "freq": "h"
     }
 }
