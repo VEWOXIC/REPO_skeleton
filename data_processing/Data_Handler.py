@@ -74,15 +74,15 @@ class Dataset_Custom(Dataset):
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
         elif self.cfg['data']['freq'] == 'w':
-            data_stamp = data_stamp[:,0]
+            data_stamp = data_stamp[:,1]
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])   
         elif self.cfg['data']['freq'] == 'm':
-            data_stamp = data_stamp[:,0]
+            data_stamp = data_stamp[:,2]
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel']) 
         elif self.cfg['data']['freq'] == 'y':
-            data_stamp = data_stamp[:,0]
+            data_stamp = data_stamp[:,3]
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
         return data_stamp
