@@ -32,8 +32,8 @@ class Dataset_Custom(Dataset):
         # transformer based methods have label_len
 
     def add_timeFeature(self,data):# add time stamp to the data, and drop the date column(s)
+        num_samples, num_nodes = self.data.shape
         if(self.cfg['data']['dataset_name'] == "metr-la" or self.cfg['data']['dataset_name'] == "pems-bay"):
-            num_samples, num_nodes = self.data.shape
             if self.cfg['data']['add_time_in_day']:
                 time_ind = (self.data.index.values - self.data.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
                 time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
@@ -43,17 +43,13 @@ class Dataset_Custom(Dataset):
                 day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
                 day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
                 return day_in_week
-
-        if self.cfg['data']['dataset_name'] not in ['ETTh1', 'ETTh2', 'ETTm1', 'ECL', 'WTH','yellow_taxi_2022-01', 'wiki_rolling_nips_train']:
-
+        if self.cfg['data']['dataset_name'] not in ['ETTh1', 'ETTh2', 'ETTm1', 'ECL', 'PEMS03', 'PEMS04', 'PEMS07', 'PEMS08', 'WTH', 
+                                                    'yellow_taxi_2022-01', 'wiki_rolling_nips_train']:
             print('Cannot add time future in {} dataset'.format(self.cfg['data']['dataset_name']))
             exit()
         else:
             if (self.cfg['data']['dataset_name'] == "ETTh1" or self.cfg['data']['dataset_name'] == "ETTh2"
-
-                or self.cfg['data']['dataset_name'] == "ETTm1" or self.cfg['data']['dataset_name'] == "ECL" 
-                or self.cfg['data']['dataset_name'] == "WTH"):
-
+                or self.cfg['data']['dataset_name'] == "ECL" or self.cfg['data']['dataset_name'] == "WTH"):
                 data['date'] = pd.to_datetime(data.date)
                 data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
                 data_stamp = data_stamp.transpose(1, 0)       
@@ -72,21 +68,25 @@ class Dataset_Custom(Dataset):
                 data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
                 data_stamp = data_stamp.transpose(1, 0)
                 #drop the first column        
-                 
+            else:
+                data_stamp = np.zeros(num_samples)
+                data_stamp = np.expand_dims(data_stamp,axis=0)
+                data_stamp = np.transpose(data_stamp) 
+
         if self.cfg['data']['freq'] == 'h':
             data_stamp = data_stamp[:,0] 
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
         elif self.cfg['data']['freq'] == 'w':
-            data_stamp = data_stamp[:,0]
+            data_stamp = data_stamp[:,1]
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])   
         elif self.cfg['data']['freq'] == 'm':
-            data_stamp = data_stamp[:,0]
+            data_stamp = data_stamp[:,2]
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel']) 
         elif self.cfg['data']['freq'] == 'y':
-            data_stamp = data_stamp[:,0]
+            data_stamp = data_stamp[:,3]
             data_stamp = np.expand_dims(data_stamp, axis=-1)
             data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
         return data_stamp
@@ -120,7 +120,6 @@ class Dataset_Custom(Dataset):
 
         self.data = self.data.fillna(method='ffill')
             
-
         num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
         num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = int(len(self.data) * self.cfg["data"]["valid_ratio"])

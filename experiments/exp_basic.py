@@ -6,6 +6,7 @@ from utils.metrics import metric
 from data_processing.Data_Handler import get_dataset
 import utils.exp_utils
 import time
+from tqdm import tqdm
 
 class Exp_Basic(object):
     def __init__(self, cfg, model_save_dir) -> None:
@@ -53,8 +54,8 @@ class Exp_Basic(object):
             loss_total = 0
             iter_count = 0
             self.adjust_learning_rate(self.optimizer, epoch, self.cfg)
-            
-            for input, target, input_time, target_time in train_loader:
+            process = tqdm(train_loader)
+            for input, target, input_time, target_time in process:
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
@@ -92,8 +93,8 @@ class Exp_Basic(object):
 
         self.model.eval()
         preds, trues = [], []
-
-        for input, target, input_time, target_time in data_loader:
+        process = tqdm(data_loader)
+        for input, target, input_time, target_time in process:
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             

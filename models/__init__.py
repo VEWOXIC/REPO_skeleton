@@ -2,7 +2,6 @@
 from .SCINet.SCINet import SCINet
 from .MTGNN.MTGNN import MTGNN
 
-
 from .RNN.RNN import RNN
 from .InceptionTime.InceptionTime import InceptionTime
 from .TransformerModel.TransformerModel import TransformerModel
@@ -22,4 +21,3 @@ from .TCN.TCN import TCN
 from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
 from .XCM.XCM import XCM
 from .TST.TST import TST
-

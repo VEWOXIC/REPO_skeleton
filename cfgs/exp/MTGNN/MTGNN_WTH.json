@@ -44,7 +44,7 @@
         "gcn_true": true,
         "buildA_true": true,
         "gcn_depth": 2,
-        "num_nodes": 358,
+        "num_nodes": 12,
         "device": "cuda",
         "dropout": 0.3,
         "subgraph_size": 7,
@@ -58,7 +58,7 @@
         "residual_channels": 32,
         "skip_channels": 64,
         "end_channels": 128,
-        "seq_length": 24, 
+        "seq_length": 48, 
         "in_dim": 2,
         "out_dim": 24,
         "layers": 3,
@@ -69,20 +69,17 @@
     },
 
     "data": {
-        "exp_id" : 1,
-        "dataset_name":"PEMS03",
-        "path":"./datasets/PEMS03.npz",
+        "dataset_name":"WTH",
+        "path":"./datasets/WTH.csv",
         "freq": "h",
-        "lookback":24,
+        "lookback":48,
         "horizon":24,
-        "channel":358,
-        "normalize": 1,
+        "channel":12,
+        "normalize": 3,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
-        "target": "OT",
-        "scalar":"StandardScalar",
-        "freq": "h"
+        "scalar":"StandardScalar"
     }
 }
