@@ -38,7 +38,6 @@
         "device":"cuda"
     },
 
-
     "model": { 
         "model_name":"MTGNN",
         "gcn_true": true,
@@ -65,13 +64,12 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
-        "UseTimeFeature": false
+        "UseTimeFeature": true
     },
 
     "data": {
-        "exp_id" : 1,
         "dataset_name":"PEMS04",
-        "path":"./datasets/PEMS04.npz",
+        "path":"/research/d4/spc/jlshi1/SCINet/datasets/PEMS/PEMS04.npz",
         "freq": "h",
         "lookback":24,
         "horizon":24,
@@ -82,6 +80,7 @@
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar",
+        "freq": "h"  
     }
 }
