@@ -63,16 +63,16 @@
         "use_early_stop": true,
         "patience": 50,
         "rnn_type": "RNN",
-        "num_nodes": 7,
+        "num_nodes": 207,
         "feature_dim":2,
-        "output_dim":1,
+        "output_dim":2,
         "device":"cpu",
-        "UseTimeFeature": true
+        "UseTimeFeature": false
     },
 
     "data":{   
-        "dataset_name":"ETTh1",
-        "path":"./datasets/ETTh1.csv",
+        "dataset_name":"METR_LA",
+        "path":"./datasets/METR_LA",
         "lookback":48,
         "horizon":24,
         "channel":7,
@@ -84,7 +84,21 @@
         "target":0,
         "scalar":"StandardScalar",
         "num_nodes":7,
-        "freq": "h"
+        "freq": "h",
+        "data_col": ["traffic_speed"],
+        "weight_col": "cost",
+        "ext_col" : "",
+        "data_files": ["METR_LA"],
+        "geo_file": "METR_LA",
+        "rel_file": "METR_LA",
+        "ext_file": "METR_LA",
+        "output_dim": 2,
+        "time_intervals": 300,
+        "init_weight_inf_or_zero": "inf",
+        "set_weight_link_or_dist": "dist",
+        "calculate_weight_adj": true,
+        "bidir_adj_mx": false,
+        "weight_adj_epsilon": 0.1
 
     }
     

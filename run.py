@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 if __name__ == '__main__':
-    with open('cfgs/exp/ResNet/ResNet_ETTh1_dataset.json','r') as f:
+    with open('cfgs/exp/FNN/FNN_METR_LA.json','r') as f:
         cfg =json.load(f)
     # else
 

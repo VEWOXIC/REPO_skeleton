@@ -27,6 +27,7 @@ class Exp_Basic(object):
         batch_size = self.cfg["exp"][flag]['batchsize']
         shuffle = self.cfg["exp"][flag]['shuffle']
         drop_last = self.cfg["exp"][flag]['drop_last']
+        #print("dataset:",self.dataset.shape)
         return DataLoader(self.dataset, batch_size, shuffle=shuffle, drop_last=drop_last)
 
     def _get_optim(self):
@@ -60,8 +61,8 @@ class Exp_Basic(object):
 
                 self.optimizer.zero_grad()
                 prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
-                print("target:", target.size())
-                print("prediction:", prediction.size())
+                #print("target:", target.size())
+                #print("prediction:", prediction.size())
                 loss = self.loss_func(target, prediction)
                 iter_count += 1
                 loss.backward() 
@@ -99,7 +100,7 @@ class Exp_Basic(object):
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
+            prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)

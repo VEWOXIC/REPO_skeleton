@@ -51,5 +51,22 @@ class FNN(nn.Module):
         outputs = outputs.reshape(batch_size, self.num_nodes, self.output_window, self.output_dim)
         outputs = outputs.permute(0, 2, 1, 3)
         outputs = torch.squeeze(outputs)
-        print("outputs",outputs.size())
+        #print("outputs",outputs.size())
+        return outputs
+
+    def forward(self, input, target):
+        input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
+        trainx = torch.Tensor(input).to(self.device)
+        batch_size = input.shape[0]
+        trainx = trainx.permute(0, 2, 1, 3)
+        trainx = trainx.reshape(batch_size, self.num_nodes, -1)
+        inputs = trainx.float()
+        
+        outputs = self.fc1(inputs)
+        outputs = self.relu(outputs)
+        outputs = self.fc2(outputs)
+        outputs = outputs.reshape(batch_size, self.num_nodes, self.output_window, self.output_dim)
+        outputs = outputs.permute(0, 2, 1, 3)
+        outputs = torch.squeeze(outputs)
+        #print("outputs",outputs.size())
         return outputs
