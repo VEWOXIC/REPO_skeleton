@@ -1,0 +1,77 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":32,
+            "epochs":150,
+            "lr":0.009,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":32,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":32,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+    "model": {
+        "model_name":"SCINet",
+        "horizon": 3,
+        "window_size": 168,
+        "input_dim": 321,
+        "hidden_size": 8,
+        "num_stacks": 2,
+        "num_levels": 3,
+        "num_decoder_layer": 2,
+        "concat_len": 165,
+        "groups": 321,
+        "kernel": 3,
+        "dropout": 0,
+        "single_step_output_One": 0,
+        "positionalEcoding": false,
+        "modified": true,
+        "input_len_seg": 0,
+        "RIN": false,
+        "UseTimeFeature": false
+    },
+
+    "data": {
+        "exp_id": false,
+        "dataset_name":"electricity",
+        "path":"./datasets/electricity.txt",
+        "lookback":168,
+        "horizon":3,
+        "channel":321,        
+        "normalize":2,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target":"OT",
+        "scalar":"StandardScalar",
+        "freq": "h"
+    }
+}
+

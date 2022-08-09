@@ -1,0 +1,16 @@
+{
+    "model_name":"TST",
+    "n_layers":3,
+    "batchsize":8,
+    "c_in": 48,
+    "c_out": 24,
+    "seq_len": 7,
+    "d_model": 128,
+    "n_heads": 16,
+    "d_ff": 256,
+    "dropout": 0.1,
+    "act": "gelu",
+    "fc_dropout": 0.0,
+    "verbose": false,
+    "UseTimeFeature": false
+}
