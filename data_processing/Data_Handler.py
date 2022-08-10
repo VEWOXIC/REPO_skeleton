@@ -43,6 +43,7 @@ class Dataset_Custom(Dataset):
                 day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
                 day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
                 return day_in_week
+
         if self.cfg['data']['dataset_name'] not in ['ETTh1', 'ETTh2', 'ETTm1', 'ECL', 'PEMS03', 'PEMS04', 'PEMS07', 'PEMS08', 'WTH', 
                                                     'yellow_taxi_2022-01', 'wiki_rolling_nips_train']:
             print('Cannot add time future in {} dataset'.format(self.cfg['data']['dataset_name']))
@@ -73,6 +74,7 @@ class Dataset_Custom(Dataset):
                 data_stamp = np.zeros(num_samples)
                 data_stamp = np.expand_dims(data_stamp,axis=0)
                 data_stamp = np.transpose(data_stamp) 
+
 
         if self.cfg['data']['freq'] == 'h':
             data_stamp = data_stamp[:,0] 
