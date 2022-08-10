@@ -1,0 +1,72 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":4,
+            "epochs":100,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":4,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":4,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+    "model":{
+        "model_name":"TST",
+        "batchsize":4,
+        "c_in": 12,
+        "c_out": 12,
+        "seq_len": 358,
+        "n_layers":3,
+        "d_model": 128,
+        "n_heads": 16,
+        "d_ff": 256,
+        "dropout": 0.1,
+        "act": "gelu",
+        "fc_dropout": 0.0,
+        "verbose": false,
+        "UseTimeFeature": false
+    },
+
+    "data":{   
+        "dataset_name":"PEMS03",
+        "path":"./datasets/PEMS03.npz",
+        "freq": "h",
+        "lookback":12,
+        "horizon":12,
+        "channel":358,
+        "normalize": 3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target": "OT",
+        "scalar":"StandardScalar"
+    }
+    
+}
