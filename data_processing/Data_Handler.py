@@ -62,6 +62,7 @@ class Dataset_Custom(Dataset):
                 data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
                 data_stamp1 = data_stamp1.transpose(1, 0)
                 data_stamp = np.concatenate((data_stamp0, data_stamp1), axis=1)
+                self.data = self.data.drop(['tpep_dropoff_datetime'], axis=1)
             elif (self.cfg['data']['dataset_name'] == "wiki_rolling_nips_train"):
                 # add time featrue in first column
                 data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])

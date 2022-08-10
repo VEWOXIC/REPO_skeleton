@@ -8,11 +8,16 @@ from datetime import datetime
 if __name__ == '__main__':
     # if os.paths.exists()
     # with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_Electricity.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_Traffic.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_solar_AL.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
     # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_PEMS03.json','r') as f:
-    with open('cfgs/exp/MTGNN/MTGNN_metr_la.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_exchange_rate.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_metr_la.json','r') as f:
+    with open('cfgs/exp/MTGNN/MTGNN_WTH.json','r') as f:
         cfg =json.load(f)
     # else
 

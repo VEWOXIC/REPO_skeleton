@@ -3,7 +3,7 @@
         "train":{
             "training": true,
             "saved_model": true,
-            "batchsize":8,
+            "batchsize":16,
             "epochs":10,
             "lr":0.001,
             "lr_adj":1,
@@ -18,12 +18,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":8,
+            "batchsize":16,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":8,
+            "batchsize":16,
             "shuffle": false,
             "drop_last": true
         },
@@ -44,10 +44,10 @@
         "gcn_true": true,
         "buildA_true": true,
         "gcn_depth": 2,
-        "num_nodes": 358,
+        "num_nodes": 862,
         "device": "cuda",
         "dropout": 0.3,
-        "subgraph_size": 7,
+        "subgraph_size": 3,
         "node_dim": 40,
         "num_stacks": 1,
         "num_levels": 3,
@@ -65,21 +65,21 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
-        "UseTimeFeature": true
+        "UseTimeFeature": false
     },
 
     "data": {
         "exp_id" : 1,
-        "dataset_name":"PEMS03",
-        "path":"./datasets/PEMS03.npz",
+        "dataset_name":"Traffic",
+        "path":"./datasets/Traffic.txt",
         "freq": "h",
         "lookback":24,
         "horizon":24,
-        "channel":358,
-        "normalize": 3,
-        "train_ratio":0.1,
-        "valid_ratio":0.03,
-        "test_ratio":0.03,
+        "channel":862,
+        "normalize": 0,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
         "scalar":"StandardScalar"
