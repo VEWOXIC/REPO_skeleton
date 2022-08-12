@@ -33,7 +33,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
     "model":{
@@ -45,7 +45,7 @@
         "teacher_forcing_ratio": 0,
         
         "scaler": "standard",
-        "load_external": true,
+        "load_external": false,
         "normal_external": false,
         "ext_scaler": "none",
         "add_time_in_day": true,
@@ -65,9 +65,9 @@
         "rnn_type": "RNN",
         "num_nodes": 207,
         "feature_dim":2,
-        "output_dim":2,
-        "device":"cpu",
-        "UseTimeFeature": false
+        "output_dim":1,
+        "device":"cuda",
+        "UseTimeFeature": true
     },
 
     "data":{   
@@ -75,7 +75,7 @@
         "path":"./datasets/METR_LA",
         "lookback":48,
         "horizon":24,
-        "channel":7,
+        "channel":207,
         "normalize": 3,
         "train_ratio":0.6,
         "valid_ratio":0.2,
@@ -83,7 +83,7 @@
         "multivariate":true,
         "target":0,
         "scalar":"StandardScalar",
-        "num_nodes":7,
+        "num_nodes":207,
         "freq": "h",
         "data_col": ["traffic_speed"],
         "weight_col": "cost",
@@ -92,7 +92,7 @@
         "geo_file": "METR_LA",
         "rel_file": "METR_LA",
         "ext_file": "METR_LA",
-        "output_dim": 2,
+        "output_dim": 1,
         "time_intervals": 300,
         "init_weight_inf_or_zero": "inf",
         "set_weight_link_or_dist": "dist",

@@ -152,6 +152,9 @@ class Transmit(nn.Module):
         logits = logits - a
         logits = torch.sigmoid(logits)
 
+        logits = logits.to(device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
+        self.transmit = self.transmit.to(device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
+
         coefs = (logits) * self.transmit
         return coefs
 
@@ -351,7 +354,7 @@ class HGCN(nn.Module):
         input = input.cpu()
         input_time = input_time[:, :, 0].cpu()
         input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
+        input_time = np.tile(input_time, self.num_nodes)
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
@@ -362,7 +365,7 @@ class HGCN(nn.Module):
         trainx = torch.from_numpy(input).to(self.device)
         trainx = trainx.permute(0, 3, 2, 1)
         input = trainx.float()
-        print("input",input.size())
+        #print("input",input.size())
 
         input_cluster = self.get_input_cluster(input)
 
@@ -420,9 +423,9 @@ class HGCN(nn.Module):
 
         # output
         x = F.relu(skip)
-        print("x",x.size())
+        #print("x",x.size())
         x = F.relu(self.end_conv_1(x))
-        print("x",x.size())
+        #print("x",x.size())
         x = self.linear(x)
         x = self.end_conv_2(x)
         x = torch.squeeze(x)

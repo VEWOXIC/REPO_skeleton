@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_PEMS-BAY_multi.json','r') as f:
-    with open('cfgs/exp/FNN/FNN_METR_LA.json','r') as f:
+    with open('cfgs/exp/STGCN/STGCN_ETTh1_example.json','r') as f:
         cfg =json.load(f)
     # else
 

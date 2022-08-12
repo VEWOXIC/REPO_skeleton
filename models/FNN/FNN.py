@@ -29,7 +29,9 @@ class FNN(nn.Module):
 
     def forward(self, input, target, input_time, target_time):
         input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
-        input_time = input_time.cpu()
+        input_time = input_time[:, :, 0].cpu()
+        input_time = np.expand_dims(input_time, axis=-1)
+        input_time = np.tile(input_time, self.num_nodes)
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
@@ -52,19 +54,19 @@ class FNN(nn.Module):
         #print("outputs",outputs.size())
         return outputs
 
-    def forward(self, input, target):
-        input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
-        trainx = torch.Tensor(input).to(self.device)
-        batch_size = input.shape[0]
-        trainx = trainx.permute(0, 2, 1, 3)
-        trainx = trainx.reshape(batch_size, self.num_nodes, -1)
-        inputs = trainx.float()
+    # def forward(self, input, target):
+    #     input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
+    #     trainx = torch.Tensor(input).to(self.device)
+    #     batch_size = input.shape[0]
+    #     trainx = trainx.permute(0, 2, 1, 3)
+    #     trainx = trainx.reshape(batch_size, self.num_nodes, -1)
+    #     inputs = trainx.float()
         
-        outputs = self.fc1(inputs)
-        outputs = self.relu(outputs)
-        outputs = self.fc2(outputs)
-        outputs = outputs.reshape(batch_size, self.num_nodes, self.output_window, self.output_dim)
-        outputs = outputs.permute(0, 2, 1, 3)
-        outputs = torch.squeeze(outputs)
-        #print("outputs",outputs.size())
-        return outputs
+    #     outputs = self.fc1(inputs)
+    #     outputs = self.relu(outputs)
+    #     outputs = self.fc2(outputs)
+    #     outputs = outputs.reshape(batch_size, self.num_nodes, self.output_window, self.output_dim)
+    #     outputs = outputs.permute(0, 2, 1, 3)
+    #     outputs = torch.squeeze(outputs)
+    #     #print("outputs",outputs.size())
+    #     return outputs

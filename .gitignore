@@ -1,2 +1,6 @@
 **/__pycache__/
 *.pyc
+datasets/METR_LA/METR_LA.dyna
+*.npz
+*.pth
+

@@ -3,8 +3,8 @@
         "train":{
             "training": true,
             "saved_model": true,
-            "batchsize":8,
-            "epochs":5,
+            "batchsize":64,
+            "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -17,12 +17,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":8,
+            "batchsize":64,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":8,
+            "batchsize":64,
             "shuffle": false,
             "drop_last": true
         },
@@ -34,7 +34,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
     "model":{
@@ -61,7 +61,7 @@
         "use_early_stop": true,
         "patience": 50,
         
-        "device":"cpu",
+        "device":"cuda",
         "output_dim":1,
         "num_nodes": 7,
         "feature_dim":2,

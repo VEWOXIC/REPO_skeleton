@@ -1,0 +1,99 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":8,
+            "epochs":100,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "step_size": 100,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":8,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":8,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+    "model":{
+        "model_name":"TGCN",
+        "rnn_units": 100,
+        "lambda": 0.0015,
+        "bidir_adj_mx": true,
+      
+        "scaler": "normal",
+        "load_external": false,
+        "normal_external": false,
+        "ext_scaler": "none",
+        "add_time_in_day": true,
+        "add_day_in_week": false,
+      
+        "max_epoch": 5000,
+        "learner": "adam",
+        "learning_rate": 0.001,
+        "lr_decay": false,
+        "clip_grad_norm": false,
+        "use_early_stop": false,
+        
+        "device":"cuda",
+        "output_dim":1,
+        "num_nodes": 207,
+        "feature_dim":2,
+        "UseTimeFeature": true
+    },
+
+    "data":{   
+        "dataset_name":"METR_LA",
+        "path":"./datasets/METR_LA",
+        "lookback":48,
+        "horizon":24,
+        "channel":207,
+        "normalize": 3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target":0,
+        "scalar":"StandardScalar",
+        "num_nodes":207,
+        "freq": "h",
+        "data_col": ["traffic_speed"],
+        "weight_col": "cost",
+        "ext_col" : "",
+        "data_files": ["METR_LA"],
+        "geo_file": "METR_LA",
+        "rel_file": "METR_LA",
+        "ext_file": "METR_LA",
+        "output_dim": 1,
+        "time_intervals": 300,
+        "init_weight_inf_or_zero": "inf",
+        "set_weight_link_or_dist": "dist",
+        "calculate_weight_adj": true,
+        "bidir_adj_mx": false,
+        "weight_adj_epsilon": 0.1
+
+    }
+    
+}

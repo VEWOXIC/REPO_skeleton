@@ -13,15 +13,21 @@ class Exp_Basic(object):
         self.cfg = cfg
         self.device = torch.device(cfg['exp']['device'])
         self.file_dir = model_save_dir
+        self.dataset = get_dataset(self.cfg,"train")
+        self.data_feature = self.dataset.get_data_feature()
         self.model = self._build_model()
         self.model.to(self.device)
         self.loss_func = self._get_lossfunc()
         self.optimizer = self._get_optim()
+        
     
 
 
     def _build_model(self):
-        return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
+        if self.cfg['model']['model_name'] == "STMGAT":
+            return models.__dict__[self.cfg['model']['model_name']](self.cfg, self.data_feature).float()
+        else:
+            return models.__dict__[self.cfg['model']['model_name']](self.cfg).float()
 
     def _create_loader(self,flag="train"):
         self.dataset = get_dataset(self.cfg, flag)
@@ -50,22 +56,29 @@ class Exp_Basic(object):
         early_stopping = utils.exp_utils.EarlyStopping(self.cfg)
         
         # train_loop
+        self.batches_seen = 0
         for epoch in range(epochs):
+            self.model.train()
             epoch_start_time = time.time()
             loss_total = 0
             iter_count = 0
             self.adjust_learning_rate(self.optimizer, epoch, self.cfg)
+            
             process = tqdm(train_loader)
             for input, target, input_time, target_time in process:
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
 
                 self.optimizer.zero_grad()
-                prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
+                if self.cfg['model']['model_name'] == "DCRNN":
+                    prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time,self.batches_seen)
+                else:
+                    prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
                 #print("target:", target.size())
                 #print("prediction:", prediction.size())
-                loss = self.loss_func(target, prediction)
+                loss = self.loss_func(prediction, target)
                 iter_count += 1
+                self.batches_seen += 1
                 loss.backward() 
                 self.optimizer.step()
                 loss_total += float(loss)
@@ -73,7 +86,7 @@ class Exp_Basic(object):
 
             print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / iter_count))
-            
+
             val_loss, self.metrics = self.test(valid_loader)
             early_stopping(val_loss, self.model, self.optimizer, self.file_dir)
             print() 
@@ -96,12 +109,16 @@ class Exp_Basic(object):
 
         self.model.eval()
         preds, trues = [], []
+
         process = tqdm(data_loader)
         for input, target, input_time, target_time in process:
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
             
-            prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
+            if self.cfg['model']['model_name'] == "DCRNN":
+                prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time,self.batches_seen)
+            else:
+                prediction = self.model(input,target) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)
@@ -114,12 +131,15 @@ class Exp_Basic(object):
         
         print("------------TEST result:------------")
         print("norm mae:", mae, " norm mse:",mse," norm rmse:",rmse)
+        print("norm mape:",mape," norm mspe:",mspe,"norm rse:",rse)
+        print("corr:",corr)
         
         preds, trues = self.denormalized(preds, trues)
         de_mae, de_mse, de_rmse, de_mape, de_mspe, de_rse, de_corr = metric(preds, trues)
-        print("denorm mae:", de_mae, " denorm mape:", de_mape," denorm rmse:", de_rmse)
-        print("mape:",mape," mspe:",mspe," rse:",rse)
-        print("corr:",corr)
+        print("denorm mae:", de_mae, "denorm mape:", de_mape,"denorm rmse:", de_rmse)
+        print("denorm mape:", de_mape, "denorm mspe:", de_mspe,"denorm rse:", de_rse)
+        print("denorm corr:", de_corr)
+        
         
         return mae, [metric(preds, trues)]
          

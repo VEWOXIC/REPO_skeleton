@@ -182,7 +182,7 @@ class GWNET(nn.Module):
                                                    out_channels=self.dilation_channels,
                                                    kernel_size=(1, self.kernel_size), dilation=new_dilation))
                 # print(self.filter_convs[-1])
-                self.gate_convs.append(nn.Conv1d(in_channels=self.residual_channels,
+                self.gate_convs.append(nn.Conv2d(in_channels=self.residual_channels,
                                                  out_channels=self.dilation_channels,
                                                  kernel_size=(1, self.kernel_size), dilation=new_dilation))
                 # print(self.gate_convs[-1])
@@ -191,7 +191,7 @@ class GWNET(nn.Module):
                                                      out_channels=self.residual_channels,
                                                      kernel_size=(1, 1)))
                 # 1x1 convolution for skip connection
-                self.skip_convs.append(nn.Conv1d(in_channels=self.dilation_channels,
+                self.skip_convs.append(nn.Conv2d(in_channels=self.dilation_channels,
                                                  out_channels=self.skip_channels,
                                                  kernel_size=(1, 1)))
                 self.bn.append(nn.BatchNorm2d(self.residual_channels))
@@ -219,7 +219,7 @@ class GWNET(nn.Module):
         input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
         input_time = input_time[:, :, 0].cpu()
         input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
+        input_time = np.tile(input_time, self.num_nodes)
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
@@ -238,7 +238,7 @@ class GWNET(nn.Module):
             x = nn.functional.pad(inputs, (self.receptive_field-in_len, 0, 0, 0))
         else:
             x = inputs
-        print( self.receptive_field )
+        #print( self.receptive_field )
         x = self.start_conv(x)  # (batch_size, residual_channels, num_nodes, self.receptive_field)
         #print("x:", x.size())
         skip = 0

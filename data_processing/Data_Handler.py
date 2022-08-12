@@ -1,8 +1,5 @@
-from distutils.dep_util import newer
 from locale import normalize
-from sqlite3 import Timestamp
-from click import echo
-import sklearn
+import torch
 import numpy as np
 from torch.utils.data import Dataset
 from utils import data_utils
@@ -18,11 +15,19 @@ from logging import getLogger
 
 def get_dataset(cfg, flag):
     # 可能要选择
-    if cfg['data']['dataset_name'] == 'METR_LA':
+    dataset_name = cfg['data']['dataset_name']
+    print("dataset_name is: ",dataset_name)
+    # print(dataset_name == 'ETTh1')
+    # print(dataset_name == 'METR_LA')
+    # print(dataset_name == 'PEMSD7(M)')
+    if dataset_name == 'ETTh1':
+        return Dataset_Custom(cfg, flag)
+    if dataset_name == 'METR_LA' or 'PEMSD7(M)':
         print("choose Dataset_Traffic")
         return Dataset_Traffic(cfg, flag)
     else:
         return Dataset_Custom(cfg, flag)
+
 
 
 # 如果想一个dataloader对应所有数据，这里需要非常多的函数支持
@@ -41,64 +46,14 @@ class Dataset_Custom(Dataset):
         # need to be implemented
         # transformer based methods have label_len
 
-    def add_timeFeature(self,data):# add time stamp to the data, and drop the date column(s)
-        num_samples, num_nodes = self.data.shape
-        if(self.cfg['data']['dataset_name'] == "metr-la" or self.cfg['data']['dataset_name'] == "pems-bay"):
-            if self.cfg['data']['add_time_in_day']:
-                time_ind = (self.data.index.values - self.data.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
-                time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
-                time_in_day = time_in_day.squeeze()
-                return time_in_day
-            if self.cfg['data']['add_time_in_day']:
-                day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
-                day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
-                return day_in_week
+    def add_timeFeature(self, data):
+        data['date'] = pd.to_datetime(data.date)
+        data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
+        data_stamp = data_stamp.transpose(1, 0)
+        return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
 
-        if (self.cfg['data']['dataset_name'] == "ETTh1" or self.cfg['data']['dataset_name'] == "ETTh2"
-            or self.cfg['data']['dataset_name'] == "ECL" or self.cfg['data']['dataset_name'] == "WTH"):
-            data['date'] = pd.to_datetime(data.date)
-            data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
-            data_stamp = data_stamp.transpose(1, 0)       
-        elif (self.cfg['data']['dataset_name'] == "yellow_taxi_2022-01"):
-            data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
-            data_stamp0 = time_features(pd.to_datetime(data['tpep_pickup_datetime'].values), freq=self.timeStampFreq)
-            data_stamp0 = data_stamp0.transpose(1, 0)
-            self.data = self.data.drop(['tpep_pickup_datetime'], axis=1)
-            data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
-            data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
-            data_stamp1 = data_stamp1.transpose(1, 0)
-            data_stamp = np.concatenate((data_stamp0, data_stamp1), axis=1)
-        elif (self.cfg['data']['dataset_name'] == "wiki_rolling_nips_train"):
-            # add time featrue in first column
-            data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
-            data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
-            data_stamp = data_stamp.transpose(1, 0)
-            #drop the first column        
-        else:
-            data_stamp = np.zeros(num_samples)
-            data_stamp = np.expand_dims(data_stamp,axis=0)
-            data_stamp = np.transpose(data_stamp) 
-
-        if self.cfg['data']['freq'] == 'h':
-            data_stamp = data_stamp[:,0] 
-            data_stamp = np.expand_dims(data_stamp, axis=-1)
-            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
-        elif self.cfg['data']['freq'] == 'w':
-            data_stamp = data_stamp[:,1]
-            data_stamp = np.expand_dims(data_stamp, axis=-1)
-            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])   
-        elif self.cfg['data']['freq'] == 'm':
-            data_stamp = data_stamp[:,2]
-            data_stamp = np.expand_dims(data_stamp, axis=-1)
-            data_stamp = np.tile(data_stamp, self.cfg['data']['channel']) 
-        elif self.cfg['data']['freq'] == 'y':
-            data_stamp = data_stamp[:,3]
-            data_stamp = np.expand_dims(data_stamp, axis=-1)
-            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
-        return data_stamp
-            
     def __read_data__(self):
-
+        #print("data handler: read data...")
         self.scaler = data_utils.get_scaler(self.cfg['data']['scalar'])
         path = self.cfg["data"]['path']     
 
@@ -116,42 +71,34 @@ class Dataset_Custom(Dataset):
             data = np.load(path)
             data = data['data'][:,:,0]
             self.data = pd.DataFrame(data)
-        elif file_type == 'parquet':
-            data = pd.read_parquet(path)
-            self.data = pd.DataFrame(data) 
-        elif file_type == 'h5':
-            self.data = pd.read_hdf(path)
-        else:
-            print("Error: file type not supported")
-            exit()
 
-        self.data = self.data.fillna(method='ffill')
-            
-        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])     
-        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])     
+        self.data = self.data.fillna(method='ffill')    
+        self.scale = np.ones(self.data.shape[1])
+        self.bias =  np.zeros(self.data.shape[1])
+        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
+        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
         num_vali = len(self.data) - num_train - num_test
         boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
 
         if self.cfg['model']['UseTimeFeature']:
-            self.data_stamp = self.add_timeFeature(self.data)
-            self.data_stamp = self.data_stamp[boarder[self.flag][0]: boarder[self.flag][1]]
+            self.data_stamp = self.add_timeFeature(self.data[['date']][boarder[self.flag][0]:boarder[self.flag][1]])
+
         self.data = self.data.drop(self.data.columns[[i for i in range(self.data.shape[1]-self.cfg['data']['channel'])]] ,axis = 1)
+
         self.train_data = self.data[boarder["train"][0]: boarder["train"][1]].values
         self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]].values
-        self.data = np.nan_to_num(self.data)
-        self._normalize()
-        
+        self._normalized()
 
-        
-    def _normalize(self):
-        self.scale = np.ones(self.data.shape[1])
-        self.bias =  np.zeros(self.data.shape[1])
+   
+    def _normalized(self):
+
         if (self.normalize == 0):
             self.data = self.data
+
         if (self.normalize == 1):
             # normalized by the maximum value of entire matrix.
             self.data = self.data / np.max(self.train_data)
-
+        
         if (self.normalize == 2):
             # normlized by the maximum value of each row (sensor).
             for i in range(self.cfg['data']['channel']):
@@ -164,6 +111,8 @@ class Dataset_Custom(Dataset):
                 self.scale[i] = np.std(self.train_data[:, i]) #std
                 self.bias[i] = np.mean(self.train_data[:, i])
                 self.data[:, i] = (self.data[:, i] - self.bias[i]) / self.scale[i]
+                
+
 
         # 单变量/多变量
     def __getitem__(self, index):
@@ -218,7 +167,7 @@ class Dataset_Traffic(Dataset):
         # self.output_window = self.config.get('output_window', 12)
         self.parameters_str = \
             str(self.dataset) + '_' + str(self.input_window) + '_' + str(self.output_window) + '_' \
-            + str(self.load_external) + '_' + str(self.add_time_in_day) + '_' + str(self.add_day_in_week)
+            + str(self.load_external) + '_' + str(self.add_time_in_day) + '_' + str(self.add_day_in_week) + '_' + str(self.flag)
         self.cache_file_name = os.path.join('./cache/dataset_cache/',
                                             'traffic_state_{}.npz'.format(self.parameters_str))
         self.cache_file_folder = './cache/dataset_cache/'
@@ -271,11 +220,89 @@ class Dataset_Traffic(Dataset):
             else:
                 self.data_x, self.data_y = self._generate_data()
 
-    def add_timeFeature(self, data):
-        data['date'] = pd.to_datetime(data.date)
-        data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
-        data_stamp = data_stamp.transpose(1, 0)
-        return data_stamp # cfg['data']['freq']==“h" -> data_stamp = [HourOfDay, DayOfWeek, DayOfMonth, DayOfYear] MTGNN就拿第一个
+        
+
+   
+    def _normalized(self):
+        self.scale = np.ones(self.data.shape[1])
+        self.bias =  np.zeros(self.data.shape[1])
+        if (self.normalize == 0):
+            self.data = self.data
+
+        if (self.normalize == 1):
+            # normalized by the maximum value of entire matrix.
+            self.data = self.data / np.max(self.train_data)
+        
+        if (self.normalize == 2):
+            # normlized by the maximum value of each row (sensor).
+            for i in range(self.cfg['data']['channel']):
+                self.scale[i] = np.max(np.abs(self.train_data[:, i]))
+                self.data[:, i] = self.data[:, i] /  self.scale[i]
+
+        if (self.normalize == 3):
+            print("normlized by the mean/std value of each row (sensor).")
+            # normlized by the mean/std value of each row (sensor).
+            for i in range(self.cfg['data']['channel']):
+                self.scale[i] = np.std(self.train_data[:, i]) #std
+                self.bias[i] = np.mean(self.train_data[:, i])
+                self.data[:, i] = (self.data[:, i] - self.bias[i]) / self.scale[i]
+            #print("self.scale", self.scale)
+
+    def add_timeFeature(self,data):# add time stamp to the data, and drop the date column(s)
+        num_samples, num_nodes = self.data.shape
+        if(self.cfg['data']['dataset_name'] == "METR_LA" or self.cfg['data']['dataset_name'] == "pems-bay" or self.cfg['data']['dataset_name'] == "PEMSD7(M)"):
+            if self.cfg['model']['add_time_in_day']:
+                time_ind = (self.timesolts - self.timesolts.astype("datetime64[D]")) / np.timedelta64(1, "D")
+                time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
+                time_in_day = time_in_day.squeeze()
+                return time_in_day
+            if self.cfg['model']['add_day_in_week']:
+                day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
+                day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
+                return day_in_week
+
+        if (self.cfg['data']['dataset_name'] == "ETTh1" or self.cfg['data']['dataset_name'] == "ETTh2"
+            or self.cfg['data']['dataset_name'] == "ECL" or self.cfg['data']['dataset_name'] == "WTH"):
+            data['date'] = pd.to_datetime(data.date)
+            data_stamp = time_features(pd.to_datetime(data['date'].values), freq=self.timeStampFreq)
+            data_stamp = data_stamp.transpose(1, 0)       
+        elif (self.cfg['data']['dataset_name'] == "yellow_taxi_2022-01"):
+            data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+            data_stamp0 = time_features(pd.to_datetime(data['tpep_pickup_datetime'].values), freq=self.timeStampFreq)
+            data_stamp0 = data_stamp0.transpose(1, 0)
+            self.data = self.data.drop(['tpep_pickup_datetime'], axis=1)
+            data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+            data_stamp1 = time_features(pd.to_datetime(data['tpep_dropoff_datetime'].values), freq=self.timeStampFreq)
+            data_stamp1 = data_stamp1.transpose(1, 0)
+            data_stamp = np.concatenate((data_stamp0, data_stamp1), axis=1)
+        elif (self.cfg['data']['dataset_name'] == "wiki_rolling_nips_train"):
+            # add time featrue in first column
+            data.iloc[:, 0] = pd.to_datetime(data.iloc[:, 0])
+            data_stamp = time_features(pd.to_datetime(data.iloc[:, 0].values), freq=self.timeStampFreq)
+            data_stamp = data_stamp.transpose(1, 0)
+            #drop the first column        
+        else:
+            data_stamp = np.zeros(num_samples)
+            data_stamp = np.expand_dims(data_stamp,axis=0)
+            data_stamp = np.transpose(data_stamp) 
+
+        if self.cfg['data']['freq'] == 'h':
+            data_stamp = data_stamp[:,0] 
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
+        elif self.cfg['data']['freq'] == 'w':
+            data_stamp = data_stamp[:,1]
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])   
+        elif self.cfg['data']['freq'] == 'm':
+            data_stamp = data_stamp[:,2]
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel']) 
+        elif self.cfg['data']['freq'] == 'y':
+            data_stamp = data_stamp[:,3]
+            data_stamp = np.expand_dims(data_stamp, axis=-1)
+            data_stamp = np.tile(data_stamp, self.cfg['data']['channel'])
+        return data_stamp
 
     def _load_geo(self):
         """
@@ -958,7 +985,23 @@ class Dataset_Traffic(Dataset):
                 x(np.ndarray): 模型输入数据，(epoch_size, input_length, ..., feature_dim) \n
                 y(np.ndarray): 模型输出数据，(epoch_size, output_length, ..., feature_dim)
         """
-        num_samples = df.shape[0]
+        
+        self.data = df
+        self.data = np.squeeze(self.data,2)
+        num_train = int(len(self.data) * self.cfg["data"]["train_ratio"])
+        num_test = int(len(self.data) * self.cfg["data"]["test_ratio"])
+        num_vali = len(self.data) - num_train - num_test
+        boarder = {'train':[0,num_train],'valid':[num_train,num_train+num_vali],'test':[num_train+num_vali,len(self.data)-1]}
+
+        if self.cfg['model']['UseTimeFeature']:
+            self.data_stamp = self.add_timeFeature(self.data)
+            self.data_stamp = self.data_stamp[boarder[self.flag][0]: boarder[self.flag][1]]
+
+        self.train_data = self.data[boarder["train"][0]: boarder["train"][1]]
+        self.data = self.data[boarder[self.flag][0]: boarder[self.flag][1]]
+        num_samples = self.data.shape[0]
+        self._normalized()
+
         # 预测用的过去时间窗口长度 取决于self.input_window
         x_offsets = np.sort(np.concatenate((np.arange(-self.input_window + 1, 1, 1),)))
         # 未来时间窗口长度 取决于self.output_window
@@ -968,8 +1011,8 @@ class Dataset_Traffic(Dataset):
         min_t = abs(min(x_offsets))
         max_t = abs(num_samples - abs(max(y_offsets)))
         for t in range(min_t, max_t):
-            x_t = df[t + x_offsets, ...]
-            y_t = df[t + y_offsets, ...]
+            x_t = self.data[t + x_offsets, ...]
+            y_t = self.data[t + y_offsets, ...]
             x.append(x_t)
             y.append(y_t)
         x = np.stack(x, axis=0)
@@ -1019,11 +1062,15 @@ class Dataset_Traffic(Dataset):
         np.savez_compressed(
             self.cache_file_name,
             data_x = x,
-            data_y = y
+            data_y = y,
+            data_stamp = self.data_stamp,
+            scale = self.scale,
+            bias = self.bias,
+            adj_mx = self.adj_mx
         )
         self._logger.info('Saved at ' + self.cache_file_name)
         print('Saved at ' + self.cache_file_name)
-        return x, y
+        return x, y, 
 
     def __getitem__(self, index):
         # some model use time stamp
@@ -1056,6 +1103,10 @@ class Dataset_Traffic(Dataset):
         cat_data = np.load(self.cache_file_name)
         data_x = cat_data['data_x']
         data_y = cat_data['data_y']
+        self.data_stamp = cat_data['data_stamp']
+        self.scale = cat_data['scale']
+        self.bias = cat_data['bias']
+        self.adj_mx = cat_data['adj_mx']
         self._logger.info("data\t" + "x: " + str(data_x.shape) + ", y: " + str(data_y.shape))
         print("data\t" + "x: " + str(data_x.shape) + ", y: " + str(data_y.shape))
         return data_x, data_y
@@ -1149,91 +1200,91 @@ class Dataset_Traffic(Dataset):
     #     self._logger.info("test\t" + "x: " + str(x_test.shape) + ", y: " + str(y_test.shape))
     #     return x_train, y_train, x_val, y_val, x_test, y_test
 
-    # def _get_scalar(self, scaler_type, x_train, y_train):
-    #     """
-    #     根据全局参数`scaler_type`选择数据归一化方法
+    def _get_scalar(self, scaler_type, x_train, y_train):
+        """
+        根据全局参数`scaler_type`选择数据归一化方法
 
-    #     Args:
-    #         x_train: 训练数据X
-    #         y_train: 训练数据y
+        Args:
+            x_train: 训练数据X
+            y_train: 训练数据y
 
-    #     Returns:
-    #         Scaler: 归一化对象
-    #     """
-    #     if scaler_type == "normal":
-    #         scaler = NormalScaler(maxx=max(x_train.max(), y_train.max()))
-    #         self._logger.info('NormalScaler max: ' + str(scaler.max))
-    #     elif scaler_type == "standard":
-    #         scaler = StandardScaler(mean=x_train.mean(), std=x_train.std())
-    #         self._logger.info('StandardScaler mean: ' + str(scaler.mean) + ', std: ' + str(scaler.std))
-    #     elif scaler_type == "minmax01":
-    #         scaler = MinMax01Scaler(
-    #             maxx=max(x_train.max(), y_train.max()), minn=min(x_train.min(), y_train.min()))
-    #         self._logger.info('MinMax01Scaler max: ' + str(scaler.max) + ', min: ' + str(scaler.min))
-    #     elif scaler_type == "minmax11":
-    #         scaler = MinMax11Scaler(
-    #             maxx=max(x_train.max(), y_train.max()), minn=min(x_train.min(), y_train.min()))
-    #         self._logger.info('MinMax11Scaler max: ' + str(scaler.max) + ', min: ' + str(scaler.min))
-    #     elif scaler_type == "log":
-    #         scaler = LogScaler()
-    #         self._logger.info('LogScaler')
-    #     elif scaler_type == "none":
-    #         scaler = NoneScaler()
-    #         self._logger.info('NoneScaler')
-    #     else:
-    #         raise ValueError('Scaler type error!')
-    #     return scaler
+        Returns:
+            Scaler: 归一化对象
+        """
+        if scaler_type == "normal":
+            scaler = NormalScaler(maxx=max(x_train.max(), y_train.max()))
+            self._logger.info('NormalScaler max: ' + str(scaler.max))
+        elif scaler_type == "standard":
+            scaler = StandardScaler(mean=x_train.mean(), std=x_train.std())
+            self._logger.info('StandardScaler mean: ' + str(scaler.mean) + ', std: ' + str(scaler.std))
+        elif scaler_type == "minmax01":
+            scaler = MinMax01Scaler(
+                maxx=max(x_train.max(), y_train.max()), minn=min(x_train.min(), y_train.min()))
+            self._logger.info('MinMax01Scaler max: ' + str(scaler.max) + ', min: ' + str(scaler.min))
+        elif scaler_type == "minmax11":
+            scaler = MinMax11Scaler(
+                maxx=max(x_train.max(), y_train.max()), minn=min(x_train.min(), y_train.min()))
+            self._logger.info('MinMax11Scaler max: ' + str(scaler.max) + ', min: ' + str(scaler.min))
+        elif scaler_type == "log":
+            scaler = LogScaler()
+            self._logger.info('LogScaler')
+        elif scaler_type == "none":
+            scaler = NoneScaler()
+            self._logger.info('NoneScaler')
+        else:
+            raise ValueError('Scaler type error!')
+        return scaler
 
-    # def get_data(self):
-    #     """
-    #     返回数据的DataLoader，包括训练数据、测试数据、验证数据
+    def get_data(self):
+        """
+        返回数据的DataLoader，包括训练数据、测试数据、验证数据
 
-    #     Returns:
-    #         tuple: tuple contains:
-    #             train_dataloader: Dataloader composed of Batch (class) \n
-    #             eval_dataloader: Dataloader composed of Batch (class) \n
-    #             test_dataloader: Dataloader composed of Batch (class)
-    #     """
-    #     # 加载数据集
-    #     x_train, y_train, x_val, y_val, x_test, y_test = [], [], [], [], [], []
-    #     if self.data is None:
-    #         self.data = {}
-    #         if self.cache_dataset and os.path.exists(self.cache_file_name):
-    #             x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
-    #         else:
-    #             x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
-    #     # 数据归一化
-    #     self.feature_dim = x_train.shape[-1]
-    #     self.ext_dim = self.feature_dim - self.output_dim
-    #     self.scaler = self._get_scalar(self.scaler_type,
-    #                                    x_train[..., :self.output_dim], y_train[..., :self.output_dim])
-    #     self.ext_scaler = self._get_scalar(self.ext_scaler_type,
-    #                                        x_train[..., self.output_dim:], y_train[..., self.output_dim:])
-    #     x_train[..., :self.output_dim] = self.scaler.transform(x_train[..., :self.output_dim])
-    #     y_train[..., :self.output_dim] = self.scaler.transform(y_train[..., :self.output_dim])
-    #     x_val[..., :self.output_dim] = self.scaler.transform(x_val[..., :self.output_dim])
-    #     y_val[..., :self.output_dim] = self.scaler.transform(y_val[..., :self.output_dim])
-    #     x_test[..., :self.output_dim] = self.scaler.transform(x_test[..., :self.output_dim])
-    #     y_test[..., :self.output_dim] = self.scaler.transform(y_test[..., :self.output_dim])
-    #     if self.normal_external:
-    #         x_train[..., self.output_dim:] = self.ext_scaler.transform(x_train[..., self.output_dim:])
-    #         y_train[..., self.output_dim:] = self.ext_scaler.transform(y_train[..., self.output_dim:])
-    #         x_val[..., self.output_dim:] = self.ext_scaler.transform(x_val[..., self.output_dim:])
-    #         y_val[..., self.output_dim:] = self.ext_scaler.transform(y_val[..., self.output_dim:])
-    #         x_test[..., self.output_dim:] = self.ext_scaler.transform(x_test[..., self.output_dim:])
-    #         y_test[..., self.output_dim:] = self.ext_scaler.transform(y_test[..., self.output_dim:])
-    #     # 把训练集的X和y聚合在一起成为list，测试集验证集同理
-    #     # x_train/y_train: (num_samples, input_length, ..., feature_dim)
-    #     # train_data(list): train_data[i]是一个元组，由x_train[i]和y_train[i]组成
-    #     train_data = list(zip(x_train, y_train))
-    #     eval_data = list(zip(x_val, y_val))
-    #     test_data = list(zip(x_test, y_test))
-    #     # 转Dataloader
-    #     self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
-    #         generate_dataloader(train_data, eval_data, test_data, self.feature_name,
-    #                             self.batch_size, self.num_workers, pad_with_last_sample=self.pad_with_last_sample)
-    #     self.num_batches = len(self.train_dataloader)
-    #     return self.train_dataloader, self.eval_dataloader, self.test_dataloader
+        Returns:
+            tuple: tuple contains:
+                train_dataloader: Dataloader composed of Batch (class) \n
+                eval_dataloader: Dataloader composed of Batch (class) \n
+                test_dataloader: Dataloader composed of Batch (class)
+        """
+        # 加载数据集
+        x_train, y_train, x_val, y_val, x_test, y_test = [], [], [], [], [], []
+        if self.data is None:
+            self.data = {}
+            if self.cache_dataset and os.path.exists(self.cache_file_name):
+                x_train, y_train, x_val, y_val, x_test, y_test = self._load_cache_train_val_test()
+            else:
+                x_train, y_train, x_val, y_val, x_test, y_test = self._generate_train_val_test()
+        # 数据归一化
+        self.feature_dim = x_train.shape[-1]
+        self.ext_dim = self.feature_dim - self.output_dim
+        self.scaler = self._get_scalar(self.scaler_type,
+                                       x_train[..., :self.output_dim], y_train[..., :self.output_dim])
+        self.ext_scaler = self._get_scalar(self.ext_scaler_type,
+                                           x_train[..., self.output_dim:], y_train[..., self.output_dim:])
+        x_train[..., :self.output_dim] = self.scaler.transform(x_train[..., :self.output_dim])
+        y_train[..., :self.output_dim] = self.scaler.transform(y_train[..., :self.output_dim])
+        x_val[..., :self.output_dim] = self.scaler.transform(x_val[..., :self.output_dim])
+        y_val[..., :self.output_dim] = self.scaler.transform(y_val[..., :self.output_dim])
+        x_test[..., :self.output_dim] = self.scaler.transform(x_test[..., :self.output_dim])
+        y_test[..., :self.output_dim] = self.scaler.transform(y_test[..., :self.output_dim])
+        if self.normal_external:
+            x_train[..., self.output_dim:] = self.ext_scaler.transform(x_train[..., self.output_dim:])
+            y_train[..., self.output_dim:] = self.ext_scaler.transform(y_train[..., self.output_dim:])
+            x_val[..., self.output_dim:] = self.ext_scaler.transform(x_val[..., self.output_dim:])
+            y_val[..., self.output_dim:] = self.ext_scaler.transform(y_val[..., self.output_dim:])
+            x_test[..., self.output_dim:] = self.ext_scaler.transform(x_test[..., self.output_dim:])
+            y_test[..., self.output_dim:] = self.ext_scaler.transform(y_test[..., self.output_dim:])
+        # 把训练集的X和y聚合在一起成为list，测试集验证集同理
+        # x_train/y_train: (num_samples, input_length, ..., feature_dim)
+        # train_data(list): train_data[i]是一个元组，由x_train[i]和y_train[i]组成
+        train_data = list(zip(x_train, y_train))
+        eval_data = list(zip(x_val, y_val))
+        test_data = list(zip(x_test, y_test))
+        # 转Dataloader
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            generate_dataloader(train_data, eval_data, test_data, self.feature_name,
+                                self.batch_size, self.num_workers, pad_with_last_sample=self.pad_with_last_sample)
+        self.num_batches = len(self.train_dataloader)
+        return self.train_dataloader, self.eval_dataloader, self.test_dataloader
 
     # def get_data_feature(self):
     #     """
@@ -1243,3 +1294,14 @@ class Dataset_Traffic(Dataset):
     #         dict: 包含数据集的相关特征的字典
     #     """
     #     raise NotImplementedError('Please implement the function `get_data_feature()`.')
+    def get_data_feature(self):
+        """
+        返回数据集特征，scaler是归一化方法，adj_mx是邻接矩阵，num_nodes是点的个数，
+        feature_dim是输入数据的维度，output_dim是模型输出的维度
+
+        Returns:
+            dict: 包含数据集的相关特征的字典
+        """
+        return {"scaler": self.scaler, "adj_mx": self.adj_mx, "ext_dim": self.ext_dim,
+                "num_nodes": self.num_nodes, "feature_dim": self.feature_dim,
+                "output_dim": self.output_dim, "num_batches": self.num_batches}

@@ -33,7 +33,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
     "model":{
@@ -66,7 +66,7 @@
         "num_nodes": 7,
         "feature_dim":2,
         "output_dim":1,
-        "device":"cpu",
+        "device":"cuda",
         "UseTimeFeature": true
     },
 
