@@ -24,9 +24,9 @@ if __name__ == '__main__':
         
     model_name = cfg['model']['model_name']
     dataset_name = cfg['data']['dataset_name']
-    print("Start training for model:", model_name, " dataset:", dataset_name)
     exp = Exp_Basic(cfg, model_save_dir)
     if cfg['exp']['train']['training'] or not os.path.exists(model_save_dir):
+        print("Start training for model:", model_name, " dataset:", dataset_name)
         before_train = datetime.now().timestamp()
         print("===================Train-Start=========================")
         exp.train()
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         print("===================Train-End=========================")
     else:
         exp.load_model()
-
+    print("Start testing for model:", model_name, " dataset:", dataset_name)
     before_evaluation = datetime.now().timestamp()
     exp.test()
     after_evaluation = datetime.now().timestamp()
