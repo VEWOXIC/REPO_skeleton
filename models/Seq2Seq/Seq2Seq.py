@@ -121,7 +121,7 @@ class Seq2Seq(nn.Module):
         input = input.cpu() # [batch_size, input_window, num_nodes, feature_dim]
         input_time = input_time[:, :, 0].cpu()
         input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
+        input_time = np.tile(input_time, self.num_nodes)
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
         input = [input]
@@ -137,7 +137,7 @@ class Seq2Seq(nn.Module):
         target = target.cpu()
         target_time = target_time[:, :, 0].cpu()
         target_time = np.expand_dims(target_time, axis=-1)
-        target_time = np.tile(target_time, 7)
+        target_time = np.tile(target_time, self.num_nodes)
         target_time = np.expand_dims(target_time, axis=-1)
         target = np.expand_dims(target, axis=-1)
         target = [target]
@@ -179,6 +179,6 @@ class Seq2Seq(nn.Module):
         # outputs = [self.output_window, batch_size, self.num_nodes, self.output_dim]
         outputs = outputs.permute(1, 0, 2, 3)
         outputs = torch.squeeze(outputs)
-        print("outputs",outputs.size())
+        #print("outputs",outputs.size())
         return outputs
 

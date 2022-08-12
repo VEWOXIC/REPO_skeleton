@@ -1,0 +1,82 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":4,
+            "epochs":30,
+            "lr":0.009,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "step_size": 100,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":4,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":4,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+
+    "model": { 
+        "model_name":"MTGNN",
+        "gcn_true": true,
+        "buildA_true": true,
+        "gcn_depth": 2,
+        "num_nodes": 321,
+        "device": "cuda",
+        "dropout": 0.3,
+        "subgraph_size": 20,
+        "node_dim": 40,
+        "dilation_exponential": 2,
+        "conv_channels": 16,
+        "residual_channels": 16,
+        "skip_channels": 32,
+        "end_channels": 64,
+        "seq_length": 168, 
+        "in_dim": 1,
+        "out_dim": 3,
+        "layers": 5,
+        "propalpha": 0.05,
+        "tanhalpha": 3,
+        "layer_norm_affline": false,
+        "UseTimeFeature": true
+    },
+
+    "data": {
+        "exp_id" : 1,
+        "dataset_name":"electricity",
+        "path":"./datasets/electricity.txt",
+        "freq": "h",
+        "lookback":168,
+        "horizon":3,
+        "channel":321,
+        "normalize": 3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target": "OT",
+        "scalar":"StandardScalar"
+    }
+}

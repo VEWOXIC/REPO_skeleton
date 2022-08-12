@@ -19,3 +19,8 @@ from .ResCNN.ResCNN import ResCNN
 from .TCN.TCN import TCN
 from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
 from .XCM.XCM import XCM
+from .STMGAT.STMGAT import STMGAT
+from .GWNET.GWNET import GWNET
+from .HGCN.HGCN import HGCN
+from .ATDM.ATDM import ATDM
+from .TGCN.TGCN import TGCN

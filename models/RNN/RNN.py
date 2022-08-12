@@ -1,3 +1,5 @@
+# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/RNN.py
+
 import torch.nn as nn
 from torch.nn import init
 

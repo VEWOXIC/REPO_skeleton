@@ -446,25 +446,29 @@ class MTGNN(nn.Module):
 
     def forward(self, input, target, input_time, target_time):
         input = input.cpu()
-        input_time = input_time[:, :, 0].cpu()
-        input_time = np.expand_dims(input_time, axis=-1)
-        input_time = np.tile(input_time, 7)
-        input_time = np.expand_dims(input_time, axis=-1)
-        input = np.expand_dims(input, axis=-1)
-        input = [input]
+        if self.cfg['data']['dataset_name'] in ['metr-la', 'pems-bay']:
+            input_time = input_time.cpu()
+            input_time = np.expand_dims(input_time, axis=-1)
+            input = np.expand_dims(input, axis=-1)
+            input = [input]
+            input.append(input_time)
+            input = np.concatenate(input, axis=-1)
+        else:
+            input = np.expand_dims(input, axis=-1)
+        
         idx = np.arange(self.cfg['model']['num_nodes'])
         idx = torch.tensor(idx).to(self.device)
-        input.append(input_time)
-        input = np.concatenate(input, axis=-1)
+        
         trainx = torch.from_numpy(input).to(self.device)
         trainx = trainx.transpose(1, 3)
         input = trainx.float()
+        
         seq_len = input.size(3)
         assert seq_len == self.seq_length, 'input sequence length not equal to preset sequence length'
 
         if self.seq_length < self.receptive_field:
             input = nn.functional.pad(input, (self.receptive_field - self.seq_length, 0, 0, 0))
-
+        
         if self.gcn_true:
             if self.buildA_true:
                 if idx is None:
@@ -473,7 +477,7 @@ class MTGNN(nn.Module):
                     adp = self.gc(idx)
             else:
                 adp = self.predefined_A
-
+        
         x = self.start_conv(input)
         skip = self.skip0(F.dropout(input, self.dropout, training=self.training))
         for i in range(self.layers):
