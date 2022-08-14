@@ -58,9 +58,15 @@ class Exp_Basic(object):
             for input, target, input_time, target_time in process:
                 input, target, input_time, target_time = \
                     input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
-
                 self.optimizer.zero_grad()
-                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
+                if self.cfg['model']['model_name'] in ["Autoformer", "Transformer", "Informer", "Reformer", "FEDformer"]:
+                    dec_inp = torch.zeros_like(target[:, -self.cfg['model']["pred_len"]:, :]).float()
+                    dec_inp = torch.cat([target[:, :self.cfg['model']["label_len"], :], dec_inp], dim=1).float().to(self.device)
+                    prediction = self.model(input, input_time, dec_inp, target_time)[:, -self.cfg['model']['pred_len']:, :]
+                    target = target[:, -self.cfg['model']['pred_len']:, :]
+                else:
+                    prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
+                assert prediction.shape == target.shape
                 loss = self.loss_func(prediction, target)
                 iter_count += 1
                 loss.backward() 
@@ -97,8 +103,13 @@ class Exp_Basic(object):
         for input, target, input_time, target_time in process:
             input, target, input_time, target_time = \
                 input.float().to(self.device), target.float().to(self.device), input_time.float().to(self.device), target_time.float().to(self.device)
-            
-            prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input,target,input_time,target_time)
+            if self.cfg['model']['model_name'] in ["Autoformer", "Transformer", "Informer", "Reformer", "FEDformer"]:
+                dec_inp = torch.zeros_like(target[:, -self.cfg['model']["pred_len"]:, :]).float()
+                dec_inp = torch.cat([target[:, :self.cfg['model']["label_len"], :], dec_inp], dim=1).float().to(self.device)
+                prediction = self.model(input, input_time, dec_inp, target_time)[:, -self.cfg['model']['pred_len']:, :]
+                target = target[:, -self.cfg['model']['pred_len']:, :]
+            else:
+                prediction = self.model(input) if not self.cfg['model']['UseTimeFeature'] else self.model(input, target, input_time,target_time)
             prediction = prediction.detach().cpu().numpy()
             target = target.detach().cpu().numpy()
             preds.append(prediction)
