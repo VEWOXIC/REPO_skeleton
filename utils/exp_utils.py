@@ -145,6 +145,8 @@ def masked_mae_torch(preds, labels, null_val=np.nan):
     mask = mask.float()
     mask /= torch.mean(mask) 
     mask = torch.where(torch.isnan(mask), torch.zeros_like(mask), mask)
+    #print("pred",preds.size())
+    #print("true",labels.size())
     loss = torch.abs(torch.sub(preds, labels))
     loss = loss * mask
     loss = torch.where(torch.isnan(loss), torch.zeros_like(loss), loss)

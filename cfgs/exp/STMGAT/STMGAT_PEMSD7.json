@@ -1,0 +1,110 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":32,
+            "epochs":50,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "step_size": 100,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":64,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":64,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cpu"
+    },
+
+    "model":{
+        "model_name":"STMGAT",
+        "dropout": 0.3,
+        "blocks": 4,
+        "layers": 2,
+        "run_gconv": true,
+        "kernel_size": 2,
+        "heads": 8,
+        "feat_drop": 0.6,
+        "attn_drop": 0.6,
+        "negative_slope": 0.2,
+        "residual_channels": 40,
+        "dilation_channels": 40,
+        "skip_channels": 320,
+        "end_channels": 640,
+      
+        "scaler": "standard",
+        "load_external": false,
+        "normal_external": false,
+        "ext_scaler": "none",
+        "add_time_in_day": true,
+        "add_day_in_week": false,
+      
+        "max_epoch": 100,
+        "learner": "adam",
+        "learning_rate": 0.001,
+        "lr_decay": false,
+        "clip_grad_norm": true,
+        "max_grad_norm": 5,
+        "use_early_stop": false,
+        "device":"cpu",
+        "output_dim":1,
+        "ext_dim":1,
+        "num_nodes": 228,
+        "feature_dim":2,
+        "UseTimeFeature": true
+    },
+
+    "data":{   
+        "dataset_name":"PEMSD7(M)",
+        "path":"./datasets/PEMSD7(M)",
+        "lookback":12,
+        "horizon":12,
+        "channel":228,
+        "normalize": 3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target":0,
+        "scalar":"StandardScalar",
+        "num_nodes":228,
+        "freq": "h",
+        "data_col": ["traffic_speed"],
+        "weight_col": "weight",
+        "ext_col" : "",
+        "data_files": ["PEMSD7(M)"],
+        "geo_file": "PEMSD7(M)",
+        "rel_file": "PEMSD7(M)",
+        "ext_file": "PEMSD7(M)",
+        "output_dim": 1,
+        "time_intervals": 300,
+        "init_weight_inf_or_zero": "inf",
+        "set_weight_link_or_dist": "dist",
+        "calculate_weight_adj": true,
+        "bidir_adj_mx": false,
+        "weight_adj_epsilon": 0.1
+
+    }
+    
+}

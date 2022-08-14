@@ -6,12 +6,14 @@ from experiments.exp_basic import *
 from datetime import datetime
 
 if __name__ == '__main__':
+    
     # if os.paths.exists()
     # with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
     # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
-    with open('cfgs/exp/MTGNN/MTGNN_PEMS-BAY_multi.json','r') as f:
+    # with open('cfgs/exp/MTGNN/MTGNN_PEMS-BAY_multi.json','r') as f:
+    with open('cfgs/exp/STGCN/STGCN_ETTh1_example.json','r') as f:
         cfg =json.load(f)
     # else
 

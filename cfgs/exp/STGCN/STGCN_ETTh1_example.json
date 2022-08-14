@@ -34,7 +34,7 @@
             "RSE": true,
             "CORR": true
         },
-        "device":"cpu"
+        "device":"cuda"
     },
 
 
