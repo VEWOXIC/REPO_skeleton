@@ -1,0 +1,78 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":8,
+            "epochs":100,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":8,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":8,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+    "model":{
+        "model_name":"Transformer",
+        "enc_in":7,
+        "dec_in":7,
+        "c_out":7,
+        "d_model":512,
+        "n_heads":8,
+        "e_layers":2,
+        "d_layers":1,
+        "d_ff":2048,
+        "moving_avg":25,
+        "factor":512,
+        "dropout":0.05,
+        "embed":"timeF",
+        "activation":"gelu",
+        "pred_len":96,
+        "label_len":48,
+        "output_attention":false,
+        "freq": "h",
+        "use_amp": false,
+        "UseTimeFeature": true,
+        "distil": true
+    },
+    "data":{
+            "dataset_name":"ETTh1",
+            "path":"./datasets/ETTh1.csv",
+            "lookback":96,
+            "horizon":48,
+            "label_len":24,
+            "channel":7,
+            "normalize": 3,
+            "train_ratio":0.6,
+            "valid_ratio":0.2,
+            "test_ratio":0.2,
+            "multivariate":true,
+            "target":"OT",
+            "scalar":"StandardScalar",
+            "freq":"h"
+        }
+}

@@ -21,3 +21,11 @@ from .TCN.TCN import TCN
 from .OmniScaleCNN.OmniScaleCNN import OmniScaleCNN
 from .XCM.XCM import XCM
 from .TST.TST import TST
+from .DLinear.DLinear import Model as DLinear
+from .RNN.RNN import LSTM
+from .RNN.RNN import GRU
+from .STAT.STAT import Arima, SArima, GBRT
+from .Reformer.Reformer import Model as Reformer
+from .Informer.Informer import Model as Informer
+from .FEDformer.FEDformer import Model as FEDformer
+from .DLinear.DLinear import Model as DLinear

@@ -75,19 +75,8 @@ class Autoformer(nn.Module):
             projection=nn.Linear(cfg['model']["d_model"], cfg['model']["c_out"], bias=True)
         )
 
-    def forward(self, batch_x, batch_y, batch_x_mark, batch_y_mark):
-    # (self, x_enc, x_mark_enc, x_dec, x_mark_dec,
-    #             enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None)
-        # decoder input
-        enc_self_mask=None
-        dec_self_mask=None
-        dec_enc_mask=None
-        x_enc = batch_x
-        x_mark_enc = batch_x_mark
-        x_mark_dec = batch_y_mark
-        dec_inp = torch.zeros_like(batch_x[:, -self.pred_len:, :]).float()
-        dec_inp = torch.cat([batch_x[:, -self.label_len:, :], dec_inp], dim=1).float().to(self.device)
-        x_dec = dec_inp
+    def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec,
+                enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):        
 
         # decomp init
         mean = torch.mean(x_enc, dim=1).unsqueeze(1).repeat(1, self.pred_len, 1)
