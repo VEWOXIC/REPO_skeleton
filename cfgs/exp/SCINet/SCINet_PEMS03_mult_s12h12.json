@@ -9,7 +9,7 @@
             "lr_adj":1,
             "shuffle": true,
             "drop_last": true,
-            "optimizer": "smooth_l1_loss",
+            "optimizer": "adam",
             "loss": "mae",
             "patience": 7,
             "verbose": true,
