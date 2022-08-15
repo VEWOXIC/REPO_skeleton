@@ -111,11 +111,12 @@ class Exp_Basic(object):
         
         print("------------TEST result:------------")
         print("norm mae:", mae, " norm mse:",mse," norm rmse:",rmse)
+        print("mape:",mape," mspe:",mspe," rse:",rse, " corr:", corr) 
         
         preds, trues = self.denormalized(preds, trues)
         de_mae, de_mse, de_rmse, de_mape, de_mspe, de_rse, de_corr = metric(preds, trues)
-        print("denorm mae:", de_mae, " denorm mape:", de_mape," denorm rmse:", de_rmse)
-        
+        print("denorm mae:", de_mae, " denorm mse:", de_mse," denorm rmse:", de_rmse)
+        print("denorm_mape", de_mape," denorm_mspe", de_mspe," denorm_rse:", de_rse," denorm_corr:", de_corr)
         return mae, [metric(preds, trues)]
         # print("mape:",mape," mspe:",mspe," rse:",rse)
         # print("corr:",corr) 
