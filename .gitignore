@@ -1,2 +1,3 @@
 **/__pycache__/
 *.pyc
+cfgs/exp/MTGNN/MTGNN_Electricity.json
