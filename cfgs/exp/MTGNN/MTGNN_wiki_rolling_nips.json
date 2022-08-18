@@ -1,7 +1,7 @@
 {
     "exp":{
         "train":{
-            "training": true,
+            "training": false,
             "saved_model": true,
             "batchsize":8,
             "epochs":10,
@@ -77,9 +77,9 @@
         "horizon":24,
         "channel":792,
         "normalize": 1,
-        "train_ratio":0.6,
-        "valid_ratio":0.2,
-        "test_ratio":0.2,
+        "train_ratio":0.3,
+        "valid_ratio":0.1,
+        "test_ratio":0.1,
         "multivariate":true,
         "target": "OT",
         "scalar":"StandardScalar"

@@ -1,11 +1,19 @@
 {
     "exp":{
         "train":{
+<<<<<<< HEAD
+            "training": false,
+            "saved_model": true,
+            "batchsize":16,
+            "epochs":10,
+            "lr":0.001,
+=======
             "training": true,
             "saved_model": true,
             "batchsize":16,
             "epochs":10,
             "lr":0.003,
+>>>>>>> a4a052cc451af950e9fe0ff2ea83bad83fea206a
             "lr_adj":1,
             "shuffle": true,
             "drop_last": true,
@@ -76,7 +84,11 @@
         "lookback":24,
         "horizon":24,
         "channel":137,
+<<<<<<< HEAD
+        "normalize": 3,
+=======
         "normalize": 0,
+>>>>>>> a4a052cc451af950e9fe0ff2ea83bad83fea206a
         "train_ratio":0.3,
         "valid_ratio":0.1,
         "test_ratio":0.1,

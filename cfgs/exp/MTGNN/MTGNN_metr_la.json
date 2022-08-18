@@ -1,7 +1,7 @@
 {
     "exp":{
         "train":{
-            "training": true,
+            "training": false,
             "saved_model": true,
             "batchsize":64,
             "epochs":10,

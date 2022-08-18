@@ -1,13 +1,9 @@
 {
     "exp":{
         "train":{
-<<<<<<< HEAD
             "training": false,
-=======
-            "training": true,
->>>>>>> a4a052cc451af950e9fe0ff2ea83bad83fea206a
             "saved_model": true,
-            "batchsize":16,
+            "batchsize":64,
             "epochs":10,
             "lr":0.001,
             "lr_adj":1,
@@ -22,12 +18,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":16,
+            "batchsize":64,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":16,
+            "batchsize":64,
             "shuffle": false,
             "drop_last": true
         },
@@ -42,16 +38,15 @@
         "device":"cuda"
     },
 
-
     "model": { 
         "model_name":"MTGNN",
         "gcn_true": true,
         "buildA_true": true,
         "gcn_depth": 2,
-        "num_nodes": 862,
+        "num_nodes": 883,
         "device": "cuda",
         "dropout": 0.3,
-        "subgraph_size": 3,
+        "subgraph_size": 7,
         "node_dim": 40,
         "num_stacks": 1,
         "num_levels": 3,
@@ -69,30 +64,22 @@
         "propalpha": 0.05,
         "tanhalpha": 3,
         "layer_norm_affline": false,
-        "UseTimeFeature": false
+        "UseTimeFeature": true
     },
 
     "data": {
-        "exp_id" : 1,
-        "dataset_name":"Traffic",
-        "path":"./datasets/Traffic.txt",
+        "dataset_name":"PEMS07",
+        "path":"./datasets/PEMS07.npz",
         "freq": "h",
         "lookback":24,
         "horizon":24,
-        "channel":862,
-<<<<<<< HEAD
+        "channel":883,
         "normalize": 3,
-        "train_ratio":0.2,
-        "valid_ratio":0.05,
-        "test_ratio":0.05,
-=======
-        "normalize": 0,
-        "train_ratio":0.6,
-        "valid_ratio":0.2,
-        "test_ratio":0.2,
->>>>>>> a4a052cc451af950e9fe0ff2ea83bad83fea206a
+        "train_ratio":0.3,
+        "valid_ratio":0.1,
+        "test_ratio":0.1,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar"
+        "scalar":"StandardScalar"  
     }
 }
