@@ -444,9 +444,8 @@ class MTGNN(nn.Module):
 
         self.idx = torch.arange(self.num_nodes).to(self.device)
 
-    def forward(self, input, target = None, input_time = None, target_time = None):
+    def forward(self, input, target, input_time, target_time):
         input = input.cpu()
-
         if self.cfg['data']['dataset_name'] in ['metr-la', 'pems-bay']:
             input_time = input_time.cpu()
             input_time = np.expand_dims(input_time, axis=-1)
@@ -457,7 +456,6 @@ class MTGNN(nn.Module):
         else:
             input = np.expand_dims(input, axis=-1)
         
-
         idx = np.arange(self.cfg['model']['num_nodes'])
         idx = torch.tensor(idx).to(self.device)
         
