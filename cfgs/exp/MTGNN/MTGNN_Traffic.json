@@ -1,14 +1,10 @@
 {
     "exp":{
         "train":{
-<<<<<<< HEAD
-            "training": false,
-=======
             "training": true,
->>>>>>> a4a052cc451af950e9fe0ff2ea83bad83fea206a
             "saved_model": true,
             "batchsize":16,
-            "epochs":10,
+            "epochs":100,
             "lr":0.001,
             "lr_adj":1,
             "shuffle": true,
@@ -80,17 +76,10 @@
         "lookback":24,
         "horizon":24,
         "channel":862,
-<<<<<<< HEAD
         "normalize": 3,
-        "train_ratio":0.2,
-        "valid_ratio":0.05,
-        "test_ratio":0.05,
-=======
-        "normalize": 0,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
->>>>>>> a4a052cc451af950e9fe0ff2ea83bad83fea206a
         "multivariate":true,
         "target": "OT",
         "scalar":"StandardScalar"
