@@ -18,12 +18,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":8,
+            "batchsize":64,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":8,
+            "batchsize":64,
             "shuffle": false,
             "drop_last": true
         },
@@ -76,13 +76,12 @@
         "lookback":24,
         "horizon":24,
         "channel":358,
-        "normalize": 1,
+        "normalize": 3,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar",
-        "freq": "h"
+        "scalar":"StandardScalar"
     }
 }

@@ -3,7 +3,7 @@
         "train":{
             "training": true,
             "saved_model": true,
-            "batchsize":8,
+            "batchsize":64,
             "epochs":100,
             "lr":0.001,
             "lr_adj":1,
@@ -18,12 +18,12 @@
             "delta": 0
         },
         "valid":{
-            "batchsize":8,
+            "batchsize":64,
             "shuffle": true,
             "drop_last": true
         },
         "test":{
-            "batchsize":8,
+            "batchsize":64,
             "shuffle": false,
             "drop_last": true
         },
@@ -69,18 +69,17 @@
 
     "data": {
         "dataset_name":"PEMS04",
-        "path":"/research/d4/spc/jlshi1/SCINet/datasets/PEMS/PEMS04.npz",
+        "path":"./datasets/PEMS04.npz",
         "freq": "h",
         "lookback":24,
         "horizon":24,
         "channel":307,
-        "normalize": 1,
+        "normalize": 3,
         "train_ratio":0.6,
         "valid_ratio":0.2,
         "test_ratio":0.2,
         "multivariate":true,
         "target": "OT",
-        "scalar":"StandardScalar",
-        "freq": "h"  
+        "scalar":"StandardScalar"
     }
 }
