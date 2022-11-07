@@ -1,11 +1,12 @@
 import math
-from tkinter import X
-import numpy as np
 from logging import getLogger
+from tkinter import X
+
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.init as init
 import torch.nn.functional as F
+import torch.nn.init as init
 
 
 def calculate_scaled_laplacian(adj):
@@ -87,7 +88,8 @@ class Align(nn.Module):
             return self.conv1x1(x)
         if self.c_in < self.c_out:
             return F.pad(x, [0, 0, 0, 0, 0, self.c_out - self.c_in, 0, 0])
-        return x  # return: (batch_size, c_out, input_length-1+1, num_nodes-1+1)
+        # return: (batch_size, c_out, input_length-1+1, num_nodes-1+1)
+        return x
 
 
 class TemporalConvLayer(nn.Module):
@@ -109,16 +111,18 @@ class TemporalConvLayer(nn.Module):
         :return: (batch_size, c_out, input_length-kt+1, num_nodes)
         """
         x_in = self.align(x)[
-            :, :, self.kt - 1 :, :
+            :, :, self.kt - 1:, :
         ]  # (batch_size, c_out, input_length-kt+1, num_nodes)
         if self.act == "GLU":
             # x: (batch_size, c_in, input_length, num_nodes)
             x_conv = self.conv(x)
-            # x_conv: (batch_size, c_out * 2, input_length-kt+1, num_nodes)  [P Q]
+            # x_conv: (batch_size, c_out * 2, input_length-kt+1, num_nodes)  [P
+            # Q]
             return (x_conv[:, : self.c_out, :, :] + x_in) * torch.sigmoid(
-                x_conv[:, self.c_out :, :, :]
+                x_conv[:, self.c_out:, :, :]
             )
-            # return P * sigmoid(Q) shape: (batch_size, c_out, input_length-kt+1, num_nodes)
+            # return P * sigmoid(Q) shape: (batch_size, c_out,
+            # input_length-kt+1, num_nodes)
         if self.act == "sigmoid":
             return torch.sigmoid(self.conv(x) + x_in)  # residual connection
         return torch.relu(self.conv(x) + x_in)  # residual connection
@@ -147,7 +151,10 @@ class SpatioConvLayer(nn.Module):
         # x_c: (batch_size, c_in, input_length, Ks, num_nodes)
         # theta: (c_in, c_out, Ks)
         # x_gc: (batch_size, c_out, input_length, num_nodes)
-        x_c = torch.einsum("knm,bitm->bitkn", self.Lk, x)  # delete num_nodes(n)
+        x_c = torch.einsum(
+            "knm,bitm->bitkn",
+            self.Lk,
+            x)  # delete num_nodes(n)
         x_gc = (
             torch.einsum("iok,bitkn->botn", self.theta, x_c) + self.b
         )  # delete Ks(k) c_in(i)
@@ -164,10 +171,14 @@ class STConvBlock(nn.Module):
         self.ln = nn.LayerNorm([n, c[2]])
         self.dropout = nn.Dropout(p)
 
-    def forward(self, x):  # x: (batch_size, feature_dim/c[0], input_length, num_nodes)
-        x_t1 = self.tconv1(x)  # (batch_size, c[1], input_length-kt+1, num_nodes)
-        x_s = self.sconv(x_t1)  # (batch_size, c[1], input_length-kt+1, num_nodes)
-        x_t2 = self.tconv2(x_s)  # (batch_size, c[2], input_length-kt+1-kt+1, num_nodes)
+    # x: (batch_size, feature_dim/c[0], input_length, num_nodes)
+    def forward(self, x):
+        # (batch_size, c[1], input_length-kt+1, num_nodes)
+        x_t1 = self.tconv1(x)
+        # (batch_size, c[1], input_length-kt+1, num_nodes)
+        x_s = self.sconv(x_t1)
+        # (batch_size, c[2], input_length-kt+1-kt+1, num_nodes)
+        x_t2 = self.tconv2(x_s)
         x_ln = self.ln(x_t2.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
         return self.dropout(x_ln)
 
@@ -239,15 +250,18 @@ class STGCN(nn.Module):
         if self.graph_conv_type.lower() == "chebconv":
             laplacian_mx = calculate_scaled_laplacian(adj_mx)
             self.Lk = calculate_cheb_poly(laplacian_mx, self.Ks)
-            self._logger.info("Chebyshev_polynomial_Lk shape: " + str(self.Lk.shape))
+            self._logger.info(
+                "Chebyshev_polynomial_Lk shape: " + str(self.Lk.shape))
             self.Lk = torch.FloatTensor(self.Lk).to(self.device)
         elif self.graph_conv_type.lower() == "gcnconv":
             self.Lk = calculate_first_approx(adj_mx)
-            self._logger.info("First_approximation_Lk shape: " + str(self.Lk.shape))
+            self._logger.info(
+                "First_approximation_Lk shape: " + str(self.Lk.shape))
             self.Lk = torch.FloatTensor(self.Lk).to(self.device)
             self.Ks = 1  # 一阶近似保留到K0和K1，但是不是数组形式，只有一个n*n矩阵，所以是1（本质上是2）
         else:
-            raise ValueError("Error graph_conv_type, must be chebconv or gcnconv.")
+            raise ValueError(
+                "Error graph_conv_type, must be chebconv or gcnconv.")
 
         # 模型结构
         self.st_conv1 = STConvBlock(
@@ -277,7 +291,8 @@ class STGCN(nn.Module):
 
     def forward(self, input, target, input_time, target_time):
         # input = [input]  # (batch_size, input_length, num_nodes, feature_dim)
-        # x = x.permute(0, 3, 1, 2)  # (batch_size, feature_dim, input_length, num_nodes)
+        # x = x.permute(0, 3, 1, 2)  # (batch_size, feature_dim, input_length,
+        # num_nodes)
 
         input = input.cpu()
         input_time = input_time.cpu()
@@ -316,9 +331,8 @@ class STGCN(nn.Module):
                 x_batch
             )  # (batch_size, c[2](64), input_length-kt+1-kt+1, num_nodes)
             # print("x_st1",x_st1.size())
-            x_st2 = self.st_conv2(
-                x_st1
-            )  # (batch_size, c[2](128), input_length-kt+1-kt+1-kt+1-kt+1, num_nodes)
+            # (batch_size, c[2](128), input_length-kt+1-kt+1-kt+1-kt+1, num_nodes)
+            x_st2 = self.st_conv2(x_st1)
             # print("x_st2",x_st2.size())
             outputs = self.output(
                 x_st2
@@ -333,7 +347,8 @@ class STGCN(nn.Module):
 
             y_preds.append(y_.clone())
             if y_.shape[-1] < x_.shape[-1]:  # output_dim < feature_dim
-                y_ = torch.cat([y_, y[:, i : i + 1, :, self.output_dim :]], dim=3)
+                y_ = torch.cat(
+                    [y_, y[:, i: i + 1, :, self.output_dim:]], dim=3)
                 # print("!y_",y_.size())
             # print("!x_",x_.size())
             x_ = torch.cat([x_[:, 1:, :, :], y_], dim=1)
@@ -367,10 +382,12 @@ class STGCN(nn.Module):
         x_ = x.clone()
         for i in range(self.output_window):
             batch_tmp = {"X": x_}
-            y_ = self.forward(batch_tmp)  # (batch_size, 1, num_nodes, output_dim)
+            # (batch_size, 1, num_nodes, output_dim)
+            y_ = self.forward(batch_tmp)
             y_preds.append(y_.clone())
             if y_.shape[-1] < x_.shape[-1]:  # output_dim < feature_dim
-                y_ = torch.cat([y_, y[:, i : i + 1, :, self.output_dim :]], dim=3)
+                y_ = torch.cat(
+                    [y_, y[:, i: i + 1, :, self.output_dim:]], dim=3)
             x_ = torch.cat([x_[:, 1:, :, :], y_], dim=1)
         y_preds = torch.cat(
             y_preds, dim=1

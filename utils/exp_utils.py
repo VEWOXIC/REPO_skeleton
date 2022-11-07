@@ -1,18 +1,25 @@
-from functools import partial
-import torch
-from torch import optim
-import numpy as np
-from sklearn.metrics import r2_score, explained_variance_score
 import os
+from functools import partial
+
+import numpy as np
+import torch
 import torch.nn as nn
 from numpy import inf
+from sklearn.metrics import explained_variance_score, r2_score
+from torch import optim
 
 # optimizer selection
+
+
 def build_optimizer(cfg, model):
     if cfg["exp"]["train"]["optimizer"] == "adam":
-        optimizer = optim.Adam(model.parameters(), lr=cfg["exp"]["train"]["lr"])
+        optimizer = optim.Adam(
+            model.parameters(),
+            lr=cfg["exp"]["train"]["lr"])
     elif cfg["exp"]["train"]["optimizer"] == "sgd":
-        optimizer = torch.optim.SGD(model.parameters(), lr=cfg["exp"]["train"]["lr"])
+        optimizer = torch.optim.SGD(
+            model.parameters(),
+            lr=cfg["exp"]["train"]["lr"])
     elif cfg["exp"]["train"]["optimizer"] == "adagrad":
         optimizer = torch.optim.Adagrad(
             model.parameters(), lr=cfg["exp"]["train"]["lr"]
@@ -27,7 +34,9 @@ def build_optimizer(cfg, model):
         )
     else:
         print("Received unrecognized optimizer, set default Adam optimizer")
-        optimizer = optim.Adam(model.parameters(), lr=cfg["exp"]["train"]["lr"])
+        optimizer = optim.Adam(
+            model.parameters(),
+            lr=cfg["exp"]["train"]["lr"])
     return optimizer
 
 
@@ -108,7 +117,8 @@ class EarlyStopping:
             self.save_checkpoint(val_loss, model, optimizer, path)
         elif score < self.best_score + self.delta:
             self.counter += 1
-            print(f"EarlyStopping counter: {self.counter} out of {self.patience}")
+            print(
+                f"EarlyStopping counter: {self.counter} out of {self.patience}")
             if self.counter >= self.patience:
                 self.early_stop = True
         else:
@@ -225,7 +235,11 @@ def masked_mse_torch(preds, labels, null_val=np.nan):
 
 def masked_rmse_torch(preds, labels, null_val=np.nan):
     labels[torch.abs(labels) < 1e-4] = 0
-    return torch.sqrt(masked_mse_torch(preds=preds, labels=labels, null_val=null_val))
+    return torch.sqrt(
+        masked_mse_torch(
+            preds=preds,
+            labels=labels,
+            null_val=null_val))
 
 
 def r2_score_torch(preds, labels):
@@ -241,7 +255,11 @@ def explained_variance_score_torch(preds, labels):
 
 
 def masked_rmse_np(preds, labels, null_val=np.nan):
-    return np.sqrt(masked_mse_np(preds=preds, labels=labels, null_val=null_val))
+    return np.sqrt(
+        masked_mse_np(
+            preds=preds,
+            labels=labels,
+            null_val=null_val))
 
 
 def masked_mse_np(preds, labels, null_val=np.nan):
@@ -278,7 +296,12 @@ def masked_mape_np(preds, labels, null_val=np.nan):
             mask = np.not_equal(labels, null_val)
         mask = mask.astype("float32")
         mask /= np.mean(mask)
-        mape = np.abs(np.divide(np.subtract(preds, labels).astype("float32"), labels))
+        mape = np.abs(
+            np.divide(
+                np.subtract(
+                    preds,
+                    labels).astype("float32"),
+                labels))
         mape = np.nan_to_num(mask * mape)
         return np.mean(mape)
 

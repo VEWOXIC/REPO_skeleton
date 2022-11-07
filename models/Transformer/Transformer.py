@@ -1,10 +1,12 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from .Transformer_EncDec import Decoder, DecoderLayer, Encoder, EncoderLayer, ConvLayer
-from .SelfAttention_Family import FullAttention, AttentionLayer
+
 from .Embed import DataEmbedding
-import numpy as np
+from .SelfAttention_Family import AttentionLayer, FullAttention
+from .Transformer_EncDec import (ConvLayer, Decoder, DecoderLayer, Encoder,
+                                 EncoderLayer)
 
 
 class Transformer(nn.Module):
@@ -105,9 +107,9 @@ class Transformer(nn.Module):
         x_enc = batch_x  # label_len
         x_mark_enc = batch_x_mark
         x_mark_dec = batch_y_mark
-        dec_inp = torch.zeros_like(batch_x[:, -self.pred_len :, :]).float()
+        dec_inp = torch.zeros_like(batch_x[:, -self.pred_len:, :]).float()
         dec_inp = (
-            torch.cat([batch_x[:, -self.label_len :, :], dec_inp], dim=1)
+            torch.cat([batch_x[:, -self.label_len:, :], dec_inp], dim=1)
             .float()
             .to(self.device)
         )
@@ -125,4 +127,4 @@ class Transformer(nn.Module):
         #     return dec_out[:, -self.pred_len:, :], attns
         # else:
         #     return dec_out[:, -self.pred_len:, :]  # [B, L, D]
-        return dec_out[:, -self.pred_len :, :]
+        return dec_out[:, -self.pred_len:, :]

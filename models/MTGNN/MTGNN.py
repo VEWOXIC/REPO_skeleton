@@ -1,10 +1,12 @@
 from __future__ import division
+
+import numbers
+
+import numpy as np
 import torch
 import torch.nn as nn
-from torch.nn import init
-import numbers
 import torch.nn.functional as F
-import numpy as np
+from torch.nn import init
 
 
 class nconv(nn.Module):
@@ -29,8 +31,10 @@ class linear(nn.Module):
     def __init__(self, c_in, c_out, bias=True):
         super(linear, self).__init__()
         self.mlp = torch.nn.Conv2d(
-            c_in, c_out, kernel_size=(1, 1), padding=(0, 0), stride=(1, 1), bias=bias
-        )
+            c_in, c_out, kernel_size=(
+                1, 1), padding=(
+                0, 0), stride=(
+                1, 1), bias=bias)
 
     def forward(self, x):
         return self.mlp(x)
@@ -126,7 +130,9 @@ class dilated_1D(nn.Module):
         super(dilated_1D, self).__init__()
         self.tconv = nn.ModuleList()
         self.kernel_set = [2, 3, 6, 7]
-        self.tconv = nn.Conv2d(cin, cout, (1, 7), dilation=(1, dilation_factor))
+        self.tconv = nn.Conv2d(
+            cin, cout, (1, 7), dilation=(
+                1, dilation_factor))
 
     def forward(self, input):
         x = self.tconv(input)
@@ -149,7 +155,7 @@ class dilated_inception(nn.Module):
         for i in range(len(self.kernel_set)):
             x.append(self.tconv[i](input))
         for i in range(len(self.kernel_set)):
-            x[i] = x[i][..., -x[-1].size(3) :]
+            x[i] = x[i][..., -x[-1].size(3):]
         x = torch.cat(x, dim=1)
         return x
 
@@ -306,7 +312,12 @@ class graph_directed(nn.Module):
 
 
 class LayerNorm(nn.Module):
-    __constants__ = ["normalized_shape", "weight", "bias", "eps", "elementwise_affine"]
+    __constants__ = [
+        "normalized_shape",
+        "weight",
+        "bias",
+        "eps",
+        "elementwise_affine"]
 
     def __init__(self, normalized_shape, eps=1e-5, elementwise_affine=True):
         super(LayerNorm, self).__init__()
@@ -464,9 +475,12 @@ class MTGNN(nn.Module):
                         nn.Conv2d(
                             in_channels=self.conv_channels,
                             out_channels=self.skip_channels,
-                            kernel_size=(1, self.receptive_field - rf_size_j + 1),
-                        )
-                    )
+                            kernel_size=(
+                                1,
+                                self.receptive_field -
+                                rf_size_j +
+                                1),
+                        ))
 
                 if self.gcn_true:
                     self.gconv1.append(
@@ -594,7 +608,11 @@ class MTGNN(nn.Module):
                 adp = self.predefined_A
 
         x = self.start_conv(input)
-        skip = self.skip0(F.dropout(input, self.dropout, training=self.training))
+        skip = self.skip0(
+            F.dropout(
+                input,
+                self.dropout,
+                training=self.training))
         for i in range(self.layers):
             residual = x
             filter = self.filter_convs[i](x)
@@ -607,11 +625,12 @@ class MTGNN(nn.Module):
             s = self.skip_convs[i](s)
             skip = s + skip
             if self.gcn_true:
-                x = self.gconv1[i](x, adp) + self.gconv2[i](x, adp.transpose(1, 0))
+                x = self.gconv1[i](x, adp) + \
+                    self.gconv2[i](x, adp.transpose(1, 0))
             else:
                 x = self.residual_convs[i](x)
 
-            x = x + residual[:, :, :, -x.size(3) :]
+            x = x + residual[:, :, :, -x.size(3):]
             if idx is None:
                 x = self.norm[i](x, self.idx)
             else:

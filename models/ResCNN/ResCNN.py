@@ -1,4 +1,5 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/ResCNN.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/ResCNN.py
 
 from .imports import *
 from .layers import *
@@ -6,10 +7,20 @@ from .layers import *
 
 class _ResCNNBlock(Module):
     def __init__(
-        self, ni, nf, kss=[7, 5, 3], coord=False, separable=False, zero_norm=False
-    ):
-        self.convblock1 = ConvBlock(ni, nf, kss[0], coord=coord, separable=separable)
-        self.convblock2 = ConvBlock(nf, nf, kss[1], coord=coord, separable=separable)
+            self,
+            ni,
+            nf,
+            kss=[
+                7,
+                5,
+                3],
+            coord=False,
+            separable=False,
+            zero_norm=False):
+        self.convblock1 = ConvBlock(
+            ni, nf, kss[0], coord=coord, separable=separable)
+        self.convblock2 = ConvBlock(
+            nf, nf, kss[1], coord=coord, separable=separable)
         self.convblock3 = ConvBlock(
             nf,
             nf,

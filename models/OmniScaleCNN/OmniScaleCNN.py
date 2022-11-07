@@ -1,11 +1,13 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/OmniScaleCNN.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/OmniScaleCNN.py
 
 from .imports import *
 from .layers import *
 
 # This is an unofficial PyTorch implementation by Ignacio Oguiza - oguiza@gmail.com based on:
 # Rußwurm, M., & Körner, M. (2019). Self-attention for raw optical satellite time series classification. arXiv preprint arXiv:1910.10536.
-# Official implementation: https://github.com/dl4sits/BreizhCrops/blob/master/breizhcrops/models/OmniScaleCNN.py
+# Official implementation:
+# https://github.com/dl4sits/BreizhCrops/blob/master/breizhcrops/models/OmniScaleCNN.py
 
 
 class SampaddingConv1D_BN(Module):
@@ -14,8 +16,9 @@ class SampaddingConv1D_BN(Module):
             (int((kernel_size - 1) / 2), int(kernel_size / 2)), 0
         )
         self.conv1d = torch.nn.Conv1d(
-            in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size
-        )
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size)
         self.bn = nn.BatchNorm1d(num_features=out_channels)
 
     def forward(self, x):
@@ -79,7 +82,8 @@ class OmniScaleCNN(Module):
         self.gap = GAP1d(1)
         out_put_channel_number = 0
         for final_layer_parameters in layer_parameter_list[-1]:
-            out_put_channel_number = out_put_channel_number + final_layer_parameters[1]
+            out_put_channel_number = out_put_channel_number + \
+                final_layer_parameters[1]
         self.hidden = nn.Linear(out_put_channel_number, c_out)
 
     def forward(self, x):
@@ -106,7 +110,8 @@ def get_Prime_number_in_a_range(start, end):
 
 
 def get_out_channel_number(paramenter_layer, in_channel, prime_list):
-    out_channel_expect = max(1, int(paramenter_layer / (in_channel * sum(prime_list))))
+    out_channel_expect = max(
+        1, int(paramenter_layer / (in_channel * sum(prime_list))))
     return out_channel_expect
 
 

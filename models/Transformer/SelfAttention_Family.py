@@ -1,15 +1,15 @@
+import math
+import os
+from math import sqrt
+
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-import matplotlib.pyplot as plt
-
-import numpy as np
-import math
-from math import sqrt
-from utils.masking import TriangularCausalMask, ProbMask
 from reformer_pytorch import LSHSelfAttention
-import os
+
+from utils.masking import ProbMask, TriangularCausalMask
 
 
 class FullAttention(nn.Module):
@@ -75,17 +75,18 @@ class ProbAttention(nn.Module):
         index_sample = torch.randint(
             L_K, (L_Q, sample_k)
         )  # real U = U_part(factor*ln(L_k))*L_q
-        K_sample = K_expand[:, :, torch.arange(L_Q).unsqueeze(1), index_sample, :]
-        Q_K_sample = torch.matmul(Q.unsqueeze(-2), K_sample.transpose(-2, -1)).squeeze()
+        K_sample = K_expand[:, :, torch.arange(
+            L_Q).unsqueeze(1), index_sample, :]
+        Q_K_sample = torch.matmul(
+            Q.unsqueeze(-2), K_sample.transpose(-2, -1)).squeeze()
 
         # find the Top_k query with sparisty measurement
         M = Q_K_sample.max(-1)[0] - torch.div(Q_K_sample.sum(-1), L_K)
         M_top = M.topk(n_top, sorted=False)[1]
 
         # use the reduced Q to calculate Q_K
-        Q_reduce = Q[
-            torch.arange(B)[:, None, None], torch.arange(H)[None, :, None], M_top, :
-        ]  # factor*ln(L_q)
+        Q_reduce = Q[torch.arange(B)[:, None, None], torch.arange(H)[
+            None, :, None], M_top, :]  # factor*ln(L_q)
         Q_K = torch.matmul(Q_reduce, K.transpose(-2, -1))  # factor*ln(L_q)*L_k
 
         return Q_K, M_top
@@ -95,7 +96,8 @@ class ProbAttention(nn.Module):
         if not self.mask_flag:
             # V_sum = V.sum(dim=-2)
             V_sum = V.mean(dim=-2)
-            contex = V_sum.unsqueeze(-2).expand(B, H, L_Q, V_sum.shape[-1]).clone()
+            contex = V_sum.unsqueeze(-2).expand(B, H,
+                                                L_Q, V_sum.shape[-1]).clone()
         else:  # use mask
             assert L_Q == L_V  # requires that L_Q == L_V, i.e. for self-attention only
             contex = V.cumsum(dim=-2)
@@ -114,10 +116,10 @@ class ProbAttention(nn.Module):
             torch.arange(B)[:, None, None], torch.arange(H)[None, :, None], index, :
         ] = torch.matmul(attn, V).type_as(context_in)
         if self.output_attention:
-            attns = (torch.ones([B, H, L_V, L_V]) / L_V).type_as(attn).to(attn.device)
-            attns[
-                torch.arange(B)[:, None, None], torch.arange(H)[None, :, None], index, :
-            ] = attn
+            attns = (torch.ones([B, H, L_V, L_V]) /
+                     L_V).type_as(attn).to(attn.device)
+            attns[torch.arange(B)[:, None, None], torch.arange(H)[
+                None, :, None], index, :] = attn
             return (context_in, attns)
         else:
             return (context_in, None)
@@ -130,13 +132,16 @@ class ProbAttention(nn.Module):
         keys = keys.transpose(2, 1)
         values = values.transpose(2, 1)
 
-        U_part = self.factor * np.ceil(np.log(L_K)).astype("int").item()  # c*ln(L_k)
-        u = self.factor * np.ceil(np.log(L_Q)).astype("int").item()  # c*ln(L_q)
+        U_part = self.factor * \
+            np.ceil(np.log(L_K)).astype("int").item()  # c*ln(L_k)
+        u = self.factor * \
+            np.ceil(np.log(L_Q)).astype("int").item()  # c*ln(L_q)
 
         U_part = U_part if U_part < L_K else L_K
         u = u if u < L_Q else L_Q
 
-        scores_top, index = self._prob_QK(queries, keys, sample_k=U_part, n_top=u)
+        scores_top, index = self._prob_QK(
+            queries, keys, sample_k=U_part, n_top=u)
 
         # add scale factor
         scale = self.scale or 1.0 / sqrt(D)
@@ -153,7 +158,13 @@ class ProbAttention(nn.Module):
 
 
 class AttentionLayer(nn.Module):
-    def __init__(self, attention, d_model, n_heads, d_keys=None, d_values=None):
+    def __init__(
+            self,
+            attention,
+            d_model,
+            n_heads,
+            d_keys=None,
+            d_values=None):
         super(AttentionLayer, self).__init__()
 
         d_keys = d_keys or (d_model // n_heads)
@@ -211,9 +222,8 @@ class ReformerLayer(nn.Module):
         else:
             # fill the time series
             fill_len = (self.bucket_size * 2) - (N % (self.bucket_size * 2))
-            return torch.cat(
-                [queries, torch.zeros([B, fill_len, C]).to(queries.device)], dim=1
-            )
+            return torch.cat([queries, torch.zeros(
+                [B, fill_len, C]).to(queries.device)], dim=1)
 
     def forward(self, queries, keys, values, attn_mask):
         # in Reformer: defalut queries=keys

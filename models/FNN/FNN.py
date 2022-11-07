@@ -1,5 +1,6 @@
-from logging import getLogger
 import math
+from logging import getLogger
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -23,12 +24,19 @@ class FNN(nn.Module):
         self._scaler = cfg["data"]["scalar"]
         self.hidden_size = cfg["model"]["hidden_size"]
 
-        self.fc1 = nn.Linear(self.input_window * self.feature_dim, self.hidden_size)
+        self.fc1 = nn.Linear(
+            self.input_window *
+            self.feature_dim,
+            self.hidden_size)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(self.hidden_size, self.output_window * self.output_dim)
+        self.fc2 = nn.Linear(
+            self.hidden_size,
+            self.output_window *
+            self.output_dim)
 
     def forward(self, input, target, input_time, target_time):
-        input = input.cpu()  # [batch_size, input_window, num_nodes, feature_dim]
+        # [batch_size, input_window, num_nodes, feature_dim]
+        input = input.cpu()
         input_time = input_time.cpu()
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
