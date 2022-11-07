@@ -3,13 +3,14 @@
 from .imports import *
 from .layers import *
 
+
 class FCN(Module):
     def __init__(self, cfg):
 
-        c_in = cfg['model']['c_in']
-        c_out = cfg['model']['c_out']
-        layers = cfg['model']['layers']
-        kss = cfg['model']['kss']
+        c_in = cfg["model"]["c_in"]
+        c_out = cfg["model"]["c_out"]
+        layers = cfg["model"]["layers"]
+        kss = cfg["model"]["kss"]
 
         assert len(layers) == len(kss)
         self.convblock1 = ConvBlock(c_in, layers[0], kss[0])

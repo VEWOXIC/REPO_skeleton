@@ -3,6 +3,7 @@
 from .imports import *
 from .layers import *
 
+
 class _SpatialGatingUnit(nn.Module):
     def __init__(self, d_ffn, seq_len):
         super().__init__()
@@ -50,13 +51,13 @@ class _gMLPBackbone(nn.Module):
 
 class gMLP(_gMLPBackbone):
     def __init__(self, cfg):
-        c_in = cfg['model']['c_in']
-        c_out = cfg['model']['c_out']
-        seq_len = cfg['model']['seq_len']
-        patch_size = cfg['model']['patch_size']
-        d_model = cfg['model']['d_model']
-        d_ffn = cfg['model']['d_ffn']
-        depth = cfg['model']['depth']
+        c_in = cfg["model"]["c_in"]
+        c_out = cfg["model"]["c_out"]
+        seq_len = cfg["model"]["seq_len"]
+        patch_size = cfg["model"]["patch_size"]
+        d_model = cfg["model"]["d_model"]
+        d_ffn = cfg["model"]["d_ffn"]
+        depth = cfg["model"]["depth"]
 
         assert seq_len % patch_size == 0, "`seq_len` must be divisibe by `patch_size`"
         super().__init__(d_model, d_ffn, seq_len // patch_size, depth)
