@@ -2,7 +2,9 @@ import numpy as np
 
 
 def RSE(pred, true):
-    return np.sqrt(np.sum((true - pred) ** 2)) / np.sqrt(np.sum((true - true.mean()) ** 2))
+    return np.sqrt(np.sum((true - pred) ** 2)) / np.sqrt(
+        np.sum((true - true.mean()) ** 2)
+    )
 
 
 def CORR(pred, true):
@@ -10,10 +12,11 @@ def CORR(pred, true):
     sig_g = np.std(true, axis=0)
     m_p = pred.mean(0)
     m_g = true.mean(0)
-    ind = (sig_g != 0)
+    ind = sig_g != 0
     corr = ((pred - m_p) * (true - m_g)).mean(0) / (sig_p * sig_g)
     corr = (corr[ind]).mean()
     return corr
+
 
 def MAE(pred, true):
     return np.mean(np.abs(pred - true))
