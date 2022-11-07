@@ -462,7 +462,7 @@ class SCINet(nn.Module):
 
         # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8
         # -> 4 for 3 levels)
-        assert (self.input_len % (np.power(2, self.num_levels)) == 0)
+        assert self.input_len % (np.power(2, self.num_levels)) == 0
         if self.pe:
             pe = self.get_position_encoding(x)
             if pe.shape[2] > x.shape[2]:
