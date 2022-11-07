@@ -1,4 +1,5 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/ResNet.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/ResNet.py
 
 from .imports import *
 from .layers import *
@@ -11,7 +12,8 @@ class ResBlock(Module):
         self.convblock3 = ConvBlock(nf, nf, kss[2], act=None)
 
         # expand channels for the sum if necessary
-        self.shortcut = BN1d(ni) if ni == nf else ConvBlock(ni, nf, 1, act=None)
+        self.shortcut = BN1d(ni) if ni == nf else ConvBlock(
+            ni, nf, 1, act=None)
         self.add = Add()
         self.act = nn.ReLU()
 

@@ -1,55 +1,44 @@
-# File copied from https://github.com/timeseriesAI/tsai/blob/main/tsai/imports.py
+# File copied from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/imports.py
 
-import numpy as np
-from numpy import array
-import pandas as pd
-import matplotlib.pyplot as plt
-from typing import (
-    Iterable,
-    Generator,
-    Sequence,
-    Iterator,
-    List,
-    Set,
-    Dict,
-    Union,
-    Optional,
-)
-from functools import partial
-import math
-import random
+import datetime
 import gc
+import importlib
+import math
 import os
+import random
 import sys
+import time
+import warnings
+from functools import partial
 from numbers import Integral
 from pathlib import Path
-import time
-from IPython.display import display
-import importlib
-import warnings
+from typing import (Dict, Generator, Iterable, Iterator, List, Optional,
+                    Sequence, Set, Union)
 from warnings import warn
-import psutil
 
+import fastai
+import fastcore
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import psutil
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch import Tensor
-
-import fastcore
-from fastcore.imports import *
-from fastcore.basics import *
-from fastcore.xtras import *
-from fastcore.test import *
-from fastcore.foundation import *
-from fastcore.meta import *
-from fastcore.dispatch import *
-
-import fastai
 from fastai.basics import *
 from fastai.imports import *
 from fastai.torch_core import *
-
-import datetime
+from fastcore.basics import *
+from fastcore.dispatch import *
+from fastcore.foundation import *
+from fastcore.imports import *
+from fastcore.meta import *
+from fastcore.test import *
+from fastcore.xtras import *
+from IPython.display import display
+from numpy import array
+from torch import Tensor
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 cpus = defaults.cpus
@@ -59,9 +48,8 @@ def get_gpu_memory():
     import subprocess
 
     command = "nvidia-smi --query-gpu=memory.total --format=csv"
-    memory_info = (
-        subprocess.check_output(command.split()).decode("ascii").split("\n")[:-1][1:]
-    )
+    memory_info = (subprocess.check_output(
+        command.split()).decode("ascii").split("\n")[:-1][1:])
     memory_values = [
         round(int(x.split()[0]) / 1024, 2) for i, x in enumerate(memory_info)
     ]
@@ -87,7 +75,8 @@ def is_installed(module_name: str):  # name of the module that is being checked
 def is_lab():
     import re
 
-    return any(re.search("jupyter-lab", x) for x in psutil.Process().parent().cmdline())
+    return any(re.search("jupyter-lab", x)
+               for x in psutil.Process().parent().cmdline())
 
 
 def is_colab():
@@ -171,6 +160,7 @@ def maybe_mount_gdrive():
 
 def all_last_saved(max_elapsed=60):
     from time import strftime
+
     from fastai.data.transforms import get_files
 
     print("\n")
@@ -258,7 +248,7 @@ def create_scripts(nb_name=None, max_elapsed=60, wait=2):
         wait = 0
     try:
         save_nb(nb_name)
-    except:
+    except BaseException:
         save_nb(wait=wait)
     time.sleep(0.5)
     notebook2script(nb_name)
@@ -281,7 +271,8 @@ class Timer:
     def elapsed(self):
         end_dt = datetime.datetime.now()
         self.n += 1
-        assert hasattr(self, "start_dt0"), "You need to first use timer.start()"
+        assert hasattr(
+            self, "start_dt0"), "You need to first use timer.start()"
         elapsed = end_dt - self.start_dt
         if self.all_elapsed == 0:
             self.all_elapsed = elapsed
@@ -295,7 +286,8 @@ class Timer:
     def stop(self):
         end_dt = datetime.datetime.now()
         self.n += 1
-        assert hasattr(self, "start_dt0"), "You need to first use timer.start()"
+        assert hasattr(
+            self, "start_dt0"), "You need to first use timer.start()"
         elapsed = end_dt - self.start_dt
         if self.all_elapsed == 0:
             self.all_elapsed = elapsed
@@ -318,22 +310,23 @@ timer = Timer()
 
 
 def import_file_as_module(filepath, return_path=False):
-    from pathlib import Path
-    import sys
     import importlib
+    import sys
+    from pathlib import Path
 
     filepath = Path(filepath)
     sys.path.append("..")
     if str(filepath.parent) != ".":
         sys.path.append(str(filepath.parent))
-        mod_path = ".".join([str(filepath.parent).replace("/", "."), filepath.stem])
+        mod_path = ".".join(
+            [str(filepath.parent).replace("/", "."), filepath.stem])
         package, name = mod_path.rsplit(".", 1)
     else:
         mod_path = filepath.stem
         name, package = mod_path, None
     try:
         module = importlib.import_module(mod_path)
-    except:
+    except BaseException:
         module = importlib.import_module(name, package)
     if return_path:
         return module, mod_path
@@ -349,38 +342,38 @@ def my_setup(*pkgs):
         import platform
 
         print(f"os             : {platform.platform()}")
-    except:
+    except BaseException:
         pass
     try:
         from platform import python_version
 
         print(f"python         : {python_version()}")
-    except:
+    except BaseException:
         pass
     try:
         import tsai
 
         print(f"tsai           : {tsai.__version__}")
-    except:
+    except BaseException:
         print(f"tsai           : N/A")
     try:
         import fastai
 
         print(f"fastai         : {fastai.__version__}")
-    except:
+    except BaseException:
         print(f"fastai         : N/A")
     try:
         import fastcore
 
         print(f"fastcore       : {fastcore.__version__}")
-    except:
+    except BaseException:
         print(f"fastcore       : N/A")
 
     if pkgs:
         for pkg in pkgs:
             try:
                 print(f"{pkg.__name__:15}: {pkg.__version__}")
-            except:
+            except BaseException:
                 pass
     try:
         import torch
@@ -390,7 +383,7 @@ def my_setup(*pkgs):
             import torch_xla
 
             print(f"device         : TPU")
-        except:
+        except BaseException:
             iscuda = torch.cuda.is_available()
             if iscuda:
                 device_count = torch.cuda.device_count()
@@ -400,25 +393,27 @@ def my_setup(*pkgs):
                 )
             else:
                 print(f"device         : {device}")
-    except:
+    except BaseException:
         pass
     try:
         print(f"cpu cores      : {cpus}")
-    except:
+    except BaseException:
         print(f"cpu cores      : N/A")
     try:
         print(f"RAM            : {get_ram_memory()} GB")
-    except:
+    except BaseException:
         print(f"RAM            : N/A")
     try:
         print(f"GPU memory     : {get_gpu_memory()} GB")
-    except:
+    except BaseException:
         print(f"GPU memory     : N/A")
 
 
 computer_setup = my_setup
 
 # This function will be available in fastai 2.5.4
+
+
 def ismin_torch(min_version):
     from packaging.version import parse
 

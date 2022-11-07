@@ -1,8 +1,9 @@
+import random
+from logging import getLogger
+
 import numpy as np
 import torch
 import torch.nn as nn
-import random
-from logging import getLogger
 
 
 class Encoder(nn.Module):
@@ -179,10 +180,13 @@ class Seq2Seq(nn.Module):
             self.dropout,
             self.bidirectional,
         )
-        self._logger.info("You select rnn_type {} in Seq2Seq!".format(self.rnn_type))
+        self._logger.info(
+            "You select rnn_type {} in Seq2Seq!".format(
+                self.rnn_type))
 
     def forward(self, input, target, input_time, target_time):
-        input = input.cpu()  # [batch_size, input_window, num_nodes, feature_dim]
+        # [batch_size, input_window, num_nodes, feature_dim]
+        input = input.cpu()
         input_time = input_time.cpu()
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
@@ -216,11 +220,8 @@ class Seq2Seq(nn.Module):
         src = src.reshape(
             self.input_window, batch_size, self.num_nodes * self.feature_dim
         )
-        target = (
-            target[..., : self.output_dim]
-            .contiguous()
-            .reshape(self.output_window, batch_size, self.num_nodes * self.output_dim)
-        )
+        target = (target[..., : self.output_dim] .contiguous() .reshape(
+            self.output_window, batch_size, self.num_nodes * self.output_dim))
         # src = [self.input_window, batch_size, self.num_nodes * self.feature_dim]
         # target = [self.output_window, batch_size, self.num_nodes * self.output_dim]
 
@@ -228,9 +229,11 @@ class Seq2Seq(nn.Module):
         decoder_hn = encoder_hn
         decoder_cn = encoder_cn
         # encoder_hidden_state = [layers * num_directions, batch_size, hidden_size]
-        decoder_input = torch.randn(batch_size, self.num_nodes * self.output_dim).to(
-            self.device
-        )
+        decoder_input = torch.randn(
+            batch_size,
+            self.num_nodes *
+            self.output_dim).to(
+            self.device)
         # decoder_input = [batch_size, self.num_nodes * self.output_dim]
 
         outputs = []
@@ -241,8 +244,10 @@ class Seq2Seq(nn.Module):
             # decoder_output = [batch_size, self.num_nodes * self.output_dim]
             # decoder_hn = [layers * num_directions, batch_size, hidden_size]
             outputs.append(
-                decoder_output.reshape(batch_size, self.num_nodes, self.output_dim)
-            )
+                decoder_output.reshape(
+                    batch_size,
+                    self.num_nodes,
+                    self.output_dim))
             # 只有训练的时候才考虑用真值
             if self.training and random.random() < self.teacher_forcing_ratio:
                 decoder_input = target[i]

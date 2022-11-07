@@ -1,11 +1,12 @@
+import math
+import os
+from math import sqrt
+
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import matplotlib.pyplot as plt
-import numpy as np
-import math
-from math import sqrt
-import os
 
 
 class AutoCorrelation(nn.Module):
@@ -43,7 +44,8 @@ class AutoCorrelation(nn.Module):
         top_k = int(self.factor * math.log(length))
         mean_value = torch.mean(torch.mean(corr, dim=1), dim=1)
         index = torch.topk(torch.mean(mean_value, dim=0), top_k, dim=-1)[1]
-        weights = torch.stack([mean_value[:, index[i]] for i in range(top_k)], dim=-1)
+        weights = torch.stack([mean_value[:, index[i]]
+                              for i in range(top_k)], dim=-1)
         # update corr
         tmp_corr = torch.softmax(weights, dim=-1)
         # aggregation
@@ -129,7 +131,8 @@ class AutoCorrelation(nn.Module):
         for i in range(top_k):
             tmp_delay = init_index + delay[..., i].unsqueeze(-1)
             pattern = torch.gather(tmp_values, dim=-1, index=tmp_delay)
-            delays_agg = delays_agg + pattern * (tmp_corr[..., i].unsqueeze(-1))
+            delays_agg = delays_agg + pattern * \
+                (tmp_corr[..., i].unsqueeze(-1))
         return delays_agg
 
     def forward(self, queries, keys, values, attn_mask):
@@ -144,7 +147,9 @@ class AutoCorrelation(nn.Module):
             keys = keys[:, :L, :, :]
 
         # period-based dependencies
-        q_fft = torch.fft.rfft(queries.permute(0, 2, 3, 1).contiguous(), dim=-1)
+        q_fft = torch.fft.rfft(
+            queries.permute(
+                0, 2, 3, 1).contiguous(), dim=-1)
         k_fft = torch.fft.rfft(keys.permute(0, 2, 3, 1).contiguous(), dim=-1)
         res = q_fft * torch.conj(k_fft)
         corr = torch.fft.irfft(res, dim=-1)
@@ -166,7 +171,13 @@ class AutoCorrelation(nn.Module):
 
 
 class AutoCorrelationLayer(nn.Module):
-    def __init__(self, correlation, d_model, n_heads, d_keys=None, d_values=None):
+    def __init__(
+            self,
+            correlation,
+            d_model,
+            n_heads,
+            d_keys=None,
+            d_values=None):
         super(AutoCorrelationLayer, self).__init__()
 
         d_keys = d_keys or (d_model // n_heads)

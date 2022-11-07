@@ -1,6 +1,8 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/MLP.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/MLP.py
 
 from fastai.layers import *
+
 from .imports import *
 from .layers import *
 

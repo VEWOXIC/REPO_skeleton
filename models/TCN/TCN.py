@@ -1,10 +1,13 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TCN.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TCN.py
 
 from torch.nn.utils import weight_norm
+
 from .imports import *
 from .layers import *
 
-# This is an unofficial PyTorch implementation by Ignacio Oguiza - oguiza@gmail.com based on:
+# This is an unofficial PyTorch implementation by Ignacio Oguiza -
+# oguiza@gmail.com based on:
 
 # Bai, S., Kolter, J. Z., & Koltun, V. (2018). An empirical evaluation of generic convolutional and recurrent networks for sequence modeling. arXiv preprint arXiv:1803.01271.
 # Official TCN PyTorch implementation: https://github.com/locuslab/TCN
@@ -13,14 +16,24 @@ from .layers import *
 class TemporalBlock(Module):
     def __init__(self, ni, nf, ks, stride, dilation, padding, dropout=0.0):
         self.conv1 = weight_norm(
-            nn.Conv1d(ni, nf, ks, stride=stride, padding=padding, dilation=dilation)
-        )
+            nn.Conv1d(
+                ni,
+                nf,
+                ks,
+                stride=stride,
+                padding=padding,
+                dilation=dilation))
         self.chomp1 = Chomp1d(padding)
         self.relu1 = nn.ReLU()
         self.dropout1 = nn.Dropout(dropout)
         self.conv2 = weight_norm(
-            nn.Conv1d(nf, nf, ks, stride=stride, padding=padding, dilation=dilation)
-        )
+            nn.Conv1d(
+                nf,
+                nf,
+                ks,
+                stride=stride,
+                padding=padding,
+                dilation=dilation))
         self.chomp2 = Chomp1d(padding)
         self.relu2 = nn.ReLU()
         self.dropout2 = nn.Dropout(dropout)

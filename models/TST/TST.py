@@ -1,4 +1,5 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TST.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TST.py
 
 from .imports import *
 from .layers import *
@@ -8,9 +9,15 @@ class _ScaledDotProductAttention(Module):
     def __init__(self, d_k: int):
         self.d_k = d_k
 
-    def forward(self, q: Tensor, k: Tensor, v: Tensor, mask: Optional[Tensor] = None):
+    def forward(
+            self,
+            q: Tensor,
+            k: Tensor,
+            v: Tensor,
+            mask: Optional[Tensor] = None):
 
-        # MatMul (q, k) - similarity scores for all pairs of positions in an input sequence
+        # MatMul (q, k) - similarity scores for all pairs of positions in an
+        # input sequence
         scores = torch.matmul(q, k)  # scores : [bs x n_heads x q_len x q_len]
 
         # Scale
@@ -21,10 +28,12 @@ class _ScaledDotProductAttention(Module):
             scores.masked_fill_(mask, -1e9)
 
         # SoftMax
-        attn = F.softmax(scores, dim=-1)  # attn   : [bs x n_heads x q_len x q_len]
+        # attn   : [bs x n_heads x q_len x q_len]
+        attn = F.softmax(scores, dim=-1)
 
         # MatMul (attn, v)
-        context = torch.matmul(attn, v)  # context: [bs x n_heads x q_len x d_v]
+        # context: [bs x n_heads x q_len x d_v]
+        context = torch.matmul(attn, v)
 
         return context, attn
 
@@ -43,7 +52,12 @@ class _MultiHeadAttention(Module):
 
         self.W_O = nn.Linear(n_heads * d_v, d_model, bias=False)
 
-    def forward(self, Q: Tensor, K: Tensor, V: Tensor, mask: Optional[Tensor] = None):
+    def forward(
+            self,
+            Q: Tensor,
+            K: Tensor,
+            V: Tensor,
+            mask: Optional[Tensor] = None):
 
         bs = Q.size(0)
 
@@ -59,14 +73,15 @@ class _MultiHeadAttention(Module):
         )  # v_s    : [bs x n_heads x q_len x d_v]
 
         # Scaled Dot-Product Attention (multiple heads)
-        context, attn = _ScaledDotProductAttention(self.d_k)(
-            q_s, k_s, v_s
-        )  # context: [bs x n_heads x q_len x d_v], attn: [bs x n_heads x q_len x q_len]
+        # context: [bs x n_heads x q_len x d_v], attn: [bs x n_heads x q_len x
+        # q_len]
+        context, attn = _ScaledDotProductAttention(self.d_k)(q_s, k_s, v_s)
 
         # Concat
         context = (
-            context.transpose(1, 2).contiguous().view(bs, -1, self.n_heads * self.d_v)
-        )  # context: [bs x q_len x n_heads * d_v]
+            context.transpose(
+                1, 2).contiguous().view(
+                bs, -1, self.n_heads * self.d_v))  # context: [bs x q_len x n_heads * d_v]
 
         # Linear
         output = self.W_O(context)  # context: [bs x q_len x d_model]
@@ -132,7 +147,7 @@ class _TSTEncoderLayer(Module):
     def forward(self, src: Tensor, mask: Optional[Tensor] = None) -> Tensor:
 
         # Multi-Head attention sublayer
-        ## Multi-Head attention
+        # Multi-Head attention
         src2, attn = self.self_attn(src, src, src, mask=mask)
         ## Add & Norm
         src = src + self.dropout_attn(
@@ -141,7 +156,7 @@ class _TSTEncoderLayer(Module):
         src = self.batchnorm_attn(src)  # Norm: batchnorm
 
         # Feed-forward sublayer
-        ## Position-wise Feed-Forward
+        # Position-wise Feed-Forward
         src2 = self.ff(src)
         ## Add & Norm
         src = src + self.dropout_ffn(
@@ -256,8 +271,11 @@ class TST(Module):
             self.W_P = nn.Sequential(
                 Pad1d(padding),
                 Conv1d(
-                    c_in, d_model, kernel_size=tr_factor, padding=0, stride=tr_factor
-                ),
+                    c_in,
+                    d_model,
+                    kernel_size=tr_factor,
+                    padding=0,
+                    stride=tr_factor),
             )
             pv(
                 f"temporal resolution modified: {seq_len} --> {q_len} time steps: kernel_size={tr_factor}, stride={tr_factor}, padding={padding}.\n",
@@ -326,13 +344,13 @@ class TST(Module):
 
         # Input encoding
         if self.new_q_len:
-            u = self.W_P(x).transpose(
-                2, 1
-            )  # Eq 2        # u: [bs x d_model x q_len] transposed to [bs x q_len x d_model]
+            # Eq 2        # u: [bs x d_model x q_len] transposed to [bs x q_len
+            # x d_model]
+            u = self.W_P(x).transpose(2, 1)
         else:
-            u = self.W_P(
-                x.transpose(2, 1)
-            )  # Eq 1                     # u: [bs x q_len x nvars] converted to [bs x q_len x d_model]
+            # Eq 1                     # u: [bs x q_len x nvars] converted to
+            # [bs x q_len x d_model]
+            u = self.W_P(x.transpose(2, 1))
 
         # Positional encoding
         u = self.dropout(u + self.W_pos)

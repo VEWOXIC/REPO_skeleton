@@ -1,14 +1,18 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TransformerModel.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/TransformerModel.py
+
+from torch import nn
+from torch.nn.modules.transformer import (TransformerEncoder,
+                                          TransformerEncoderLayer)
 
 from .layers import *
-from torch import nn
-from torch.nn.modules.transformer import TransformerEncoder, TransformerEncoderLayer
 
 
 class TransformerModel(nn.Module):
     def __init__(self, cfg):
         super(TransformerModel, self).__init__()
-        # def __init__(self, c_in, c_out, d_model=64, n_head=1, d_ffn=128, dropout=0.1, activation="relu", n_layers=1):
+        # def __init__(self, c_in, c_out, d_model=64, n_head=1, d_ffn=128,
+        # dropout=0.1, activation="relu", n_layers=1):
         """
         Args:
             c_in: the number of features (aka variables, dimensions, channels) in the time series dataset
@@ -56,7 +60,8 @@ class TransformerModel(nn.Module):
         x = self.inlinear(x)  # seq_len x bs x nvars -> seq_len x bs x d_model
         x = self.relu(x)
         x = self.transformer_encoder(x)
-        x = self.transpose(x)  # seq_len x bs x d_model -> bs x seq_len x d_model
+        # seq_len x bs x d_model -> bs x seq_len x d_model
+        x = self.transpose(x)
         # x = self.max(x);print(x.size())
         x = self.relu(x)
         x = self.outlinear(x)

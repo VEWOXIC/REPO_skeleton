@@ -1,12 +1,14 @@
+import time
+
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
-import numpy as np
-import models
-from utils.metrics import metric
-from data_processing.Data_Handler import get_dataset
-import utils.exp_utils
-import time
 from tqdm import tqdm
+
+import models
+import utils.exp_utils
+from data_processing.Data_Handler import get_dataset
+from utils.metrics import metric
 
 
 class Exp_Basic(object):
@@ -20,7 +22,9 @@ class Exp_Basic(object):
         self.optimizer = self._get_optim()
 
     def _build_model(self):
-        return models.__dict__[self.cfg["model"]["model_name"]](self.cfg).float()
+        return models.__dict__[
+            self.cfg["model"]["model_name"]](
+            self.cfg).float()
 
     def _create_loader(self, flag="train"):
         self.dataset = get_dataset(self.cfg, flag)
@@ -138,7 +142,13 @@ class Exp_Basic(object):
         de_mae, de_mse, de_rmse, de_mape, de_mspe, de_rse, de_corr = metric(
             preds, trues
         )
-        print("denorm mae:", de_mae, " denorm mse:", de_mse, " denorm rmse:", de_rmse)
+        print(
+            "denorm mae:",
+            de_mae,
+            " denorm mse:",
+            de_mse,
+            " denorm rmse:",
+            de_rmse)
         print(
             "denorm_mape",
             de_mape,

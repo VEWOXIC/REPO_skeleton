@@ -1,14 +1,16 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/InceptionTime.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/InceptionTime.py
 
 from .imports import *
 from .layers import *
 
-
-# This is an unofficial PyTorch implementation by Ignacio Oguiza - oguiza@gmail.com based on:
+# This is an unofficial PyTorch implementation by Ignacio Oguiza -
+# oguiza@gmail.com based on:
 
 # Fawaz, H. I., Lucas, B., Forestier, G., Pelletier, C., Schmidt, D. F., Weber, J., ... & Petitjean, F. (2019).
 # InceptionTime: Finding AlexNet for Time Series Classification. arXiv preprint arXiv:1909.04939.
-# Official InceptionTime tensorflow implementation: https://github.com/hfawaz/InceptionTime
+# Official InceptionTime tensorflow implementation:
+# https://github.com/hfawaz/InceptionTime
 
 
 class InceptionModule(Module):
@@ -30,7 +32,8 @@ class InceptionModule(Module):
     def forward(self, x):
         input_tensor = x
         x = self.bottleneck(input_tensor)
-        x = self.concat([l(x) for l in self.convs] + [self.maxconvpool(input_tensor)])
+        x = self.concat([l(x) for l in self.convs] +
+                        [self.maxconvpool(input_tensor)])
         return self.act(self.bn(x))
 
 
@@ -46,8 +49,8 @@ class InceptionBlock(Module):
             if self.residual and d % 3 == 2:
                 n_in, n_out = ni if d == 2 else nf * 4, nf * 4
                 self.shortcut.append(
-                    BN1d(n_in) if n_in == n_out else ConvBlock(n_in, n_out, 1, act=None)
-                )
+                    BN1d(n_in) if n_in == n_out else ConvBlock(
+                        n_in, n_out, 1, act=None))
         self.add = Add()
         self.act = nn.ReLU()
 
@@ -63,7 +66,8 @@ class InceptionBlock(Module):
 @delegates(InceptionModule.__init__)
 class InceptionTime(Module):
     def __init__(self, cfg, nf=8, nb_filters=None, **kwargs):
-        # def __init__(self, c_in, c_out, seq_len=None, nf=32, nb_filters=None, **kwargs):
+        # def __init__(self, c_in, c_out, seq_len=None, nf=32, nb_filters=None,
+        # **kwargs):
         self.num_layer = cfg["model"]["num_layers"]
         self.seq_len = cfg["data"]["lookback"]
         c_in = cfg["model"]["c_in"]

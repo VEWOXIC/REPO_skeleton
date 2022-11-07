@@ -1,18 +1,14 @@
+import math
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from .Embed import DataEmbedding, DataEmbedding_wo_pos
+
 from .AutoCorrelation import AutoCorrelation, AutoCorrelationLayer
-from .Autoformer_EncDec import (
-    Encoder,
-    Decoder,
-    EncoderLayer,
-    DecoderLayer,
-    my_Layernorm,
-    series_decomp,
-)
-import math
-import numpy as np
+from .Autoformer_EncDec import (Decoder, DecoderLayer, Encoder, EncoderLayer,
+                                my_Layernorm, series_decomp)
+from .Embed import DataEmbedding, DataEmbedding_wo_pos
 
 
 class Autoformer(nn.Module):
@@ -124,24 +120,27 @@ class Autoformer(nn.Module):
         x_enc = batch_x
         x_mark_enc = batch_x_mark
         x_mark_dec = batch_y_mark
-        dec_inp = torch.zeros_like(batch_x[:, -self.pred_len :, :]).float()
+        dec_inp = torch.zeros_like(batch_x[:, -self.pred_len:, :]).float()
         dec_inp = (
-            torch.cat([batch_x[:, -self.label_len :, :], dec_inp], dim=1)
+            torch.cat([batch_x[:, -self.label_len:, :], dec_inp], dim=1)
             .float()
             .to(self.device)
         )
         x_dec = dec_inp
 
         # decomp init
-        mean = torch.mean(x_enc, dim=1).unsqueeze(1).repeat(1, self.pred_len, 1)
+        mean = torch.mean(
+            x_enc, dim=1).unsqueeze(1).repeat(
+            1, self.pred_len, 1)
         zeros = torch.zeros(
             [x_dec.shape[0], self.pred_len, x_dec.shape[2]], device=x_enc.device
         )
         seasonal_init, trend_init = self.decomp(x_enc)
         # decoder input
-        trend_init = torch.cat([trend_init[:, -self.label_len :, :], mean], dim=1)
+        trend_init = torch.cat(
+            [trend_init[:, -self.label_len:, :], mean], dim=1)
         seasonal_init = torch.cat(
-            [seasonal_init[:, -self.label_len :, :], zeros], dim=1
+            [seasonal_init[:, -self.label_len:, :], zeros], dim=1
         )
         # enc
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
@@ -162,4 +161,4 @@ class Autoformer(nn.Module):
         #     return dec_out[:, -self.pred_len:, :], attns
         # else:
         #     return dec_out[:, -self.pred_len:, :]  # [B, L, D]
-        return dec_out[:, -self.pred_len :, :]
+        return dec_out[:, -self.pred_len:, :]
