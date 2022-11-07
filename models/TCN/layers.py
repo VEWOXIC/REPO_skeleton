@@ -1748,7 +1748,7 @@ class ScaledDotProductAttention(Module):
         # Attention mask (optional)
         # attn_mask with shape [q_len x seq_len] - only used when q_len ==
         # seq_len
-        if (attn_mask is not None):
+        if attn_mask is not None:
             if attn_mask.dtype == torch.bool:
                 attn_scores.masked_fill_(attn_mask, -np.inf)
             else:
