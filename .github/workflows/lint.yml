@@ -1,5 +1,5 @@
 name: Format Python Code
-on: [push, pull_request]
+on: push
 jobs:
   python-code-format:
     runs-on: ubuntu-latest
