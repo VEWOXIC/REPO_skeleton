@@ -1,14 +1,16 @@
 from distutils.dep_util import newer
 from locale import normalize
 from sqlite3 import Timestamp
-from click import echo
-import sklearn
+
 import numpy as np
+import pandas as pd
+import sklearn
+from click import echo
+from torch.autograd import Variable
 from torch.utils.data import Dataset
+
 from utils import data_utils
 from utils.timefeatures import time_features
-import pandas as pd
-from torch.autograd import Variable
 
 
 def get_dataset(cfg, flag):
@@ -46,12 +48,16 @@ class Dataset_Custom(Dataset):
                     self.data.index.values
                     - self.data.index.values.astype("datetime64[D]")
                 ) / np.timedelta64(1, "D")
-                time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
+                time_in_day = np.tile(
+                    time_ind, [
+                        1, num_nodes, 1]).transpose(
+                    (2, 1, 0))
                 time_in_day = time_in_day.squeeze()
                 return time_in_day
             if self.cfg["data"]["add_time_in_day"]:
                 day_in_week = np.zeros(shape=(num_samples, num_nodes, 7))
-                day_in_week[np.arange(num_samples), :, self.data.index.dayofweek] = 1
+                day_in_week[np.arange(num_samples), :,
+                            self.data.index.dayofweek] = 1
                 return day_in_week
 
         if (
@@ -66,14 +72,16 @@ class Dataset_Custom(Dataset):
             )
             data_stamp = data_stamp.transpose(1, 0)
         elif self.cfg["data"]["dataset_name"] == "yellow_taxi_2022-01":
-            data["tpep_pickup_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+            data["tpep_pickup_datetime"] = pd.to_datetime(
+                data["tpep_pickup_datetime"])
             data_stamp0 = time_features(
                 pd.to_datetime(data["tpep_pickup_datetime"].values),
                 freq=self.timeStampFreq,
             )
             data_stamp0 = data_stamp0.transpose(1, 0)
             self.data = self.data.drop(["tpep_pickup_datetime"], axis=1)
-            data["tpep_dropoff_datetime"] = pd.to_datetime(data["tpep_pickup_datetime"])
+            data["tpep_dropoff_datetime"] = pd.to_datetime(
+                data["tpep_pickup_datetime"])
             data_stamp1 = time_features(
                 pd.to_datetime(data["tpep_dropoff_datetime"].values),
                 freq=self.timeStampFreq,
@@ -152,16 +160,14 @@ class Dataset_Custom(Dataset):
         if self.cfg["model"]["UseTimeFeature"]:
             self.data_stamp = self.add_timeFeature(self.data)
             self.data_stamp = self.data_stamp[
-                boarder[self.flag][0] : boarder[self.flag][1]
+                boarder[self.flag][0]: boarder[self.flag][1]
             ]
-        self.data = self.data.drop(
-            self.data.columns[
-                [i for i in range(self.data.shape[1] - self.cfg["data"]["channel"])]
-            ],
-            axis=1,
-        )
-        self.train_data = self.data[boarder["train"][0] : boarder["train"][1]].values
-        self.data = self.data[boarder[self.flag][0] : boarder[self.flag][1]].values
+        self.data = self.data.drop(self.data.columns[[i for i in range(
+            self.data.shape[1] - self.cfg["data"]["channel"])]], axis=1, )
+        self.train_data = self.data[boarder["train"]
+                                    [0]: boarder["train"][1]].values
+        self.data = self.data[boarder[self.flag]
+                              [0]: boarder[self.flag][1]].values
         self.data = np.nan_to_num(self.data)
         self._normalize()
 
@@ -185,19 +191,23 @@ class Dataset_Custom(Dataset):
             for i in range(self.cfg["data"]["channel"]):
                 self.scale[i] = np.std(self.train_data[:, i])  # std
                 self.bias[i] = np.mean(self.train_data[:, i])
-                self.data[:, i] = (self.data[:, i] - self.bias[i]) / self.scale[i]
+                self.data[:, i] = (self.data[:, i] -
+                                   self.bias[i]) / self.scale[i]
 
         # 单变量/多变量
 
     def __getitem__(self, index):
         # some model use time stamp
-        x = self.data[index : index + self.lookback]
-        y = self.data[index + self.lookback : index + self.lookback + self.horizon]
+        x = self.data[index: index + self.lookback]
+        y = self.data[index +
+                      self.lookback: index +
+                      self.lookback +
+                      self.horizon]
 
         if self.cfg["model"]["UseTimeFeature"]:
-            timestamp_x = self.data_stamp[index : index + self.lookback]
+            timestamp_x = self.data_stamp[index: index + self.lookback]
             timestamp_y = self.data_stamp[
-                index + self.lookback : index + self.lookback + self.horizon
+                index + self.lookback: index + self.lookback + self.horizon
             ]
         else:
             timestamp_x = 0

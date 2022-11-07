@@ -1,15 +1,19 @@
-# File copied from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/explainability.py
+# File copied from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/explainability.py
 
 __all__ = ["get_acts_and_grads", "get_attribution_map"]
 
 # Cell
 from fastai.callback.hook import *
+
 from .imports import *
 from .layers import *
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # Cell
+
+
 def get_acts_and_grads(model, modules, x, y=None, detach=True, cpu=False):
     r"""Returns activations and gradients for given modules in a model and a single input or a batch.
     Gradients require y value(s). If they rae not provided, it will use the predicttions."""
@@ -31,7 +35,9 @@ def get_acts_and_grads(model, modules, x, y=None, detach=True, cpu=False):
     if len(modules) == 1:
         return h_act.stored[0].data, h_grad.stored[0][0].data
     else:
-        return [h.data for h in h_act.stored], [h[0].data for h in h_grad.stored]
+        return [
+            h.data for h in h_act.stored], [
+            h[0].data for h in h_grad.stored]
 
 
 def get_attribution_map(
@@ -56,7 +62,8 @@ def get_attribution_map(
         x = x[None, None]
     elif x.ndim == 2:
         x = x[None]
-    A_k, w_ck = get_acts_and_grads(model, modules, x, y, detach=detach, cpu=cpu)
+    A_k, w_ck = get_acts_and_grads(
+        model, modules, x, y, detach=detach, cpu=cpu)
     if is_listy(A_k):
         return [_get_attribution_map(A_k[i], w_ck[i]) for i in range(len(A_k))]
     else:

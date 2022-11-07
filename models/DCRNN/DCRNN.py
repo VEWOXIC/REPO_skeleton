@@ -1,9 +1,10 @@
-import scipy.sparse as sp
-from scipy.sparse import linalg
+from logging import getLogger
+
 import numpy as np
+import scipy.sparse as sp
 import torch
 import torch.nn as nn
-from logging import getLogger
+from scipy.sparse import linalg
 
 
 def calculate_normalized_laplacian(adj):
@@ -77,11 +78,13 @@ class GCONV(nn.Module):
         self._max_diffusion_step = max_diffusion_step
         self._supports = supports
         self._device = device
-        self._num_matrices = len(self._supports) * self._max_diffusion_step + 1  # Ks
+        self._num_matrices = len(self._supports) * \
+            self._max_diffusion_step + 1  # Ks
         self._output_dim = output_dim
         input_size = input_dim + hid_dim
         shape = (input_size * self._num_matrices, self._output_dim)
-        self.weight = torch.nn.Parameter(torch.empty(*shape, device=self._device))
+        self.weight = torch.nn.Parameter(
+            torch.empty(*shape, device=self._device))
         self.biases = torch.nn.Parameter(
             torch.empty(self._output_dim, device=self._device)
         )
@@ -95,7 +98,8 @@ class GCONV(nn.Module):
 
     def forward(self, inputs, state):
         # 对X(t)和H(t-1)做图卷积，并加偏置bias
-        # Reshape input and state to (batch_size, num_nodes, input_dim/state_dim)
+        # Reshape input and state to (batch_size, num_nodes,
+        # input_dim/state_dim)
         batch_size = inputs.shape[0]
         inputs = torch.reshape(inputs, (batch_size, self._num_nodes, -1))
         # outprint(self._num_nodes)
@@ -109,8 +113,14 @@ class GCONV(nn.Module):
         # T0=I x0=T0*x=x
         x0 = x.permute(1, 2, 0)  # (num_nodes, total_arg_size, batch_size)
         # print(x0.size())
-        x0 = torch.reshape(x0, shape=[self._num_nodes, input_size * batch_size])
-        x = torch.unsqueeze(x0, 0)  # (1, num_nodes, total_arg_size * batch_size)
+        x0 = torch.reshape(
+            x0,
+            shape=[
+                self._num_nodes,
+                input_size *
+                batch_size])
+        # (1, num_nodes, total_arg_size * batch_size)
+        x = torch.unsqueeze(x0, 0)
 
         # 3阶[T0,T1,T2]Chebyshev多项式近似g(theta)
         # 把图卷积公式中的~L替换成了随机游走拉普拉斯D^(-1)*W
@@ -124,7 +134,8 @@ class GCONV(nn.Module):
                 x1 = torch.sparse.mm(
                     support, x0
                 )  # supports: n*n; x0: n*(total_arg_size * batch_size)
-                x = self._concat(x, x1)  # (2, num_nodes, total_arg_size * batch_size)
+                # (2, num_nodes, total_arg_size * batch_size)
+                x = self._concat(x, x1)
                 for k in range(2, self._max_diffusion_step + 1):
                     # T2=2LT1-T0=2L^2-1 x2=T2*x=2L^2x-x=2L*x1-x0...
                     # T3=2LT2-T1=2L(2L^2-1)-L x3=2L*x2-x1...
@@ -137,19 +148,30 @@ class GCONV(nn.Module):
         # Ks = len(supports) * self._max_diffusion_step + 1
 
         x = torch.reshape(
-            x, shape=[self._num_matrices, self._num_nodes, input_size, batch_size]
-        )
-        x = x.permute(3, 1, 2, 0)  # (batch_size, num_nodes, input_size, num_matrices)
+            x,
+            shape=[
+                self._num_matrices,
+                self._num_nodes,
+                input_size,
+                batch_size])
+        # (batch_size, num_nodes, input_size, num_matrices)
+        x = x.permute(3, 1, 2, 0)
         x = torch.reshape(
-            x, shape=[batch_size * self._num_nodes, input_size * self._num_matrices]
-        )
+            x,
+            shape=[
+                batch_size *
+                self._num_nodes,
+                input_size *
+                self._num_matrices])
 
         x = torch.matmul(
             x, self.weight
         )  # (batch_size * self._num_nodes, self._output_dim)
         x += self.biases
-        # Reshape res back to 2D: (batch_size * num_node, state_dim) -> (batch_size, num_node * state_dim)
-        return torch.reshape(x, [batch_size, self._num_nodes * self._output_dim])
+        # Reshape res back to 2D: (batch_size * num_node, state_dim) ->
+        # (batch_size, num_node * state_dim)
+        return torch.reshape(
+            x, [batch_size, self._num_nodes * self._output_dim])
 
 
 class FC(nn.Module):
@@ -162,7 +184,8 @@ class FC(nn.Module):
         self._output_dim = output_dim
         input_size = input_dim + hid_dim
         shape = (input_size, self._output_dim)
-        self.weight = torch.nn.Parameter(torch.empty(*shape, device=self._device))
+        self.weight = torch.nn.Parameter(
+            torch.empty(*shape, device=self._device))
         self.biases = torch.nn.Parameter(
             torch.empty(self._output_dim, device=self._device)
         )
@@ -171,7 +194,8 @@ class FC(nn.Module):
 
     def forward(self, inputs, state):
         batch_size = inputs.shape[0]
-        # Reshape input and state to (batch_size * self._num_nodes, input_dim/state_dim)
+        # Reshape input and state to (batch_size * self._num_nodes,
+        # input_dim/state_dim)
         inputs = torch.reshape(inputs, (batch_size * self._num_nodes, -1))
         state = torch.reshape(state, (batch_size * self._num_nodes, -1))
         inputs_and_state = torch.cat([inputs, state], dim=-1)
@@ -179,8 +203,11 @@ class FC(nn.Module):
         value = torch.sigmoid(torch.matmul(inputs_and_state, self.weight))
         # (batch_size * self._num_nodes, self._output_dim)
         value += self.biases
-        # Reshape res back to 2D: (batch_size * num_node, state_dim) -> (batch_size, num_node * state_dim)
-        return torch.reshape(value, [batch_size, self._num_nodes * self._output_dim])
+        # Reshape res back to 2D: (batch_size * num_node, state_dim) ->
+        # (batch_size, num_node * state_dim)
+        return torch.reshape(
+            value, [
+                batch_size, self._num_nodes * self._output_dim])
 
 
 class DCGRUCell(nn.Module):
@@ -222,7 +249,9 @@ class DCGRUCell(nn.Module):
 
         supports = []
         if filter_type == "laplacian":
-            supports.append(calculate_scaled_laplacian(adj_mx, lambda_max=None))
+            supports.append(
+                calculate_scaled_laplacian(
+                    adj_mx, lambda_max=None))
         elif filter_type == "random_walk":
             supports.append(calculate_random_walk_matrix(adj_mx).T)
         elif filter_type == "dual_random_walk":
@@ -231,7 +260,9 @@ class DCGRUCell(nn.Module):
         else:
             supports.append(calculate_scaled_laplacian(adj_mx))
         for support in supports:
-            self._supports.append(self._build_sparse_matrix(support, self._device))
+            self._supports.append(
+                self._build_sparse_matrix(
+                    support, self._device))
 
         if self._use_gc_for_ru:
             self._fn = GCONV(
@@ -268,9 +299,11 @@ class DCGRUCell(nn.Module):
     def _build_sparse_matrix(lap, device):
         lap = lap.tocoo()
         indices = np.column_stack((lap.row, lap.col))
-        # this is to ensure row-major ordering to equal torch.sparse.sparse_reorder(L)
+        # this is to ensure row-major ordering to equal
+        # torch.sparse.sparse_reorder(L)
         indices = indices[np.lexsort((indices[:, 0], indices[:, 1]))]
-        lap = torch.sparse_coo_tensor(indices.T, lap.data, lap.shape, device=device)
+        lap = torch.sparse_coo_tensor(
+            indices.T, lap.data, lap.shape, device=device)
         return lap
 
     def forward(self, inputs, hx):
@@ -293,7 +326,8 @@ class DCGRUCell(nn.Module):
             value, (-1, self._num_nodes, output_size)
         )  # (batch_size, num_nodes, output_size)
 
-        r, u = torch.split(tensor=value, split_size_or_sections=self._num_units, dim=-1)
+        r, u = torch.split(
+            tensor=value, split_size_or_sections=self._num_units, dim=-1)
         r = torch.reshape(
             r, (-1, self._num_nodes * self._num_units)
         )  # (batch_size, num_nodes * _num_units)
@@ -451,7 +485,8 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
         self.num_nodes = cfg["model"]["num_nodes"]
         self.feature_dim = cfg["model"]["feature_dim"]
         self.output_dim = cfg["model"]["output_dim"]
-        self.adj_mx = np.ones((self.num_nodes, self.num_nodes), dtype=np.float32)
+        self.adj_mx = np.ones(
+            (self.num_nodes, self.num_nodes), dtype=np.float32)
 
         nn.Module.__init__(self)
         Seq2SeqAttrs.__init__(self, cfg, self.adj_mx)
@@ -516,7 +551,8 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
                 decoder_input, decoder_hidden_state
             )
             decoder_input = (
-                decoder_output  # (batch_size, self.num_nodes * self.output_dim)
+                # (batch_size, self.num_nodes * self.output_dim)
+                decoder_output
             )
             outputs.append(decoder_output)
             if self.training and self.use_curriculum_learning:
@@ -528,7 +564,13 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
         outputs = torch.stack(outputs)
         return outputs
 
-    def forward(self, input, target, input_time, target_time, batches_seen=None):
+    def forward(
+            self,
+            input,
+            target,
+            input_time,
+            target_time,
+            batches_seen=None):
         """
         seq2seq forward pass
 
@@ -541,7 +583,8 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
         Returns:
             torch.tensor: (batch_size, self.output_window, self.num_nodes, self.output_dim)
         """
-        input = input.cpu()  # [batch_size, input_window, num_nodes, feature_dim]
+        input = input.cpu(
+        )  # [batch_size, input_window, num_nodes, feature_dim]
         input_time = input_time.cpu()
         input_time = np.expand_dims(input_time, axis=-1)
         input = np.expand_dims(input, axis=-1)
@@ -555,9 +598,12 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
         trainx = trainx.permute(
             1, 0, 2, 3
         )  # (input_window, batch_size, num_nodes, input_dim)
-        trainx = trainx.view(self.input_window, batch_size, num_nodes * input_dim).to(
-            self.device
-        )
+        trainx = trainx.view(
+            self.input_window,
+            batch_size,
+            num_nodes *
+            input_dim).to(
+            self.device)
         inputs = trainx.float()
         self._logger.debug(
             "X: {}".format(inputs.size())
@@ -592,7 +638,10 @@ class DCRNN(nn.Module, Seq2SeqAttrs):
         # (num_layers, batch_size, self.hidden_state_size)
         # print("encoder_hidden_state",encoder_hidden_state.size())
         self._logger.debug("Encoder complete")
-        outputs = self.decoder(encoder_hidden_state, labels, batches_seen=batches_seen)
+        outputs = self.decoder(
+            encoder_hidden_state,
+            labels,
+            batches_seen=batches_seen)
         # (self.output_window, batch_size, self.num_nodes * self.output_dim)
         self._logger.debug("Decoder complete")
 

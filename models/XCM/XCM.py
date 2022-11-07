@@ -1,10 +1,12 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/XCM.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/XCM.py
 
+from .explainability import *
 from .imports import *
 from .layers import *
-from .explainability import *
 
-# This is an unofficial PyTorch implementation of XVM created by Ignacio Oguiza - timeseriesAU@gmail.com based on:
+# This is an unofficial PyTorch implementation of XVM created by Ignacio
+# Oguiza - timeseriesAU@gmail.com based on:
 
 # Fauvel, K., Lin, T., Masson, V., Fromont, É., & Termier, A. (2020). XCM: An Explainable Convolutional Neural Network
 # https://hal.inria.fr/hal-03469487/document

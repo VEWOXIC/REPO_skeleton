@@ -1,4 +1,5 @@
-# File copied from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/layers.py
+# File copied from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/layers.py
 
 __all__ = [
     "init_lin_zero",
@@ -113,12 +114,13 @@ __all__ = [
     "MultiEmbedding",
 ]
 
-# Cell
-from torch.nn.utils import weight_norm, spectral_norm
-from torch.nn.init import normal_
-from fastcore.basics import snake2camel
 from fastai.layers import *
 from fastai.losses import *
+from fastcore.basics import snake2camel
+from torch.nn.init import normal_
+# Cell
+from torch.nn.utils import spectral_norm, weight_norm
+
 from .imports import *
 
 # from ..utils import *
@@ -151,6 +153,8 @@ def init_lin_zero(m):
 lin_zero_init = init_lin_zero
 
 # Cell
+
+
 class SwishBeta(Module):
     def __init__(self, beta=1.0):
         self.sigmoid = torch.sigmoid
@@ -243,7 +247,11 @@ class Pad2d(nn.ConstantPad2d):
 class Conv2dSame(Module):
     "Conv2d with padding='same'"
 
-    def __init__(self, ni, nf, ks=(3, 3), stride=(1, 1), dilation=(1, 1), **kwargs):
+    def __init__(
+        self, ni, nf, ks=(
+            3, 3), stride=(
+            1, 1), dilation=(
+                1, 1), **kwargs):
         if isinstance(ks, Integral):
             ks = (ks, ks)
         if isinstance(stride, Integral):
@@ -279,7 +287,8 @@ def Conv2d(
     **kwargs,
 ):
     "conv1d layer with padding='same', 'valid', or any integer (defaults to 'same')"
-    assert not (kernel_size and ks), "use kernel_size or ks but not both simultaneously"
+    assert not (
+        kernel_size and ks), "use kernel_size or ks but not both simultaneously"
     assert kernel_size is not None or ks is not None, "you need to pass a ks"
     kernel_size = kernel_size or ks
     if padding == "same":
@@ -288,8 +297,13 @@ def Conv2d(
         )
     elif padding == "valid":
         conv = nn.Conv2d(
-            ni, nf, kernel_size, stride=stride, padding=0, dilation=dilation, **kwargs
-        )
+            ni,
+            nf,
+            kernel_size,
+            stride=stride,
+            padding=0,
+            dilation=dilation,
+            **kwargs)
     else:
         conv = nn.Conv2d(
             ni,
@@ -320,7 +334,10 @@ class CausalConv1d(torch.nn.Conv1d):
         self.__padding = (ks - 1) * dilation
 
     def forward(self, input):
-        return super(CausalConv1d, self).forward(F.pad(input, (self.__padding, 0)))
+        return super(
+            CausalConv1d, self).forward(
+            F.pad(
+                input, (self.__padding, 0)))
 
 
 # Cell
@@ -338,7 +355,8 @@ def Conv1d(
     **kwargs,
 ):
     "conv1d layer with padding='same', 'causal', 'valid', or any integer (defaults to 'same')"
-    assert not (kernel_size and ks), "use kernel_size or ks but not both simultaneously"
+    assert not (
+        kernel_size and ks), "use kernel_size or ks but not both simultaneously"
     assert kernel_size is not None or ks is not None, "you need to pass a ks"
     kernel_size = kernel_size or ks
     if padding == "same":
@@ -362,8 +380,13 @@ def Conv1d(
         )
     elif padding == "valid":
         conv = nn.Conv1d(
-            ni, nf, kernel_size, stride=stride, padding=0, dilation=dilation, **kwargs
-        )
+            ni,
+            nf,
+            kernel_size,
+            stride=stride,
+            padding=0,
+            dilation=dilation,
+            **kwargs)
     else:
         conv = nn.Conv1d(
             ni,
@@ -381,8 +404,15 @@ def Conv1d(
 # Cell
 class SeparableConv1d(Module):
     def __init__(
-        self, ni, nf, ks, stride=1, padding="same", dilation=1, bias=True, bias_std=0.01
-    ):
+            self,
+            ni,
+            nf,
+            ks,
+            stride=1,
+            padding="same",
+            dilation=1,
+            bias=True,
+            bias_std=0.01):
         self.depthwise_conv = Conv1d(
             ni,
             ni,
@@ -416,7 +446,8 @@ class AddCoords1d(Module):
 
     def forward(self, x):
         bs, _, seq_len = x.shape
-        cc = torch.linspace(-1, 1, x.shape[-1], device=x.device).repeat(bs, 1, 1)
+        cc = torch.linspace(-1, 1, x.shape[-1],
+                            device=x.device).repeat(bs, 1, 1)
         cc = (cc - cc.mean()) / cc.std()
         x = torch.cat([x, cc], dim=1)
         return x
@@ -507,10 +538,22 @@ class ConvBlock(nn.Sequential):
 
 Conv = named_partial("Conv", ConvBlock, norm=None, act=None)
 ConvBN = named_partial("ConvBN", ConvBlock, norm="Batch", act=None)
-CoordConv = named_partial("CoordConv", ConvBlock, norm=None, act=None, coord=True)
-SepConv = named_partial("SepConv", ConvBlock, norm=None, act=None, separable=True)
+CoordConv = named_partial(
+    "CoordConv",
+    ConvBlock,
+    norm=None,
+    act=None,
+    coord=True)
+SepConv = named_partial(
+    "SepConv",
+    ConvBlock,
+    norm=None,
+    act=None,
+    separable=True)
 
 # Cell
+
+
 class ResBlock1dPlus(Module):
     "Resnet block from `ni` to `nh` with `stride`"
 
@@ -580,9 +623,18 @@ class ResBlock1dPlus(Module):
         self.convpath = nn.Sequential(*convpath)
         idpath = []
         if ni != nf:
-            idpath.append(ConvBlock(ni, nf, 1, coord=coord, act=None, **kwargs))
+            idpath.append(
+                ConvBlock(
+                    ni,
+                    nf,
+                    1,
+                    coord=coord,
+                    act=None,
+                    **kwargs))
         if stride != 1:
-            idpath.insert((1, 0)[pool_first], pool(stride, ndim=1, ceil_mode=True))
+            idpath.insert(
+                (1, 0)[pool_first], pool(
+                    stride, ndim=1, ceil_mode=True))
         self.idpath = nn.Sequential(*idpath)
         self.act = (
             defaults.activation(inplace=True)
@@ -622,6 +674,8 @@ BN1d = partial(Norm, ndim=1, norm="Batch")
 IN1d = partial(Norm, ndim=1, norm="Instance")
 
 # Cell
+
+
 class LinLnDrop(nn.Sequential):
     "Module grouping `LayerNorm1d`, `Dropout` and `Linear` layers"
 
@@ -811,6 +865,8 @@ class ReZero(Module):
 Noop = nn.Sequential()
 
 # Cell
+
+
 class DropPath(nn.Module):
     """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
 
@@ -827,10 +883,12 @@ class DropPath(nn.Module):
             return x
         keep_prob = 1 - self.p
         shape = (x.shape[0],) + (1,) * (x.ndim - 1)
-        random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
+        random_tensor = keep_prob + \
+            torch.rand(shape, dtype=x.dtype, device=x.device)
         random_tensor.floor_()
         output = x.div(keep_prob) * random_tensor
-        #         output = x.div(random_tensor.mean()) * random_tensor # divide by the actual mean to mantain the input mean?
+        # output = x.div(random_tensor.mean()) * random_tensor # divide by the
+        # actual mean to mantain the input mean?
         return output
 
 
@@ -881,7 +939,8 @@ class TimeDistributed(nn.Module):
                 x.size(0), -1, y.size(-1)
             )  # (samples, timesteps, output_size)
         else:
-            y = y.view(-1, x.size(1), y.size(-1))  # (timesteps, samples, output_size)
+            # (timesteps, samples, output_size)
+            y = y.view(-1, x.size(1), y.size(-1))
 
         return y
 
@@ -965,6 +1024,8 @@ class LogitAdjustmentLayer(Module):
 LogitAdjLayer = LogitAdjustmentLayer
 
 # Cell
+
+
 class PPV(Module):
     def __init__(self, dim=-1):
         self.dim = dim
@@ -1143,7 +1204,13 @@ class GAttP1d(nn.Sequential):
 
 
 def attentional_pool_head(n_in, c_out, seq_len=None, bn=True, **kwargs):
-    return nn.Sequential(AttentionalPool1d(n_in, c_out, bn=bn, **kwargs), Flatten())
+    return nn.Sequential(
+        AttentionalPool1d(
+            n_in,
+            c_out,
+            bn=bn,
+            **kwargs),
+        Flatten())
 
 
 # Cell
@@ -1221,6 +1288,8 @@ concat_pool_head = partial(pool_head, concat_pool=True)
 setattr(concat_pool_head, "__name__", "concat_pool_head")
 
 # Cell
+
+
 def max_pool_head(
     n_in, c_out, seq_len, fc_dropout=0.0, bn=False, y_range=None, **kwargs
 ):
@@ -1247,7 +1316,8 @@ def create_pool_plus_head(
     c_out = args[1]
     if concat_pool:
         nf = nf * 2
-    lin_ftrs = [nf, 512, c_out] if lin_ftrs is None else [nf] + lin_ftrs + [c_out]
+    lin_ftrs = [nf, 512, c_out] if lin_ftrs is None else [
+        nf] + lin_ftrs + [c_out]
     ps = L(fc_dropout)
     if len(ps) == 1:
         ps = [ps[0] / 2] * (len(lin_ftrs) - 2) + ps
@@ -1257,7 +1327,8 @@ def create_pool_plus_head(
     if lin_first:
         layers.append(nn.Dropout(ps.pop(0)))
     for ni, no, p, actn in zip(lin_ftrs[:-1], lin_ftrs[1:], ps, actns):
-        layers += LinBnDrop(ni, no, bn=True, p=p, act=actn, lin_first=lin_first)
+        layers += LinBnDrop(ni, no, bn=True, p=p,
+                            act=actn, lin_first=lin_first)
     if lin_first:
         layers.append(nn.Linear(lin_ftrs[-2], c_out))
     if bn_final:
@@ -1270,10 +1341,13 @@ def create_pool_plus_head(
 pool_plus_head = create_pool_plus_head
 
 # Cell
+
+
 def create_conv_head(*args, adaptive_size=None, y_range=None):
     nf = args[0]
     c_out = args[1]
-    layers = [nn.AdaptiveAvgPool1d(adaptive_size)] if adaptive_size is not None else []
+    layers = [nn.AdaptiveAvgPool1d(
+        adaptive_size)] if adaptive_size is not None else []
     for i in range(2):
         if nf > 1:
             layers += [ConvBlock(nf, nf // 2, 1)]
@@ -1289,6 +1363,8 @@ def create_conv_head(*args, adaptive_size=None, y_range=None):
 conv_head = create_conv_head
 
 # Cell
+
+
 def create_mlp_head(
     nf,
     c_out,
@@ -1311,6 +1387,8 @@ def create_mlp_head(
 mlp_head = create_mlp_head
 
 # Cell
+
+
 def create_fc_head(
     nf,
     c_out,
@@ -1326,7 +1404,8 @@ def create_fc_head(
     if flatten:
         nf *= seq_len
     layers = [Flatten()] if flatten else []
-    lin_ftrs = [nf, 512, c_out] if lin_ftrs is None else [nf] + lin_ftrs + [c_out]
+    lin_ftrs = [nf, 512, c_out] if lin_ftrs is None else [
+        nf] + lin_ftrs + [c_out]
     if not is_listy(fc_dropout):
         fc_dropout = [fc_dropout] * (len(lin_ftrs) - 1)
     actns = [act for _ in range(len(lin_ftrs) - 2)] + [None]
@@ -1348,6 +1427,8 @@ def create_fc_head(
 fc_head = create_fc_head
 
 # Cell
+
+
 def create_rnn_head(*args, fc_dropout=0.0, bn=False, y_range=None):
     nf = args[0]
     c_out = args[1]
@@ -1361,7 +1442,15 @@ def create_rnn_head(*args, fc_dropout=0.0, bn=False, y_range=None):
 rnn_head = create_rnn_head
 
 # Cell
-def imputation_head(c_in, c_out, seq_len=None, ks=1, y_range=None, fc_dropout=0.0):
+
+
+def imputation_head(
+        c_in,
+        c_out,
+        seq_len=None,
+        ks=1,
+        y_range=None,
+        fc_dropout=0.0):
     layers = [nn.Dropout(fc_dropout), nn.Conv1d(c_in, c_out, ks)]
     if y_range is not None:
         y_range = (tensor(y_range[0]), tensor(y_range[1]))
@@ -1400,7 +1489,14 @@ class create_conv_lin_nd_head(nn.Sequential):
             shape = [d, n_out] if n_out > 1 else [d]
 
         conv = [BatchNorm(n_in, ndim=1)] if conv_bn else []
-        conv.append(Conv1d(n_in, n_out, 1, padding=0, bias=not conv_bn, **kwargs))
+        conv.append(
+            Conv1d(
+                n_in,
+                n_out,
+                1,
+                padding=0,
+                bias=not conv_bn,
+                **kwargs))
         l = (
             [Transpose(-1, -2), BatchNorm(seq_len, ndim=1), Transpose(-1, -2)]
             if lin_bn
@@ -1422,6 +1518,8 @@ conv_lin_3d_head = create_conv_lin_nd_head  # included for compatibility
 create_conv_lin_3d_head = create_conv_lin_nd_head  # included for compatibility
 
 # Cell
+
+
 class create_lin_nd_head(nn.Sequential):
     "Module to create a nd output head with linear layers"
 
@@ -1441,7 +1539,8 @@ class create_lin_nd_head(nn.Sequential):
             shape = [d, n_out] if n_out > 1 else [d]
 
         layers = [Flatten()]
-        layers += LinBnDrop(n_in * seq_len, n_out * fd, bn=use_bn, p=fc_dropout)
+        layers += LinBnDrop(n_in * seq_len, n_out * fd,
+                            bn=use_bn, p=fc_dropout)
         layers += [Reshape(*shape)]
 
         super().__init__(*layers)
@@ -1452,6 +1551,8 @@ lin_3d_head = create_lin_nd_head  # included for compatiblity
 create_lin_3d_head = create_lin_nd_head  # included for compatiblity
 
 # Cell
+
+
 class create_conv_3d_head(nn.Sequential):
     "Module to create a nd output head with a convolutional layer"
 
@@ -1470,6 +1571,8 @@ class create_conv_3d_head(nn.Sequential):
 conv_3d_head = create_conv_3d_head
 
 # Cell
+
+
 def universal_pool_head(
     n_in,
     c_out,
@@ -1517,6 +1620,8 @@ heads = [
 ]
 
 # Cell
+
+
 class SqueezeExciteBlock(Module):
     def __init__(self, ni, reduction=16):
         self.avg_pool = GAP1d(1)
@@ -1554,7 +1659,8 @@ class GaussianNoise(Module):
     def forward(self, x):
         if self.training and self.sigma not in [0, None]:
             scale = self.sigma * (x.detach() if self.is_relative_detach else x)
-            sampled_noise = torch.empty(x.size(), device=x.device).normal_() * scale
+            sampled_noise = torch.empty(
+                x.size(), device=x.device).normal_() * scale
             x = x + sampled_noise
         return x
 
@@ -1590,12 +1696,19 @@ class ScaledDotProductAttention(Module):
     by Lee et al, 2021)"""
 
     def __init__(
-        self, d_model, n_heads, attn_dropout=0.0, res_attention=False, lsa=False
-    ):
+            self,
+            d_model,
+            n_heads,
+            attn_dropout=0.0,
+            res_attention=False,
+            lsa=False):
         self.attn_dropout = nn.Dropout(attn_dropout)
         self.res_attention = res_attention
         head_dim = d_model // n_heads
-        self.scale = nn.Parameter(torch.tensor(head_dim**-0.5), requires_grad=lsa)
+        self.scale = nn.Parameter(
+            torch.tensor(
+                head_dim**-0.5),
+            requires_grad=lsa)
         self.lsa = lsa
 
     def forward(
@@ -1622,7 +1735,8 @@ class ScaledDotProductAttention(Module):
             scores : [bs x n_heads x q_len x seq_len]
         """
 
-        # Scaled MatMul (q, k) - similarity scores for all pairs of positions in an input sequence
+        # Scaled MatMul (q, k) - similarity scores for all pairs of positions
+        # in an input sequence
         attn_scores = (
             torch.matmul(q, k) * self.scale
         )  # attn_scores : [bs x n_heads x max_q_len x q_len]
@@ -1632,9 +1746,9 @@ class ScaledDotProductAttention(Module):
             attn_scores = attn_scores + prev
 
         # Attention mask (optional)
-        if (
-            attn_mask is not None
-        ):  # attn_mask with shape [q_len x seq_len] - only used when q_len == seq_len
+        # attn_mask with shape [q_len x seq_len] - only used when q_len ==
+        # seq_len
+        if (attn_mask is not None):
             if attn_mask.dtype == torch.bool:
                 attn_scores.masked_fill_(attn_mask, -np.inf)
             else:
@@ -1750,14 +1864,15 @@ class MultiheadAttention(Module):
             )
         else:
             output, attn_weights = self.sdp_attn(
-                q_s, k_s, v_s, key_padding_mask=key_padding_mask, attn_mask=attn_mask
-            )
-        # output: [bs x n_heads x q_len x d_v], attn: [bs x n_heads x q_len x q_len], scores: [bs x n_heads x max_q_len x q_len]
+                q_s, k_s, v_s, key_padding_mask=key_padding_mask, attn_mask=attn_mask)
+        # output: [bs x n_heads x q_len x d_v], attn: [bs x n_heads x q_len x
+        # q_len], scores: [bs x n_heads x max_q_len x q_len]
 
         # back to the original inputs dimensions
         output = (
-            output.transpose(1, 2).contiguous().view(bs, -1, self.n_heads * self.d_v)
-        )  # output: [bs x q_len x n_heads * d_v]
+            output.transpose(
+                1, 2).contiguous().view(
+                bs, -1, self.n_heads * self.d_v))  # output: [bs x q_len x n_heads * d_v]
         output = self.to_out(output)
 
         if self.res_attention:
@@ -1836,8 +1951,13 @@ class TSEmbedding(nn.Embedding):
 # Cell
 class MultiEmbedding(Module):
     def __init__(
-        self, c_in, n_embeds, embed_dims=None, cat_pos=None, std=0.01, padding_idxs=None
-    ):
+            self,
+            c_in,
+            n_embeds,
+            embed_dims=None,
+            cat_pos=None,
+            std=0.01,
+            padding_idxs=None):
         n_embeds = listify(n_embeds)
         if padding_idxs is None:
             padding_idxs = [None]

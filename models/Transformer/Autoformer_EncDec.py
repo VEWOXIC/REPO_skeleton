@@ -26,7 +26,10 @@ class moving_avg(nn.Module):
     def __init__(self, kernel_size, stride):
         super(moving_avg, self).__init__()
         self.kernel_size = kernel_size
-        self.avg = nn.AvgPool1d(kernel_size=kernel_size, stride=stride, padding=0)
+        self.avg = nn.AvgPool1d(
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=0)
 
     def forward(self, x):
         # padding on the both ends of time series
@@ -108,7 +111,8 @@ class Encoder(nn.Module):
     def forward(self, x, attn_mask=None):
         attns = []
         if self.conv_layers is not None:
-            for attn_layer, conv_layer in zip(self.attn_layers, self.conv_layers):
+            for attn_layer, conv_layer in zip(
+                    self.attn_layers, self.conv_layers):
                 x, attn = attn_layer(x, attn_mask=attn_mask)
                 x = conv_layer(x)
                 attns.append(attn)
@@ -179,9 +183,10 @@ class DecoderLayer(nn.Module):
         x, trend3 = self.decomp3(x + y)
 
         residual_trend = trend1 + trend2 + trend3
-        residual_trend = self.projection(residual_trend.permute(0, 2, 1)).transpose(
-            1, 2
-        )
+        residual_trend = self.projection(
+            residual_trend.permute(
+                0, 2, 1)).transpose(
+            1, 2)
         return x, residual_trend
 
 
@@ -198,7 +203,8 @@ class Decoder(nn.Module):
 
     def forward(self, x, cross, x_mask=None, cross_mask=None, trend=None):
         for layer in self.layers:
-            x, residual_trend = layer(x, cross, x_mask=x_mask, cross_mask=cross_mask)
+            x, residual_trend = layer(
+                x, cross, x_mask=x_mask, cross_mask=cross_mask)
             trend = trend + residual_trend
 
         if self.norm is not None:

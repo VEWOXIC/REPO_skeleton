@@ -1,4 +1,5 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/FCN.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/FCN.py
 
 from .imports import *
 from .layers import *

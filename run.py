@@ -1,8 +1,9 @@
 import json
 import os
 import random
-from experiments.exp_basic import *
 from datetime import datetime
+
+from experiments.exp_basic import *
 
 if __name__ == "__main__":
     # if os.paths.exists()
@@ -21,8 +22,9 @@ if __name__ == "__main__":
     # else
 
     model_save_dir = "cache/{}/{}/{}".format(
-        cfg["model"]["model_name"], cfg["data"]["dataset_name"], cfg["data"]["horizon"]
-    )
+        cfg["model"]["model_name"],
+        cfg["data"]["dataset_name"],
+        cfg["data"]["horizon"])
     if not os.path.exists(model_save_dir):
         os.makedirs(model_save_dir)
 
@@ -30,7 +32,11 @@ if __name__ == "__main__":
     dataset_name = cfg["data"]["dataset_name"]
     exp = Exp_Basic(cfg, model_save_dir)
     if cfg["exp"]["train"]["training"] or not os.path.exists(model_save_dir):
-        print("Start training for model:", model_name, " dataset:", dataset_name)
+        print(
+            "Start training for model:",
+            model_name,
+            " dataset:",
+            dataset_name)
         before_train = datetime.now().timestamp()
         print("===================Train-Start=========================")
         exp.train()
