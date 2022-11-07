@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # with open('cfgs/exp/MTGNN/MTGNN_PEMS03.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_exchange_rate.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_metr_la.json','r') as f:
-    with open("cfgs/exp/MTGNN/MTGNN_WTH.json", "r") as f:
+    with open("cfgs/exp/MTGNN/MTGNN_WTH.json","r") as f:
         cfg = json.load(f)
     # else
 
