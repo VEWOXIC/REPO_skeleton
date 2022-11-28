@@ -1,7 +1,9 @@
-# File modified from https://github.com/timeseriesAI/tsai/blob/main/tsai/models/ResNet.py
+# File modified from
+# https://github.com/timeseriesAI/tsai/blob/main/tsai/models/ResNet.py
 
 from .imports import *
 from .layers import *
+
 
 class ResBlock(Module):
     def __init__(self, ni, nf, kss=[7, 5, 3]):
@@ -10,7 +12,8 @@ class ResBlock(Module):
         self.convblock3 = ConvBlock(nf, nf, kss[2], act=None)
 
         # expand channels for the sum if necessary
-        self.shortcut = BN1d(ni) if ni == nf else ConvBlock(ni, nf, 1, act=None)
+        self.shortcut = BN1d(ni) if ni == nf else ConvBlock(
+            ni, nf, 1, act=None)
         self.add = Add()
         self.act = nn.ReLU()
 
@@ -23,13 +26,14 @@ class ResBlock(Module):
         x = self.act(x)
         return x
 
+
 class ResNet(Module):
     def __init__(self, cfg):
 
-        c_in = cfg['model']['c_in']
-        c_out = cfg['model']['c_out']
-        nf = cfg['model']['nf']
-        kss = cfg['model']['kss']
+        c_in = cfg["model"]["c_in"]
+        c_out = cfg["model"]["c_out"]
+        nf = cfg["model"]["nf"]
+        kss = cfg["model"]["kss"]
 
         self.resblock1 = ResBlock(c_in, nf, kss=kss)
         self.resblock2 = ResBlock(nf, nf * 2, kss=kss)

@@ -1,10 +1,12 @@
 from __future__ import division
+
+import numbers
+
+import numpy as np
 import torch
 import torch.nn as nn
-from torch.nn import init
-import numbers
 import torch.nn.functional as F
-import numpy as np
+from torch.nn import init
 
 
 class nconv(nn.Module):
@@ -12,7 +14,7 @@ class nconv(nn.Module):
         super(nconv, self).__init__()
 
     def forward(self, x, A):
-        x = torch.einsum('ncwl,vw->ncvl', (x, A))
+        x = torch.einsum("ncwl,vw->ncvl", (x, A))
         return x.contiguous()
 
 
@@ -21,14 +23,18 @@ class dy_nconv(nn.Module):
         super(dy_nconv, self).__init__()
 
     def forward(self, x, A):
-        x = torch.einsum('ncvl,nvwl->ncwl', (x, A))
+        x = torch.einsum("ncvl,nvwl->ncwl", (x, A))
         return x.contiguous()
 
 
 class linear(nn.Module):
     def __init__(self, c_in, c_out, bias=True):
         super(linear, self).__init__()
-        self.mlp = torch.nn.Conv2d(c_in, c_out, kernel_size=(1, 1), padding=(0, 0), stride=(1, 1), bias=bias)
+        self.mlp = torch.nn.Conv2d(
+            c_in, c_out, kernel_size=(
+                1, 1), padding=(
+                0, 0), stride=(
+                1, 1), bias=bias)
 
     def forward(self, x):
         return self.mlp(x)
@@ -124,7 +130,9 @@ class dilated_1D(nn.Module):
         super(dilated_1D, self).__init__()
         self.tconv = nn.ModuleList()
         self.kernel_set = [2, 3, 6, 7]
-        self.tconv = nn.Conv2d(cin, cout, (1, 7), dilation=(1, dilation_factor))
+        self.tconv = nn.Conv2d(
+            cin, cout, (1, 7), dilation=(
+                1, dilation_factor))
 
     def forward(self, input):
         x = self.tconv(input)
@@ -138,7 +146,9 @@ class dilated_inception(nn.Module):
         self.kernel_set = [2, 3, 6, 7]
         cout = int(cout / len(self.kernel_set))
         for kern in self.kernel_set:
-            self.tconv.append(nn.Conv2d(cin, cout, (1, kern), dilation=(1, dilation_factor)))
+            self.tconv.append(
+                nn.Conv2d(cin, cout, (1, kern), dilation=(1, dilation_factor))
+            )
 
     def forward(self, input):
         x = []
@@ -181,10 +191,12 @@ class graph_constructor(nn.Module):
         nodevec1 = torch.tanh(self.alpha * self.lin1(nodevec1))
         nodevec2 = torch.tanh(self.alpha * self.lin2(nodevec2))
 
-        a = torch.mm(nodevec1, nodevec2.transpose(1, 0)) - torch.mm(nodevec2, nodevec1.transpose(1, 0))
+        a = torch.mm(nodevec1, nodevec2.transpose(1, 0)) - torch.mm(
+            nodevec2, nodevec1.transpose(1, 0)
+        )
         adj = F.relu(torch.tanh(self.alpha * a))
         mask = torch.zeros(idx.size(0), idx.size(0)).to(self.device)
-        mask.fill_(float('0'))
+        mask.fill_(float("0"))
         s1, t1 = (adj + torch.rand_like(adj) * 0.01).topk(self.k, 1)
         mask.scatter_(1, t1, s1.fill_(1))
         adj = adj * mask
@@ -201,7 +213,9 @@ class graph_constructor(nn.Module):
         nodevec1 = torch.tanh(self.alpha * self.lin1(nodevec1))
         nodevec2 = torch.tanh(self.alpha * self.lin2(nodevec2))
 
-        a = torch.mm(nodevec1, nodevec2.transpose(1, 0)) - torch.mm(nodevec2, nodevec1.transpose(1, 0))
+        a = torch.mm(nodevec1, nodevec2.transpose(1, 0)) - torch.mm(
+            nodevec2, nodevec1.transpose(1, 0)
+        )
         adj = F.relu(torch.tanh(self.alpha * a))
         return adj
 
@@ -210,7 +224,9 @@ class graph_global(nn.Module):
     def __init__(self, nnodes, k, dim, device, alpha=3, static_feat=None):
         super(graph_global, self).__init__()
         self.nnodes = nnodes
-        self.A = nn.Parameter(torch.randn(nnodes, nnodes).to(device), requires_grad=True).to(device)
+        self.A = nn.Parameter(
+            torch.randn(nnodes, nnodes).to(device), requires_grad=True
+        ).to(device)
 
     def forward(self, idx):
         return F.relu(self.A)
@@ -247,7 +263,7 @@ class graph_undirected(nn.Module):
         a = torch.mm(nodevec1, nodevec2.transpose(1, 0))
         adj = F.relu(torch.tanh(self.alpha * a))
         mask = torch.zeros(idx.size(0), idx.size(0)).to(self.device)
-        mask.fill_(float('0'))
+        mask.fill_(float("0"))
         s1, t1 = adj.topk(self.k, 1)
         mask.scatter_(1, t1, s1.fill_(1))
         adj = adj * mask
@@ -288,7 +304,7 @@ class graph_directed(nn.Module):
         a = torch.mm(nodevec1, nodevec2.transpose(1, 0))
         adj = F.relu(torch.tanh(self.alpha * a))
         mask = torch.zeros(idx.size(0), idx.size(0)).to(self.device)
-        mask.fill_(float('0'))
+        mask.fill_(float("0"))
         s1, t1 = adj.topk(self.k, 1)
         mask.scatter_(1, t1, s1.fill_(1))
         adj = adj * mask
@@ -296,7 +312,12 @@ class graph_directed(nn.Module):
 
 
 class LayerNorm(nn.Module):
-    __constants__ = ['normalized_shape', 'weight', 'bias', 'eps', 'elementwise_affine']
+    __constants__ = [
+        "normalized_shape",
+        "weight",
+        "bias",
+        "eps",
+        "elementwise_affine"]
 
     def __init__(self, normalized_shape, eps=1e-5, elementwise_affine=True):
         super(LayerNorm, self).__init__()
@@ -309,8 +330,8 @@ class LayerNorm(nn.Module):
             self.weight = nn.Parameter(torch.Tensor(*normalized_shape))
             self.bias = nn.Parameter(torch.Tensor(*normalized_shape))
         else:
-            self.register_parameter('weight', None)
-            self.register_parameter('bias', None)
+            self.register_parameter("weight", None)
+            self.register_parameter("bias", None)
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -320,39 +341,49 @@ class LayerNorm(nn.Module):
 
     def forward(self, input, idx):
         if self.elementwise_affine:
-            return F.layer_norm(input, tuple(input.shape[1:]), self.weight[:, idx, :], self.bias[:, idx, :], self.eps)
+            return F.layer_norm(
+                input,
+                tuple(input.shape[1:]),
+                self.weight[:, idx, :],
+                self.bias[:, idx, :],
+                self.eps,
+            )
         else:
-            return F.layer_norm(input, tuple(input.shape[1:]), self.weight, self.bias, self.eps)
+            return F.layer_norm(
+                input, tuple(input.shape[1:]), self.weight, self.bias, self.eps
+            )
 
     def extra_repr(self):
-        return '{normalized_shape}, eps={eps}, ' \
-               'elementwise_affine={elementwise_affine}'.format(**self.__dict__)
+        return (
+            "{normalized_shape}, eps={eps}, "
+            "elementwise_affine={elementwise_affine}".format(**self.__dict__)
+        )
 
 
 class MTGNN(nn.Module):
     def __init__(self, cfg):
         super(MTGNN, self).__init__()
         self.cfg = cfg
-        self.gcn_true = cfg['model']['gcn_true']
-        self.buildA_true = cfg['model']['buildA_true']
-        self.gcn_depth = cfg['model']['gcn_depth']
-        self.num_nodes = cfg['model']['num_nodes']
-        self.device = cfg['model']['device']
-        self.dropout = cfg['model']['dropout']
-        self.subgraph_size = cfg['model']['subgraph_size']
-        self.node_dim = cfg['model']['node_dim']
-        self.dilation_exponential = cfg['model']['dilation_exponential']
-        self.conv_channels = cfg['model']['conv_channels']
-        self.residual_channels = cfg['model']['residual_channels']
-        self.skip_channels = cfg['model']['skip_channels']
-        self.end_channels = cfg['model']['end_channels']
-        self.seq_length = cfg['model']['seq_length']
-        self.in_dim = cfg['model']['in_dim']
-        self.out_dim = cfg['model']['out_dim']
-        self.layers = cfg['model']['layers']
-        self.propalpha = cfg['model']['propalpha']
-        self.tanhalpha = cfg['model']['tanhalpha']
-        self.layer_norm_affline = cfg['model']['layer_norm_affline']
+        self.gcn_true = cfg["model"]["gcn_true"]
+        self.buildA_true = cfg["model"]["buildA_true"]
+        self.gcn_depth = cfg["model"]["gcn_depth"]
+        self.num_nodes = cfg["model"]["num_nodes"]
+        self.device = cfg["model"]["device"]
+        self.dropout = cfg["model"]["dropout"]
+        self.subgraph_size = cfg["model"]["subgraph_size"]
+        self.node_dim = cfg["model"]["node_dim"]
+        self.dilation_exponential = cfg["model"]["dilation_exponential"]
+        self.conv_channels = cfg["model"]["conv_channels"]
+        self.residual_channels = cfg["model"]["residual_channels"]
+        self.skip_channels = cfg["model"]["skip_channels"]
+        self.end_channels = cfg["model"]["end_channels"]
+        self.seq_length = cfg["model"]["seq_length"]
+        self.in_dim = cfg["model"]["in_dim"]
+        self.out_dim = cfg["model"]["out_dim"]
+        self.layers = cfg["model"]["layers"]
+        self.propalpha = cfg["model"]["propalpha"]
+        self.tanhalpha = cfg["model"]["tanhalpha"]
+        self.layer_norm_affline = cfg["model"]["layer_norm_affline"]
         self.predefined_A = None
         self.static_feat = None
         self.filter_convs = nn.ModuleList()
@@ -362,91 +393,185 @@ class MTGNN(nn.Module):
         self.gconv1 = nn.ModuleList()
         self.gconv2 = nn.ModuleList()
         self.norm = nn.ModuleList()
-        self.start_conv = nn.Conv2d(in_channels=self.in_dim,
-                                    out_channels=self.residual_channels,
-                                    kernel_size=(1, 1))
-        self.gc = graph_constructor(self.num_nodes, self.subgraph_size, self.node_dim, self.device,
-                                    alpha=self.tanhalpha, static_feat=self.static_feat)
+        self.start_conv = nn.Conv2d(
+            in_channels=self.in_dim,
+            out_channels=self.residual_channels,
+            kernel_size=(1, 1),
+        )
+        self.gc = graph_constructor(
+            self.num_nodes,
+            self.subgraph_size,
+            self.node_dim,
+            self.device,
+            alpha=self.tanhalpha,
+            static_feat=self.static_feat,
+        )
 
         kernel_size = 7
         if self.dilation_exponential > 1:
-            self.receptive_field = int(1 + (kernel_size - 1) * (self.dilation_exponential ** self.layers - 1) / (
-                        self.dilation_exponential - 1))
+            self.receptive_field = int(
+                1
+                + (kernel_size - 1)
+                * (self.dilation_exponential**self.layers - 1)
+                / (self.dilation_exponential - 1)
+            )
         else:
             self.receptive_field = self.layers * (kernel_size - 1) + 1
 
         for i in range(1):
             if self.dilation_exponential > 1:
-                rf_size_i = int(1 + i * (kernel_size - 1) * (self.dilation_exponential ** self.layers - 1) / (
-                            self.dilation_exponential - 1))
+                rf_size_i = int(
+                    1
+                    + i
+                    * (kernel_size - 1)
+                    * (self.dilation_exponential**self.layers - 1)
+                    / (self.dilation_exponential - 1)
+                )
             else:
                 rf_size_i = i * self.layers * (kernel_size - 1) + 1
             new_dilation = 1
             for j in range(1, self.layers + 1):
                 if self.dilation_exponential > 1:
-                    rf_size_j = int(rf_size_i + (kernel_size - 1) * (self.dilation_exponential ** j - 1) / (
-                                self.dilation_exponential - 1))
+                    rf_size_j = int(
+                        rf_size_i
+                        + (kernel_size - 1)
+                        * (self.dilation_exponential**j - 1)
+                        / (self.dilation_exponential - 1)
+                    )
                 else:
                     rf_size_j = rf_size_i + j * (kernel_size - 1)
 
                 self.filter_convs.append(
-                    dilated_inception(self.residual_channels, self.conv_channels, dilation_factor=new_dilation))
+                    dilated_inception(
+                        self.residual_channels,
+                        self.conv_channels,
+                        dilation_factor=new_dilation,
+                    )
+                )
                 self.gate_convs.append(
-                    dilated_inception(self.residual_channels, self.conv_channels, dilation_factor=new_dilation))
-                self.residual_convs.append(nn.Conv2d(in_channels=self.conv_channels,
-                                                     out_channels=self.residual_channels,
-                                                     kernel_size=(1, 1)))
+                    dilated_inception(
+                        self.residual_channels,
+                        self.conv_channels,
+                        dilation_factor=new_dilation,
+                    )
+                )
+                self.residual_convs.append(
+                    nn.Conv2d(
+                        in_channels=self.conv_channels,
+                        out_channels=self.residual_channels,
+                        kernel_size=(1, 1),
+                    )
+                )
                 if self.seq_length > self.receptive_field:
-                    self.skip_convs.append(nn.Conv2d(in_channels=self.conv_channels,
-                                                     out_channels=self.skip_channels,
-                                                     kernel_size=(1, self.seq_length - rf_size_j + 1)))
+                    self.skip_convs.append(
+                        nn.Conv2d(
+                            in_channels=self.conv_channels,
+                            out_channels=self.skip_channels,
+                            kernel_size=(1, self.seq_length - rf_size_j + 1),
+                        )
+                    )
                 else:
-                    self.skip_convs.append(nn.Conv2d(in_channels=self.conv_channels,
-                                                     out_channels=self.skip_channels,
-                                                     kernel_size=(1, self.receptive_field - rf_size_j + 1)))
+                    self.skip_convs.append(
+                        nn.Conv2d(
+                            in_channels=self.conv_channels,
+                            out_channels=self.skip_channels,
+                            kernel_size=(
+                                1,
+                                self.receptive_field -
+                                rf_size_j +
+                                1),
+                        ))
 
                 if self.gcn_true:
-                    self.gconv1.append(mixprop(self.conv_channels, self.residual_channels, self.gcn_depth, self.dropout,
-                                               self.propalpha))
-                    self.gconv2.append(mixprop(self.conv_channels, self.residual_channels, self.gcn_depth, self.dropout,
-                                               self.propalpha))
+                    self.gconv1.append(
+                        mixprop(
+                            self.conv_channels,
+                            self.residual_channels,
+                            self.gcn_depth,
+                            self.dropout,
+                            self.propalpha,
+                        )
+                    )
+                    self.gconv2.append(
+                        mixprop(
+                            self.conv_channels,
+                            self.residual_channels,
+                            self.gcn_depth,
+                            self.dropout,
+                            self.propalpha,
+                        )
+                    )
 
                 if self.seq_length > self.receptive_field:
                     self.norm.append(
-                        LayerNorm((self.residual_channels, self.num_nodes, self.seq_length - rf_size_j + 1),
-                                  elementwise_affine=self.layer_norm_affline))
+                        LayerNorm(
+                            (
+                                self.residual_channels,
+                                self.num_nodes,
+                                self.seq_length - rf_size_j + 1,
+                            ),
+                            elementwise_affine=self.layer_norm_affline,
+                        )
+                    )
                 else:
                     self.norm.append(
-                        LayerNorm((self.residual_channels, self.num_nodes, self.receptive_field - rf_size_j + 1),
-                                  elementwise_affine=self.layer_norm_affline))
+                        LayerNorm(
+                            (
+                                self.residual_channels,
+                                self.num_nodes,
+                                self.receptive_field - rf_size_j + 1,
+                            ),
+                            elementwise_affine=self.layer_norm_affline,
+                        )
+                    )
 
                 new_dilation *= self.dilation_exponential
 
-        self.end_conv_1 = nn.Conv2d(in_channels=self.skip_channels,
-                                    out_channels=self.end_channels,
-                                    kernel_size=(1, 1),
-                                    bias=True)
-        self.end_conv_2 = nn.Conv2d(in_channels=self.end_channels,
-                                    out_channels=self.out_dim,
-                                    kernel_size=(1, 1),
-                                    bias=True)
+        self.end_conv_1 = nn.Conv2d(
+            in_channels=self.skip_channels,
+            out_channels=self.end_channels,
+            kernel_size=(1, 1),
+            bias=True,
+        )
+        self.end_conv_2 = nn.Conv2d(
+            in_channels=self.end_channels,
+            out_channels=self.out_dim,
+            kernel_size=(1, 1),
+            bias=True,
+        )
         if self.seq_length > self.receptive_field:
-            self.skip0 = nn.Conv2d(in_channels=self.in_dim, out_channels=self.skip_channels,
-                                   kernel_size=(1, self.seq_length), bias=True)
-            self.skipE = nn.Conv2d(in_channels=self.residual_channels, out_channels=self.skip_channels,
-                                   kernel_size=(1, self.seq_length - self.receptive_field + 1), bias=True)
+            self.skip0 = nn.Conv2d(
+                in_channels=self.in_dim,
+                out_channels=self.skip_channels,
+                kernel_size=(1, self.seq_length),
+                bias=True,
+            )
+            self.skipE = nn.Conv2d(
+                in_channels=self.residual_channels,
+                out_channels=self.skip_channels,
+                kernel_size=(1, self.seq_length - self.receptive_field + 1),
+                bias=True,
+            )
 
         else:
-            self.skip0 = nn.Conv2d(in_channels=self.in_dim, out_channels=self.skip_channels,
-                                   kernel_size=(1, self.receptive_field), bias=True)
-            self.skipE = nn.Conv2d(in_channels=self.residual_channels, out_channels=self.skip_channels,
-                                   kernel_size=(1, 1), bias=True)
+            self.skip0 = nn.Conv2d(
+                in_channels=self.in_dim,
+                out_channels=self.skip_channels,
+                kernel_size=(1, self.receptive_field),
+                bias=True,
+            )
+            self.skipE = nn.Conv2d(
+                in_channels=self.residual_channels,
+                out_channels=self.skip_channels,
+                kernel_size=(1, 1),
+                bias=True,
+            )
 
         self.idx = torch.arange(self.num_nodes).to(self.device)
 
     def forward(self, input, target, input_time, target_time):
         input = input.cpu()
-        if self.cfg['data']['dataset_name'] in ['metr-la', 'pems-bay']:
+        if self.cfg["data"]["dataset_name"] in ["metr-la", "pems-bay"]:
             input_time = input_time.cpu()
             input_time = np.expand_dims(input_time, axis=-1)
             input = np.expand_dims(input, axis=-1)
@@ -455,20 +580,24 @@ class MTGNN(nn.Module):
             input = np.concatenate(input, axis=-1)
         else:
             input = np.expand_dims(input, axis=-1)
-        
-        idx = np.arange(self.cfg['model']['num_nodes'])
+
+        idx = np.arange(self.cfg["model"]["num_nodes"])
         idx = torch.tensor(idx).to(self.device)
-        
+
         trainx = torch.from_numpy(input).to(self.device)
         trainx = trainx.transpose(1, 3)
         input = trainx.float()
-        
+
         seq_len = input.size(3)
-        assert seq_len == self.seq_length, 'input sequence length not equal to preset sequence length'
+        assert (
+            seq_len == self.seq_length
+        ), "input sequence length not equal to preset sequence length"
 
         if self.seq_length < self.receptive_field:
-            input = nn.functional.pad(input, (self.receptive_field - self.seq_length, 0, 0, 0))
-        
+            input = nn.functional.pad(
+                input, (self.receptive_field - self.seq_length, 0, 0, 0)
+            )
+
         if self.gcn_true:
             if self.buildA_true:
                 if idx is None:
@@ -477,9 +606,13 @@ class MTGNN(nn.Module):
                     adp = self.gc(idx)
             else:
                 adp = self.predefined_A
-        
+
         x = self.start_conv(input)
-        skip = self.skip0(F.dropout(input, self.dropout, training=self.training))
+        skip = self.skip0(
+            F.dropout(
+                input,
+                self.dropout,
+                training=self.training))
         for i in range(self.layers):
             residual = x
             filter = self.filter_convs[i](x)
@@ -492,7 +625,8 @@ class MTGNN(nn.Module):
             s = self.skip_convs[i](s)
             skip = s + skip
             if self.gcn_true:
-                x = self.gconv1[i](x, adp) + self.gconv2[i](x, adp.transpose(1, 0))
+                x = self.gconv1[i](x, adp) + \
+                    self.gconv2[i](x, adp.transpose(1, 0))
             else:
                 x = self.residual_convs[i](x)
 
