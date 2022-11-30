@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utils package &mdash; REPO_skeleton . documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="run module" href="run.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> REPO_skeleton
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">REPO_skeleton</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments.html">experiments package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">run module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">utils package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils.data_utils">utils.data_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#utils.data_utils.get_scaler"><code class="docutils literal notranslate"><span class="pre">get_scaler()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils.exp_utils">utils.exp_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.EarlyStopping"><code class="docutils literal notranslate"><span class="pre">EarlyStopping</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.build_optimizer"><code class="docutils literal notranslate"><span class="pre">build_optimizer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.build_train_loss"><code class="docutils literal notranslate"><span class="pre">build_train_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.explained_variance_score_np"><code class="docutils literal notranslate"><span class="pre">explained_variance_score_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.explained_variance_score_torch"><code class="docutils literal notranslate"><span class="pre">explained_variance_score_torch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.huber_loss"><code class="docutils literal notranslate"><span class="pre">huber_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.load_model"><code class="docutils literal notranslate"><span class="pre">load_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.log_cosh_loss"><code class="docutils literal notranslate"><span class="pre">log_cosh_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mae_loss"><code class="docutils literal notranslate"><span class="pre">masked_mae_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mae_np"><code class="docutils literal notranslate"><span class="pre">masked_mae_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mae_torch"><code class="docutils literal notranslate"><span class="pre">masked_mae_torch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mape_np"><code class="docutils literal notranslate"><span class="pre">masked_mape_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mape_torch"><code class="docutils literal notranslate"><span class="pre">masked_mape_torch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mse_np"><code class="docutils literal notranslate"><span class="pre">masked_mse_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_mse_torch"><code class="docutils literal notranslate"><span class="pre">masked_mse_torch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_rmse_np"><code class="docutils literal notranslate"><span class="pre">masked_rmse_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.masked_rmse_torch"><code class="docutils literal notranslate"><span class="pre">masked_rmse_torch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.quantile_loss"><code class="docutils literal notranslate"><span class="pre">quantile_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.r2_score_np"><code class="docutils literal notranslate"><span class="pre">r2_score_np()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.r2_score_torch"><code class="docutils literal notranslate"><span class="pre">r2_score_torch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.save_model"><code class="docutils literal notranslate"><span class="pre">save_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.exp_utils.smooth_l1_loss"><code class="docutils literal notranslate"><span class="pre">smooth_l1_loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils.masking">utils.masking module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#utils.masking.ProbMask"><code class="docutils literal notranslate"><span class="pre">ProbMask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.masking.TriangularCausalMask"><code class="docutils literal notranslate"><span class="pre">TriangularCausalMask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils.metrics">utils.metrics module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.CORR"><code class="docutils literal notranslate"><span class="pre">CORR()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.MAE"><code class="docutils literal notranslate"><span class="pre">MAE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.MAPE"><code class="docutils literal notranslate"><span class="pre">MAPE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.MSE"><code class="docutils literal notranslate"><span class="pre">MSE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.MSPE"><code class="docutils literal notranslate"><span class="pre">MSPE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.RMSE"><code class="docutils literal notranslate"><span class="pre">RMSE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.RSE"><code class="docutils literal notranslate"><span class="pre">RSE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.metrics.metric"><code class="docutils literal notranslate"><span class="pre">metric()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils.timefeatures">utils.timefeatures module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.DayOfMonth"><code class="docutils literal notranslate"><span class="pre">DayOfMonth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.DayOfWeek"><code class="docutils literal notranslate"><span class="pre">DayOfWeek</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.DayOfYear"><code class="docutils literal notranslate"><span class="pre">DayOfYear</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.HourOfDay"><code class="docutils literal notranslate"><span class="pre">HourOfDay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.MinuteOfHour"><code class="docutils literal notranslate"><span class="pre">MinuteOfHour</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.MonthOfYear"><code class="docutils literal notranslate"><span class="pre">MonthOfYear</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.SecondOfMinute"><code class="docutils literal notranslate"><span class="pre">SecondOfMinute</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.TimeFeature"><code class="docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.WeekOfYear"><code class="docutils literal notranslate"><span class="pre">WeekOfYear</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.time_features"><code class="docutils literal notranslate"><span class="pre">time_features()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utils.timefeatures.time_features_from_frequency_str"><code class="docutils literal notranslate"><span class="pre">time_features_from_frequency_str()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">REPO_skeleton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">REPO_skeleton</a></li>
+      <li class="breadcrumb-item active">utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="utils-package">
+<h1>utils package<a class="headerlink" href="#utils-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-utils.data_utils">
+<span id="utils-data-utils-module"></span><h2>utils.data_utils module<a class="headerlink" href="#module-utils.data_utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.data_utils.get_scaler">
+<span class="sig-prename descclassname"><span class="pre">utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">get_scaler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scalar_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/data_utils.html#get_scaler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.data_utils.get_scaler" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-utils.exp_utils">
+<span id="utils-exp-utils-module"></span><h2>utils.exp_utils module<a class="headerlink" href="#module-utils.exp_utils" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.exp_utils.EarlyStopping">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">EarlyStopping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#EarlyStopping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.EarlyStopping" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.exp_utils.EarlyStopping.save_checkpoint">
+<span class="sig-name descname"><span class="pre">save_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#EarlyStopping.save_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.EarlyStopping.save_checkpoint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.build_optimizer">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">build_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#build_optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.build_optimizer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.build_train_loss">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">build_train_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#build_train_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.build_train_loss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.explained_variance_score_np">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">explained_variance_score_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#explained_variance_score_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.explained_variance_score_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.explained_variance_score_torch">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">explained_variance_score_torch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#explained_variance_score_torch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.explained_variance_score_torch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.huber_loss">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">huber_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#huber_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.huber_loss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.load_model">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.load_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.log_cosh_loss">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">log_cosh_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#log_cosh_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.log_cosh_loss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mae_loss">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mae_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mae_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mae_loss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mae_np">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mae_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mae_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mae_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mae_torch">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mae_torch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mae_torch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mae_torch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mape_np">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mape_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mape_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mape_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mape_torch">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mape_torch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mape_torch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mape_torch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mse_np">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mse_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mse_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mse_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_mse_torch">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_mse_torch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_mse_torch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_mse_torch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_rmse_np">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_rmse_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_rmse_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_rmse_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.masked_rmse_torch">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">masked_rmse_torch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#masked_rmse_torch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.masked_rmse_torch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.quantile_loss">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">quantile_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#quantile_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.quantile_loss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.r2_score_np">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">r2_score_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#r2_score_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.r2_score_np" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.r2_score_torch">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">r2_score_torch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#r2_score_torch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.r2_score_torch" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.save_model">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.save_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.exp_utils.smooth_l1_loss">
+<span class="sig-prename descclassname"><span class="pre">utils.exp_utils.</span></span><span class="sig-name descname"><span class="pre">smooth_l1_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1111111111111111</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/exp_utils.html#smooth_l1_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.exp_utils.smooth_l1_loss" title="Permalink to this definition"></a></dt>
+<dd><p>very similar to the smooth_l1_loss from pytorch, but with
+the extra beta parameter</p>
+</dd></dl>
+
+</section>
+<section id="module-utils.masking">
+<span id="utils-masking-module"></span><h2>utils.masking module<a class="headerlink" href="#module-utils.masking" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.masking.ProbMask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.masking.</span></span><span class="sig-name descname"><span class="pre">ProbMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/masking.html#ProbMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.masking.ProbMask" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="utils.masking.ProbMask.mask">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#utils.masking.ProbMask.mask" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.masking.TriangularCausalMask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.masking.</span></span><span class="sig-name descname"><span class="pre">TriangularCausalMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/masking.html#TriangularCausalMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.masking.TriangularCausalMask" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="utils.masking.TriangularCausalMask.mask">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#utils.masking.TriangularCausalMask.mask" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-utils.metrics">
+<span id="utils-metrics-module"></span><h2>utils.metrics module<a class="headerlink" href="#module-utils.metrics" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.CORR">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">CORR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#CORR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.CORR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.MAE">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">MAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#MAE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.MAE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.MAPE">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">MAPE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#MAPE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.MAPE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.MSE">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">MSE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#MSE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.MSE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.MSPE">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">MSPE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#MSPE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.MSPE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.RMSE">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">RMSE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#RMSE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.RMSE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.RSE">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">RSE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#RSE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.RSE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.metrics.metric">
+<span class="sig-prename descclassname"><span class="pre">utils.metrics.</span></span><span class="sig-name descname"><span class="pre">metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/metrics.html#metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.metrics.metric" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-utils.timefeatures">
+<span id="utils-timefeatures-module"></span><h2>utils.timefeatures module<a class="headerlink" href="#module-utils.timefeatures" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.DayOfMonth">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">DayOfMonth</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#DayOfMonth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.DayOfMonth" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Day of month encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.DayOfWeek">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">DayOfWeek</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#DayOfWeek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.DayOfWeek" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Hour of day encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.DayOfYear">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">DayOfYear</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#DayOfYear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.DayOfYear" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Day of year encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.HourOfDay">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">HourOfDay</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#HourOfDay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.HourOfDay" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Hour of day encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.MinuteOfHour">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">MinuteOfHour</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#MinuteOfHour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.MinuteOfHour" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Minute of hour encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.MonthOfYear">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">MonthOfYear</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#MonthOfYear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.MonthOfYear" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Month of year encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.SecondOfMinute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">SecondOfMinute</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#SecondOfMinute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.SecondOfMinute" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Minute of hour encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.TimeFeature">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">TimeFeature</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#TimeFeature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.TimeFeature" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timefeatures.WeekOfYear">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">WeekOfYear</span></span><a class="reference internal" href="_modules/utils/timefeatures.html#WeekOfYear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.WeekOfYear" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeFeature</span></code></a></p>
+<p>Week of year encoded as value between [-0.5, 0.5]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.timefeatures.time_features">
+<span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">time_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'h'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/timefeatures.html#time_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.time_features" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.timefeatures.time_features_from_frequency_str">
+<span class="sig-prename descclassname"><span class="pre">utils.timefeatures.</span></span><span class="sig-name descname"><span class="pre">time_features_from_frequency_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#utils.timefeatures.TimeFeature" title="utils.timefeatures.TimeFeature"><span class="pre">TimeFeature</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/utils/timefeatures.html#time_features_from_frequency_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.timefeatures.time_features_from_frequency_str" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of time features that will be appropriate for the given frequency string.
+Parameters
+———-
+freq_str</p>
+<blockquote>
+<div><p>Frequency string of the form [multiple][granularity] such as “12H”, “5min”, “1D” etc.</p>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="run.html" class="btn btn-neutral float-left" title="run module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, ..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
