@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>models package &mdash; REPO_skeleton . documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="models.Autoformer package" href="models.Autoformer.html" />
+    <link rel="prev" title="experiments package" href="experiments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> REPO_skeleton
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">REPO_skeleton</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments.html">experiments package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html">models.Autoformer package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html">models.Transformer package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">REPO_skeleton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">REPO_skeleton</a></li>
+      <li class="breadcrumb-item active">models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="models-package">
+<h1>models package<a class="headerlink" href="#models-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="models.Autoformer.html">models.Autoformer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer.AutoCorrelation">models.Autoformer.AutoCorrelation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.bias"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.forward"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.groups"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.in_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.kernel_size"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.out_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.padding"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.padding_mode"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.return"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.time_delay_agg_full"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.time_delay_agg_full()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.time_delay_agg_inference"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.time_delay_agg_inference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.time_delay_agg_training"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.time_delay_agg_training()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelation.training"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.bias"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.forward"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.groups"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.padding"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.return"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.AutoCorrelation.AutoCorrelationLayer.training"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer.Autoformer">models.Autoformer.Autoformer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer"><code class="docutils literal notranslate"><span class="pre">Autoformer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.bias"><code class="docutils literal notranslate"><span class="pre">Autoformer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.forward"><code class="docutils literal notranslate"><span class="pre">Autoformer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.groups"><code class="docutils literal notranslate"><span class="pre">Autoformer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.in_channels"><code class="docutils literal notranslate"><span class="pre">Autoformer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.kernel_size"><code class="docutils literal notranslate"><span class="pre">Autoformer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.out_channels"><code class="docutils literal notranslate"><span class="pre">Autoformer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.padding"><code class="docutils literal notranslate"><span class="pre">Autoformer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.padding_mode"><code class="docutils literal notranslate"><span class="pre">Autoformer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.return"><code class="docutils literal notranslate"><span class="pre">Autoformer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer.Autoformer.training"><code class="docutils literal notranslate"><span class="pre">Autoformer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer.Autoformer_EncDec">models.Autoformer.Autoformer_EncDec module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder"><code class="docutils literal notranslate"><span class="pre">Decoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.bias"><code class="docutils literal notranslate"><span class="pre">Decoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.forward"><code class="docutils literal notranslate"><span class="pre">Decoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.groups"><code class="docutils literal notranslate"><span class="pre">Decoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Decoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.padding"><code class="docutils literal notranslate"><span class="pre">Decoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Decoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.return"><code class="docutils literal notranslate"><span class="pre">Decoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Decoder.training"><code class="docutils literal notranslate"><span class="pre">Decoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer"><code class="docutils literal notranslate"><span class="pre">DecoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.return"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.DecoderLayer.training"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder"><code class="docutils literal notranslate"><span class="pre">Encoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.bias"><code class="docutils literal notranslate"><span class="pre">Encoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.forward"><code class="docutils literal notranslate"><span class="pre">Encoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.groups"><code class="docutils literal notranslate"><span class="pre">Encoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Encoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.padding"><code class="docutils literal notranslate"><span class="pre">Encoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Encoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.return"><code class="docutils literal notranslate"><span class="pre">Encoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.Encoder.training"><code class="docutils literal notranslate"><span class="pre">Encoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer"><code class="docutils literal notranslate"><span class="pre">EncoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.return"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.EncoderLayer.training"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg"><code class="docutils literal notranslate"><span class="pre">moving_avg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.bias"><code class="docutils literal notranslate"><span class="pre">moving_avg.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.forward"><code class="docutils literal notranslate"><span class="pre">moving_avg.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.groups"><code class="docutils literal notranslate"><span class="pre">moving_avg.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.in_channels"><code class="docutils literal notranslate"><span class="pre">moving_avg.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.kernel_size"><code class="docutils literal notranslate"><span class="pre">moving_avg.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.out_channels"><code class="docutils literal notranslate"><span class="pre">moving_avg.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.padding"><code class="docutils literal notranslate"><span class="pre">moving_avg.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.padding_mode"><code class="docutils literal notranslate"><span class="pre">moving_avg.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.return"><code class="docutils literal notranslate"><span class="pre">moving_avg.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.moving_avg.training"><code class="docutils literal notranslate"><span class="pre">moving_avg.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm"><code class="docutils literal notranslate"><span class="pre">my_Layernorm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.bias"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.forward"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.groups"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.in_channels"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.kernel_size"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.out_channels"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.padding"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.padding_mode"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.return"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.my_Layernorm.training"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp"><code class="docutils literal notranslate"><span class="pre">series_decomp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.bias"><code class="docutils literal notranslate"><span class="pre">series_decomp.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.forward"><code class="docutils literal notranslate"><span class="pre">series_decomp.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.groups"><code class="docutils literal notranslate"><span class="pre">series_decomp.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.in_channels"><code class="docutils literal notranslate"><span class="pre">series_decomp.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.kernel_size"><code class="docutils literal notranslate"><span class="pre">series_decomp.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.out_channels"><code class="docutils literal notranslate"><span class="pre">series_decomp.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.padding"><code class="docutils literal notranslate"><span class="pre">series_decomp.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.padding_mode"><code class="docutils literal notranslate"><span class="pre">series_decomp.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.return"><code class="docutils literal notranslate"><span class="pre">series_decomp.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Autoformer_EncDec.series_decomp.training"><code class="docutils literal notranslate"><span class="pre">series_decomp.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer.Embed">models.Autoformer.Embed module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding"><code class="docutils literal notranslate"><span class="pre">DataEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.return"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding.training"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.bias"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.forward"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.groups"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.in_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.kernel_size"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.out_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.padding"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.padding_mode"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.return"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.DataEmbedding_wo_pos.training"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.return"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.FixedEmbedding.training"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.return"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.PositionalEmbedding.training"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.return"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TemporalEmbedding.training"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.return"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TimeFeatureEmbedding.training"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.return"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Embed.TokenEmbedding.training"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer.SelfAttention_Family">models.Autoformer.SelfAttention_Family module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer"><code class="docutils literal notranslate"><span class="pre">AttentionLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.bias"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.forward"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.groups"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.padding"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.return"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.AttentionLayer.training"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention"><code class="docutils literal notranslate"><span class="pre">FullAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.bias"><code class="docutils literal notranslate"><span class="pre">FullAttention.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.forward"><code class="docutils literal notranslate"><span class="pre">FullAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.groups"><code class="docutils literal notranslate"><span class="pre">FullAttention.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.in_channels"><code class="docutils literal notranslate"><span class="pre">FullAttention.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.kernel_size"><code class="docutils literal notranslate"><span class="pre">FullAttention.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.out_channels"><code class="docutils literal notranslate"><span class="pre">FullAttention.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.padding"><code class="docutils literal notranslate"><span class="pre">FullAttention.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.padding_mode"><code class="docutils literal notranslate"><span class="pre">FullAttention.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.return"><code class="docutils literal notranslate"><span class="pre">FullAttention.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.FullAttention.training"><code class="docutils literal notranslate"><span class="pre">FullAttention.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention"><code class="docutils literal notranslate"><span class="pre">ProbAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.bias"><code class="docutils literal notranslate"><span class="pre">ProbAttention.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.forward"><code class="docutils literal notranslate"><span class="pre">ProbAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.groups"><code class="docutils literal notranslate"><span class="pre">ProbAttention.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.in_channels"><code class="docutils literal notranslate"><span class="pre">ProbAttention.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.kernel_size"><code class="docutils literal notranslate"><span class="pre">ProbAttention.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.out_channels"><code class="docutils literal notranslate"><span class="pre">ProbAttention.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.padding"><code class="docutils literal notranslate"><span class="pre">ProbAttention.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.padding_mode"><code class="docutils literal notranslate"><span class="pre">ProbAttention.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.return"><code class="docutils literal notranslate"><span class="pre">ProbAttention.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ProbAttention.training"><code class="docutils literal notranslate"><span class="pre">ProbAttention.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer"><code class="docutils literal notranslate"><span class="pre">ReformerLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.bias"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.fit_length"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.fit_length()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.forward"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.groups"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.padding"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.return"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.SelfAttention_Family.ReformerLayer.training"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer.Transformer_EncDec">models.Autoformer.Transformer_EncDec module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer"><code class="docutils literal notranslate"><span class="pre">ConvLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.bias"><code class="docutils literal notranslate"><span class="pre">ConvLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.forward"><code class="docutils literal notranslate"><span class="pre">ConvLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.groups"><code class="docutils literal notranslate"><span class="pre">ConvLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">ConvLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">ConvLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">ConvLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.padding"><code class="docutils literal notranslate"><span class="pre">ConvLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">ConvLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.return"><code class="docutils literal notranslate"><span class="pre">ConvLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.ConvLayer.training"><code class="docutils literal notranslate"><span class="pre">ConvLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder"><code class="docutils literal notranslate"><span class="pre">Decoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.bias"><code class="docutils literal notranslate"><span class="pre">Decoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.forward"><code class="docutils literal notranslate"><span class="pre">Decoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.groups"><code class="docutils literal notranslate"><span class="pre">Decoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Decoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.padding"><code class="docutils literal notranslate"><span class="pre">Decoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Decoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.return"><code class="docutils literal notranslate"><span class="pre">Decoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Decoder.training"><code class="docutils literal notranslate"><span class="pre">Decoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer"><code class="docutils literal notranslate"><span class="pre">DecoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.return"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.DecoderLayer.training"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder"><code class="docutils literal notranslate"><span class="pre">Encoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.bias"><code class="docutils literal notranslate"><span class="pre">Encoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.forward"><code class="docutils literal notranslate"><span class="pre">Encoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.groups"><code class="docutils literal notranslate"><span class="pre">Encoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Encoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.padding"><code class="docutils literal notranslate"><span class="pre">Encoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Encoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.return"><code class="docutils literal notranslate"><span class="pre">Encoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.Encoder.training"><code class="docutils literal notranslate"><span class="pre">Encoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer"><code class="docutils literal notranslate"><span class="pre">EncoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.return"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Autoformer.html#models.Autoformer.Transformer_EncDec.EncoderLayer.training"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Autoformer.html#module-models.Autoformer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.Transformer.html">models.Transformer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer.AutoCorrelation">models.Transformer.AutoCorrelation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.bias"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.forward"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.groups"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.in_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.kernel_size"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.out_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.padding"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.padding_mode"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.return"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.time_delay_agg_full"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.time_delay_agg_full()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.time_delay_agg_inference"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.time_delay_agg_inference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.time_delay_agg_training"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.time_delay_agg_training()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelation.training"><code class="docutils literal notranslate"><span class="pre">AutoCorrelation.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.bias"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.forward"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.groups"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.padding"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.return"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.AutoCorrelation.AutoCorrelationLayer.training"><code class="docutils literal notranslate"><span class="pre">AutoCorrelationLayer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer.Autoformer_EncDec">models.Transformer.Autoformer_EncDec module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder"><code class="docutils literal notranslate"><span class="pre">Decoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.bias"><code class="docutils literal notranslate"><span class="pre">Decoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.forward"><code class="docutils literal notranslate"><span class="pre">Decoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.groups"><code class="docutils literal notranslate"><span class="pre">Decoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Decoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.padding"><code class="docutils literal notranslate"><span class="pre">Decoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Decoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.return"><code class="docutils literal notranslate"><span class="pre">Decoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Decoder.training"><code class="docutils literal notranslate"><span class="pre">Decoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer"><code class="docutils literal notranslate"><span class="pre">DecoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.return"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.DecoderLayer.training"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder"><code class="docutils literal notranslate"><span class="pre">Encoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.bias"><code class="docutils literal notranslate"><span class="pre">Encoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.forward"><code class="docutils literal notranslate"><span class="pre">Encoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.groups"><code class="docutils literal notranslate"><span class="pre">Encoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Encoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.padding"><code class="docutils literal notranslate"><span class="pre">Encoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Encoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.return"><code class="docutils literal notranslate"><span class="pre">Encoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.Encoder.training"><code class="docutils literal notranslate"><span class="pre">Encoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer"><code class="docutils literal notranslate"><span class="pre">EncoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.return"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.EncoderLayer.training"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg"><code class="docutils literal notranslate"><span class="pre">moving_avg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.bias"><code class="docutils literal notranslate"><span class="pre">moving_avg.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.forward"><code class="docutils literal notranslate"><span class="pre">moving_avg.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.groups"><code class="docutils literal notranslate"><span class="pre">moving_avg.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.in_channels"><code class="docutils literal notranslate"><span class="pre">moving_avg.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.kernel_size"><code class="docutils literal notranslate"><span class="pre">moving_avg.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.out_channels"><code class="docutils literal notranslate"><span class="pre">moving_avg.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.padding"><code class="docutils literal notranslate"><span class="pre">moving_avg.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.padding_mode"><code class="docutils literal notranslate"><span class="pre">moving_avg.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.return"><code class="docutils literal notranslate"><span class="pre">moving_avg.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.moving_avg.training"><code class="docutils literal notranslate"><span class="pre">moving_avg.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm"><code class="docutils literal notranslate"><span class="pre">my_Layernorm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.bias"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.forward"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.groups"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.in_channels"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.kernel_size"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.out_channels"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.padding"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.padding_mode"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.return"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.my_Layernorm.training"><code class="docutils literal notranslate"><span class="pre">my_Layernorm.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp"><code class="docutils literal notranslate"><span class="pre">series_decomp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.bias"><code class="docutils literal notranslate"><span class="pre">series_decomp.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.forward"><code class="docutils literal notranslate"><span class="pre">series_decomp.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.groups"><code class="docutils literal notranslate"><span class="pre">series_decomp.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.in_channels"><code class="docutils literal notranslate"><span class="pre">series_decomp.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.kernel_size"><code class="docutils literal notranslate"><span class="pre">series_decomp.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.out_channels"><code class="docutils literal notranslate"><span class="pre">series_decomp.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.padding"><code class="docutils literal notranslate"><span class="pre">series_decomp.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.padding_mode"><code class="docutils literal notranslate"><span class="pre">series_decomp.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.return"><code class="docutils literal notranslate"><span class="pre">series_decomp.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Autoformer_EncDec.series_decomp.training"><code class="docutils literal notranslate"><span class="pre">series_decomp.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer.Embed">models.Transformer.Embed module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding"><code class="docutils literal notranslate"><span class="pre">DataEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.return"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding.training"><code class="docutils literal notranslate"><span class="pre">DataEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.bias"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.forward"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.groups"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.in_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.kernel_size"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.out_channels"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.padding"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.padding_mode"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.return"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.DataEmbedding_wo_pos.training"><code class="docutils literal notranslate"><span class="pre">DataEmbedding_wo_pos.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.return"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.FixedEmbedding.training"><code class="docutils literal notranslate"><span class="pre">FixedEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.return"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.PositionalEmbedding.training"><code class="docutils literal notranslate"><span class="pre">PositionalEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.return"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TemporalEmbedding.training"><code class="docutils literal notranslate"><span class="pre">TemporalEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.return"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TimeFeatureEmbedding.training"><code class="docutils literal notranslate"><span class="pre">TimeFeatureEmbedding.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.bias"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.forward"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.groups"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.in_channels"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.kernel_size"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.out_channels"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.padding"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.padding_mode"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.return"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Embed.TokenEmbedding.training"><code class="docutils literal notranslate"><span class="pre">TokenEmbedding.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer.SelfAttention_Family">models.Transformer.SelfAttention_Family module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer"><code class="docutils literal notranslate"><span class="pre">AttentionLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.bias"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.forward"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.groups"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.padding"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.return"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.AttentionLayer.training"><code class="docutils literal notranslate"><span class="pre">AttentionLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention"><code class="docutils literal notranslate"><span class="pre">FullAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.bias"><code class="docutils literal notranslate"><span class="pre">FullAttention.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.forward"><code class="docutils literal notranslate"><span class="pre">FullAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.groups"><code class="docutils literal notranslate"><span class="pre">FullAttention.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.in_channels"><code class="docutils literal notranslate"><span class="pre">FullAttention.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.kernel_size"><code class="docutils literal notranslate"><span class="pre">FullAttention.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.out_channels"><code class="docutils literal notranslate"><span class="pre">FullAttention.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.padding"><code class="docutils literal notranslate"><span class="pre">FullAttention.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.padding_mode"><code class="docutils literal notranslate"><span class="pre">FullAttention.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.return"><code class="docutils literal notranslate"><span class="pre">FullAttention.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.FullAttention.training"><code class="docutils literal notranslate"><span class="pre">FullAttention.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention"><code class="docutils literal notranslate"><span class="pre">ProbAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.bias"><code class="docutils literal notranslate"><span class="pre">ProbAttention.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.forward"><code class="docutils literal notranslate"><span class="pre">ProbAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.groups"><code class="docutils literal notranslate"><span class="pre">ProbAttention.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.in_channels"><code class="docutils literal notranslate"><span class="pre">ProbAttention.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.kernel_size"><code class="docutils literal notranslate"><span class="pre">ProbAttention.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.out_channels"><code class="docutils literal notranslate"><span class="pre">ProbAttention.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.padding"><code class="docutils literal notranslate"><span class="pre">ProbAttention.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.padding_mode"><code class="docutils literal notranslate"><span class="pre">ProbAttention.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.return"><code class="docutils literal notranslate"><span class="pre">ProbAttention.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ProbAttention.training"><code class="docutils literal notranslate"><span class="pre">ProbAttention.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer"><code class="docutils literal notranslate"><span class="pre">ReformerLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.bias"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.fit_length"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.fit_length()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.forward"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.groups"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.padding"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.return"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.SelfAttention_Family.ReformerLayer.training"><code class="docutils literal notranslate"><span class="pre">ReformerLayer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer.Transformer">models.Transformer.Transformer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer"><code class="docutils literal notranslate"><span class="pre">Transformer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.bias"><code class="docutils literal notranslate"><span class="pre">Transformer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.forward"><code class="docutils literal notranslate"><span class="pre">Transformer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.groups"><code class="docutils literal notranslate"><span class="pre">Transformer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.in_channels"><code class="docutils literal notranslate"><span class="pre">Transformer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.kernel_size"><code class="docutils literal notranslate"><span class="pre">Transformer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.out_channels"><code class="docutils literal notranslate"><span class="pre">Transformer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.padding"><code class="docutils literal notranslate"><span class="pre">Transformer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.padding_mode"><code class="docutils literal notranslate"><span class="pre">Transformer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.return"><code class="docutils literal notranslate"><span class="pre">Transformer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer.Transformer.training"><code class="docutils literal notranslate"><span class="pre">Transformer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer.Transformer_EncDec">models.Transformer.Transformer_EncDec module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer"><code class="docutils literal notranslate"><span class="pre">ConvLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.bias"><code class="docutils literal notranslate"><span class="pre">ConvLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.forward"><code class="docutils literal notranslate"><span class="pre">ConvLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.groups"><code class="docutils literal notranslate"><span class="pre">ConvLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">ConvLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">ConvLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">ConvLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.padding"><code class="docutils literal notranslate"><span class="pre">ConvLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">ConvLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.return"><code class="docutils literal notranslate"><span class="pre">ConvLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.ConvLayer.training"><code class="docutils literal notranslate"><span class="pre">ConvLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder"><code class="docutils literal notranslate"><span class="pre">Decoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.bias"><code class="docutils literal notranslate"><span class="pre">Decoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.forward"><code class="docutils literal notranslate"><span class="pre">Decoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.groups"><code class="docutils literal notranslate"><span class="pre">Decoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Decoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Decoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.padding"><code class="docutils literal notranslate"><span class="pre">Decoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Decoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.return"><code class="docutils literal notranslate"><span class="pre">Decoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Decoder.training"><code class="docutils literal notranslate"><span class="pre">Decoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer"><code class="docutils literal notranslate"><span class="pre">DecoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.return"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.DecoderLayer.training"><code class="docutils literal notranslate"><span class="pre">DecoderLayer.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder"><code class="docutils literal notranslate"><span class="pre">Encoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.bias"><code class="docutils literal notranslate"><span class="pre">Encoder.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.forward"><code class="docutils literal notranslate"><span class="pre">Encoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.groups"><code class="docutils literal notranslate"><span class="pre">Encoder.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.in_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.kernel_size"><code class="docutils literal notranslate"><span class="pre">Encoder.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.out_channels"><code class="docutils literal notranslate"><span class="pre">Encoder.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.padding"><code class="docutils literal notranslate"><span class="pre">Encoder.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.padding_mode"><code class="docutils literal notranslate"><span class="pre">Encoder.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.return"><code class="docutils literal notranslate"><span class="pre">Encoder.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.Encoder.training"><code class="docutils literal notranslate"><span class="pre">Encoder.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer"><code class="docutils literal notranslate"><span class="pre">EncoderLayer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.bias"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.bias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.groups"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.in_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.in_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.kernel_size"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.kernel_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.out_channels"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.out_channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.padding"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.padding_mode"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.padding_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.return"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.return</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.Transformer.html#models.Transformer.Transformer_EncDec.EncoderLayer.training"><code class="docutils literal notranslate"><span class="pre">EncoderLayer.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.Transformer.html#module-models.Transformer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-models" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="experiments.html" class="btn btn-neutral float-left" title="experiments package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models.Autoformer.html" class="btn btn-neutral float-right" title="models.Autoformer package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, ..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
