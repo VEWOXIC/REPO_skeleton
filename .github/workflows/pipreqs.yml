@@ -1,7 +1,7 @@
 name: Generate requirement.txt
 on: [push, pull_request]
 jobs:
-  python-code-format:
+  gen-requirement:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
