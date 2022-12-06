@@ -1,0 +1,73 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":8,
+            "epochs":100,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":8,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":8,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cpu"
+    },
+
+    "model": {
+        "model_name":"RNN",
+        "horizon": 24,
+        "window_size": 48,
+        "c_in": 48,
+        "hidden_size": 100,
+        "n_layers": 1,
+        "c_out": 24,
+        "rnn_dropout": 0,
+        "fc_dropout": 0,
+        "bidirectional": false,
+        "bias": true,
+        "positionalEcoding": false,
+        "modified": true,
+        "input_len_seg": 0,
+        "RIN": false,
+        "UseTimeFeature": false
+    },
+    "data": {
+        "exp_id": false,
+        "dataset_name":"solar_AL",
+        "path":"./datasets/solar_AL.txt",
+        "lookback":48,
+        "horizon":24,
+        "channel":137,        
+        "normalize": 2,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "scalar":"StandardScalar",
+        "freq": "h"
+    }
+}
+
