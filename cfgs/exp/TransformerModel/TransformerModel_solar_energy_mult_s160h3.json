@@ -1,0 +1,69 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":256,
+            "epochs":150,
+            "lr":0.0001,
+            "lr_adj":2,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":256,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":256,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true 
+        },
+        "device":"cuda"
+    }, 
+
+    "model": {
+        "model_name":"TransformerModel",
+        "horizon": 24,
+        "window_size": 48,
+        "c_in": 48,
+        "c_out": 24,
+        "d_model": 24, 
+        "n_head": 1, 
+        "d_ffn": 128, 
+        "n_layers": 1,
+        "dropout": 0.1,
+        "activation":"relu", 
+        "UseTimeFeature": false
+    },
+
+    "data": {
+        "exp_id": false,
+        "dataset_name":"solar_AL",
+        "path":"./datasets/solar_AL.txt",
+        "lookback":48,
+        "horizon":24,
+        "channel":137,        
+        "normalize": 2,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "scalar":"StandardScalar",
+        "freq": "h"
+    }
+}

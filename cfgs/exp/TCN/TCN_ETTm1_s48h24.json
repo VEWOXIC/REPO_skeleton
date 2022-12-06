@@ -1,0 +1,68 @@
+{
+    "exp":{
+        "train":{
+            "training": true,
+            "saved_model": true,
+            "batchsize":8,
+            "epochs":100,
+            "lr":0.001,
+            "lr_adj":1,
+            "shuffle": true,
+            "drop_last": true,
+            "optimizer": "adam",
+            "loss": "mae",
+            "patience": 7,
+            "verbose": true,
+            "delta": 0
+        },
+        "valid":{
+            "batchsize":8,
+            "shuffle": true,
+            "drop_last": true
+        },
+        "test":{
+            "batchsize":8,
+            "shuffle": false,
+            "drop_last": true
+        },
+        "metrics":{
+            "MSE": true,
+            "MAE": true,
+            "RMSE": true,
+            "MAPE": true,
+            "RSE": true,
+            "CORR": true
+        },
+        "device":"cuda"
+    },
+
+    "model":{
+        "model_name":"TCN",
+        "num_layers":1,
+        "batchsize":8,
+        "c_in": 48,
+        "c_out": 24,
+        "layers": [25, 25, 25, 25, 25, 25, 25, 25], 
+        "ks": 7, 
+        "conv_dropout": 0.0, 
+        "fc_dropout": 0.0,
+        "UseTimeFeature": false
+    },
+
+    "data":{   
+        "dataset_name":"ETTm1",
+        "path":"./datasets/ETTm1.csv",
+        "freq": "h",
+        "lookback":48,
+        "horizon":24,
+        "channel":7,
+        "normalize": 3,
+        "train_ratio":0.6,
+        "valid_ratio":0.2,
+        "test_ratio":0.2,
+        "multivariate":true,
+        "target": "OT",
+        "scalar":"StandardScalar"
+    }
+    
+}
