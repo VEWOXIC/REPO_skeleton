@@ -4,8 +4,14 @@ import os
 import random
 from experiments.exp_basic import *
 from datetime import datetime
+import argparse
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Autoformer & Transformer family for Time Series Forecasting')
+    
+    parser.add_argument('--cfg_file', type=str, required=True, default='NA', help='path to the config file')
+    
+    args = parser.parse_args()
     # if os.paths.exists()
     # with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_Electricity.json','r') as f:
@@ -17,7 +23,7 @@ if __name__ == '__main__':
     # with open('cfgs/exp/MTGNN/MTGNN_PEMS03.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_exchange_rate.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_metr_la.json','r') as f:
-    with open('cfgs/exp/MTGNN/MTGNN_WTH.json','r') as f:
+    with open(args.cfg_file,'r') as f:
         cfg =json.load(f)
     # else
 
