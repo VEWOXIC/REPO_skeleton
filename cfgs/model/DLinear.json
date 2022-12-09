@@ -1,0 +1,8 @@
+{
+    "model_name":"DLinear",
+    "seq_len":96 ,
+    "pred_len": 96 ,
+    "individual":true,
+    "enc_in":7,
+    "UseTimeFeature": false
+}
