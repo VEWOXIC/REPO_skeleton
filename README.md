@@ -2,7 +2,6 @@
 
 This repository offers a large collection of forecasting models ranging from classic networks like MLP, RNNs to novel proven contributions like NBEATS, TFT and other architectures. 
 
-
 ## Dataset
 We conduct the experiments on **7** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 , ETTm1 and ETTm2) , and Solar-Energy, Electricity and Exchange Rate**, from **power, energy, finance and traffic domains**. 
 
@@ -74,6 +73,21 @@ The data directory structure is shown as follows.
     │   ├── solar_AL.txt
     
 ```
+
+### Quick start
+
+This project provide highly customizable time-series model training backbone. If you want to configure your model manually, please refer to our example json config files under the path `cfgs/`, which will give you some insight about how to write a json config file. To use a custom dataset, you could put the dataset file under the `datasets/` directory for better file management, then don't forget to specify the path in the config file. After that, you just have to tell the program where to find your config file. Here is an example:
+
+```
+$ python run.py --cfg_file 'path_to_your_json_file.json'
+```
+
+However, if you want to try out with our provided examples, you can run something like:
+
+```
+$ python run.py --cfg_file 'cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json'
+```
+The above demo trains with a SCINet model and a Electricity Transformer Temperature dataset.
 
 ## Features
 * **Forecasting Models:** A large collection of forecasting models; from transformer models (such as 
