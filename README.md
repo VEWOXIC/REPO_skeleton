@@ -82,11 +82,16 @@ This project provide highly customizable time-series model training backbone. If
 $ python run.py --cfg_file 'path_to_your_json_file.json'
 ```
 
-However, if you want to try out with our provided examples, you can run something like:
+However, if you want to try out with our provided examples, you can follow the steps below:
 
+1. Download the our example dataset file from [here](https://github.com/VEWOXIC/REPO_skeleton#dataset-preparation). 
+    * In this demo, we use the `ETTh1.csv` dataset file under the path `dataset/ETT-data/ETT` in our provided link.
+2. Put the dataset file under `datasets/` directory.
+3. run the program: 
 ```
 $ python run.py --cfg_file 'cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json'
 ```
+
 The above demo trains with a SCINet model and a Electricity Transformer Temperature dataset.
 
 ## Features
