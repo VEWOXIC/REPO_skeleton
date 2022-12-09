@@ -76,7 +76,7 @@ The data directory structure is shown as follows.
 
 ### Quick start
 
-This project provide highly customizable time-series model training backbone. If you want to configure your model manually, please refer to our example json config files under the path `cfgs/`, which will give you some insight about how to write a json config file. To use a custom dataset, you could put the dataset file under the `datasets/` directory for better file management, then don't forget to specify the path in the config file. Remember to also install the dependencies, follow the steps [here](https://github.com/VEWOXIC/REPO_skeleton##requirements). After that, you just have to tell the program where to find your config file. Here is an example:
+This project provides highly customizable time-series model training backbone. If you want to configure your model manually, please refer to our example json config files under the path `cfgs/`, which will give you some insight about how to write a json config file. To use a custom dataset, you can put the dataset file under the `datasets/` directory for better file management, then don't forget to specify the path in the config file. Remember to also install the dependencies, follow the steps [here](https://github.com/VEWOXIC/REPO_skeleton##requirements). After that, you just have to tell the program where to find your config file. Here is an example:
 
 ```
 $ python run.py --cfg_file 'path_to_your_json_file.json'
