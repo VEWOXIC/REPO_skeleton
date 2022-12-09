@@ -78,7 +78,7 @@ The data directory structure is shown as follows.
 This project provides highly customizable time-series model training backbone. If you want to configure your model manually, please refer to our example json config files under the path `cfgs/`, which will give you some insight about how to write a json config file. To use a custom dataset, you can put the dataset file under the `datasets/` directory for better file management, then don't forget to specify the path in the config file. Remember to also install the dependencies, follow the steps [here](https://github.com/VEWOXIC/REPO_skeleton##requirements). After that, you just have to tell the program where to find your config file. Here is an example:
 
 ```
-$ python run.py --cfg_file 'path_to_your_json_file.json'
+python run.py --cfg_file 'path_to_your_json_file.json'
 ```
 
 However, if you want to try out with our provided examples, you can follow the steps below:
@@ -89,7 +89,7 @@ However, if you want to try out with our provided examples, you can follow the s
 3. Follow the steps in the [requirements](https://github.com/VEWOXIC/REPO_skeleton##requirements) section to install the dependencies.
 4. Run the program with the following commands: 
 ```
-$ python run.py --cfg_file 'cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json'
+python run.py --cfg_file 'cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json'
 ```
 
 The above demo trains with a SCINet model and a Electricity Transformer Temperature dataset. 
