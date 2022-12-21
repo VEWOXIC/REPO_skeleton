@@ -1,6 +1,48 @@
-# Repo_skeleton
+# TSF Skeleton
 
-This repository offers a large collection of forecasting models ranging from classic networks like MLP, RNNs to novel proven contributions like NBEATS, TFT and other architectures. 
+This project provides a highly customizable time-series forecasting (TSF) pipeline. It also includes a large collection of forecasting baseline models ranging from basic MLP, RNN to novel Transformer-based models and DLinear. 
+
+## Why?
+
+During our research on the Time-series forecasting topic, we find that the open-source repositories often adopts totally different pipeline, which takes a lot of time to read and debug just in order to run a baseline experiment on it. Recently, we find that a series of work prefer to develop on our repository [LSTF-Linear](https://github.com/cure-lab/LTSF-Linear). Thus, we make the TSF Skeleton based on it as a baseline repository and a easy to use pipeline. 
+
+
+
+## Features
+* **Baseline Results:** We validate every models in this repository to make sure the [results](#results) is similiar to the original implementation. You can also directly run these model with costomized experiment settings. 
+* **Simple Pipeline: ** We keep the pipeline as concise as possible. So that you can make modification and realize your idea without too much learning cost. 
+* **Forecasting Models:** A large collection of forecasting models; from transformer models (such as 
+ Informer) to deep learning models (such as RNN). See [table of models below](#forecasting-models).
+* **Multivariate Support:** Datasets contain multiple time-varying dimensions instead of a single scalar value. Many models can consume and produce multivariate series.
+* **Regression Models:** It is possible to plug-in any scikit-learn compatible model
+  to obtain forecasts as functions of lagged values of the target series and covariates.
+* **Data processing:**  This repository has its own dataloader to preprocess the datasets. 
+* **Metrics:** A variety of metrics for evaluating time series' goodness of fit;
+  from RMSE to Mean Absolute Scaled Error.
+* **Datasets** In the dataset folder, we offer some popular time series datasets for rapid
+  experimentation (such as ETT).
+* **cfgs sysyem**  In this repository, we create a unique configuration file system. we have provided paremeters of all available datasets, models and expression files. All parameters initially are default. You can also change it according to your needs.
+* **Documentation (Working on): ** We provide detailed documentation about not only how to use, but also how to develop based on TSF Skeleton. 
+
+## Forecasting Models
+
+Here's a breakdown of the forecasting models in our current repository . We are constantly working
+on bringing more models and features.
+
+Model | Univariate | Multivariate |UseTimeFeature| Reference|
+--- | --- | --- | --- | ---| 
+`RNN` | ✅ | ✅ |  | [DeepAR paper](https://arxiv.org/abs/1704.04110)
+`SCINet` | ✅ | ✅ |  |[SCINet paper](https://arxiv.org/pdf/2106.09305.pdf)|
+`MTGNN` | ✅ | ✅ | ✅ | [MTGNN paper](https://arxiv.org/abs/2005.11650)
+`InceptionTime` | ✅ | ✅ | | [InceptionTime paper](https://arxiv.org/pdf/1909.04939.pdf)
+`STGCN`  | ✅ | ✅ | ✅ |[STGCN paper](https://www.ijcai.org/proceedings/2018/0505)
+`FNN` | ✅ | ✅ | ✅ |[FNN paper](https://arxiv.org/abs/2002.05909)|
+`DCRNN` | ✅ | ✅ | ✅ |[DCRNN paper](https://arxiv.org/abs/1707.01926)|
+`Autoformer` | ✅ | ✅ | ✅ |[Autoformer paper](https://arxiv.org/abs/2106.13008)|
+`MLP` | ✅ | ✅ |  ||
+`gMLP` | ✅ | ✅ |  ||
+`ResNet` | ✅ | ✅ |  |[ResNet paper](https://arxiv.org/abs/1512.03385)|
+`TCN` | ✅ | ✅ |  |[TCN paper](https://github.com/locuslab/TCN)|
 
 ## Dataset
 We conduct the experiments on **7** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 , ETTm1 and ETTm2) , and Solar-Energy, Electricity and Exchange Rate**, from **power, energy, finance and traffic domains**. 
@@ -94,52 +136,6 @@ python run.py --cfg_file 'cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json'
 
 The above demo trains with a SCINet model and a Electricity Transformer Temperature dataset. 
   * Details can be found in the config file `cfgs/exp/SCINet/SCINet_ETTh1_mult_s48h24.json`.
-
-## Features
-* **Forecasting Models:** A large collection of forecasting models; from transformer models (such as 
- Informer) to deep learning models (such as RNN). See [table of models below](#forecasting-models).
-* **Multivariate Support:** Datasets contain multiple time-varying dimensions instead of a single scalar value. Many models can consume and produce multivariate series.
-* **Regression Models:** It is possible to plug-in any scikit-learn compatible model
-  to obtain forecasts as functions of lagged values of the target series and covariates.
-* **Data processing:**  This repository has its own dataloader to preprocess the datasets. 
-* **Metrics:** A variety of metrics for evaluating time series' goodness of fit;
-  from RMSE to Mean Absolute Scaled Error.
-* **Datasets** In the dataset folder, we offer some popular time series datasets for rapid
-  experimentation (such as ETT).
-* **cfgs sysyem**  In this repository, we create a unique configuration file system. we have provided paremeters of all available datasets, models and expression files. All parameters initially are default. You can also change it according to your needs.
-
-## Forecasting Models
-
-Here's a breakdown of the forecasting models in our current repository . We are constantly working
-on bringing more models and features.
-
-Model | Univariate | Multivariate |UseTimeFeature| Reference|
---- | --- | --- | --- | ---| 
-`RNN` | ✅ | ✅ |  | [DeepAR paper](https://arxiv.org/abs/1704.04110)
-`SCINet` | ✅ | ✅ |  |[SCINet paper](https://arxiv.org/pdf/2106.09305.pdf)|
-`MTGNN` | ✅ | ✅ | ✅ | [MTGNN paper](https://arxiv.org/abs/2005.11650)
-`InceptionTime` | ✅ | ✅ | | [InceptionTime paper](https://arxiv.org/pdf/1909.04939.pdf)
-`TransformerModel` | ✅ | ✅ | ✅ | |
-`STGCN`  | ✅ | ✅ | ✅ |[STGCN paper](https://www.ijcai.org/proceedings/2018/0505)
-`Seq2Seq` | ✅ | ✅ | ✅ ||
-`FNN` | ✅ | ✅ | ✅ |[FNN paper](https://arxiv.org/abs/2002.05909)|
-`DCRNN` | ✅ | ✅ | ✅ |[DCRNN paper](https://arxiv.org/abs/1707.01926)|
-`AutoEncoder` | ✅ | ✅ | ✅ ||
-`Autoformer` | ✅ | ✅ | ✅ |[Autoformer paper](https://arxiv.org/abs/2106.13008)|
-`MLP` | ✅ | ✅ |  ||
-`gMLP` | ✅ | ✅ |  ||
-`FCN` | ✅ | ✅ |  ||
-`ResNet` | ✅ | ✅ |  |[ResNet paper](https://arxiv.org/abs/1512.03385)|
-`ResCNN` | ✅ | ✅ |  ||
-`TCN` | ✅ | ✅ |  |[TCN paper](https://github.com/locuslab/TCN)|
-`OmniScaleCNN` | ✅ | ✅ |  ||
-`XCM` | ✅ | ✅ |  ||
-`TST` | ✅ | ✅ |  ||
-
-## Why?
-
-Unfortunately, available implementations and published research nowadays are mainly to realize neural networks' potential on certain datasets. Therefore, a respository is essential to test performances of models on various datasets, which ultimately generates the optimal choice.
-
 
 
 ## Results
