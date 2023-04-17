@@ -11,16 +11,6 @@ if __name__ == '__main__':
     parser.add_argument('--cfg_file', type=str, required=True, default='NA', help='path to the config file')
     
     args = parser.parse_args()
-    # if os.paths.exists()
-    # with open('cfgs/exp/MTGNN/MTGNN_yellow_taxi_2022-01.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_Electricity.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_Traffic.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_solar_AL.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_wiki_rolling_nips.json','r') as f:
-    # with open('cfgs/exp/SCINet/SCINet_wind.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_ETTh1_example.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_PEMS03.json','r') as f:
-    # with open('cfgs/exp/MTGNN/MTGNN_exchange_rate.json','r') as f:
     # with open('cfgs/exp/MTGNN/MTGNN_metr_la.json','r') as f:
     with open(args.cfg_file,'r') as f:
         cfg =json.load(f)
