@@ -48,7 +48,6 @@ class _ResCNNBlock(Module):
 
 class ResCNN(Module):
     def __init__(self, cfg, coord=False, separable=False, zero_norm=False):
-
         c_in = cfg["model"]["c_in"]
         c_out = cfg["model"]["c_out"]
         nf = cfg["model"]["nf"]

@@ -49,7 +49,6 @@ class build_layer_with_layer_parameter(Module):
             self.conv_list.append(conv)
 
     def forward(self, x):
-
         conv_result_list = []
         for conv in self.conv_list:
             conv_result = conv(x)
@@ -61,7 +60,6 @@ class build_layer_with_layer_parameter(Module):
 
 class OmniScaleCNN(Module):
     def __init__(self, cfg):
-
         c_in = cfg["model"]["c_in"]
         c_out = cfg["model"]["c_out"]
         seq_len = cfg["model"]["seq_len"]
