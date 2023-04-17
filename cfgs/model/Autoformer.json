@@ -14,5 +14,8 @@
     "factor":"1",
     "dropout":"0.05",
     "embed":"timeF",
-    "activation":"gelu"
+    "activation":"gelu",
+    "seq_len" :"96",
+    "label_len":"48",
+    "pred_len":"96"
 }
