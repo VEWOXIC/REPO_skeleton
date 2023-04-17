@@ -119,7 +119,6 @@ class Dataset_Custom(Dataset):
         return data_stamp
 
     def __read_data__(self):
-
         self.scaler = data_utils.get_scaler(self.cfg["data"]["scalar"])
         path = self.cfg["data"]["path"]
 
@@ -197,9 +196,11 @@ class Dataset_Custom(Dataset):
 
     def __getitem__(self, index):
         # some model use time stamp
-        x = self.data[index: index + self.lookback] # seq_len->lookback, seq_len-label_len->lookback, seq_len+pred_len->horizon
+        # seq_len->lookback, seq_len-label_len->lookback,
+        # seq_len+pred_len->horizon
+        x = self.data[index: index + self.lookback]
         y = self.data[index +
-                      self.lookback: index + 
+                      self.lookback: index +
                       self.lookback +
                       self.horizon]
         if self.cfg["model"]["UseTimeFeature"]:

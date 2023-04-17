@@ -922,7 +922,6 @@ class TimeDistributed(nn.Module):
         self.batch_first = batch_first
 
     def forward(self, x):
-
         if len(x.size()) <= 2:
             return self.module(x)
 
@@ -1063,7 +1062,8 @@ class AdaptiveWeightedAvgPool1d(Module):
     """Global Pooling layer that performs a weighted average along the temporal axis
 
     It can be considered as a channel-wise form of local temporal attention. Inspired by the paper:
-    Hyun, J., Seong, H., & Kim, E. (2019). Universal Pooling--A New Pooling Method for Convolutional Neural Networks. arXiv preprint arXiv:1907.11440."""
+    Hyun, J., Seong, H., & Kim, E. (2019). Universal Pooling--A New Pooling Method for Convolutional Neural Networks. arXiv preprint arXiv:1907.11440.
+    """
 
     def __init__(
         self,
@@ -1474,7 +1474,6 @@ class create_conv_lin_nd_head(nn.Sequential):
         fc_dropout=0.0,
         **kwargs,
     ):
-
         assert d, "you cannot use an nd head when d is None or 0"
         if is_listy(d):
             fd = 1
@@ -1524,7 +1523,6 @@ class create_lin_nd_head(nn.Sequential):
     "Module to create a nd output head with linear layers"
 
     def __init__(self, n_in, n_out, seq_len, d, use_bn=False, fc_dropout=0.0):
-
         assert d, "you cannot use an nd head when d is None or 0"
         if is_listy(d):
             fd = 1
@@ -1834,7 +1832,6 @@ class MultiheadAttention(Module):
         key_padding_mask: Optional[Tensor] = None,
         attn_mask: Optional[Tensor] = None,
     ):
-
         bs = Q.size(0)
         if K is None:
             K = Q

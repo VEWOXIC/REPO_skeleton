@@ -85,7 +85,6 @@ def TemporalConvNet(c_in, layers, ks=2, dropout=0.0):
 
 class TCN(Module):
     def __init__(self, cfg):
-
         c_in = cfg["model"]["c_in"]
         c_out = cfg["model"]["c_out"]
         layers = cfg["model"]["layers"]

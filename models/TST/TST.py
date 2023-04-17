@@ -15,7 +15,6 @@ class _ScaledDotProductAttention(Module):
             k: Tensor,
             v: Tensor,
             mask: Optional[Tensor] = None):
-
         # MatMul (q, k) - similarity scores for all pairs of positions in an
         # input sequence
         scores = torch.matmul(q, k)  # scores : [bs x n_heads x q_len x q_len]
@@ -58,7 +57,6 @@ class _MultiHeadAttention(Module):
             K: Tensor,
             V: Tensor,
             mask: Optional[Tensor] = None):
-
         bs = Q.size(0)
 
         # Linear (+ split in multiple heads)
@@ -114,7 +112,6 @@ class _TSTEncoderLayer(Module):
         dropout: float = 0.1,
         activation: str = "gelu",
     ):
-
         assert (
             d_model // n_heads
         ), f"d_model ({d_model}) must be divisible by n_heads ({n_heads})"
@@ -145,11 +142,10 @@ class _TSTEncoderLayer(Module):
         )
 
     def forward(self, src: Tensor, mask: Optional[Tensor] = None) -> Tensor:
-
         # Multi-Head attention sublayer
         # Multi-Head attention
         src2, attn = self.self_attn(src, src, src, mask=mask)
-        ## Add & Norm
+        # Add & Norm
         src = src + self.dropout_attn(
             src2
         )  # Add: residual connection with residual dropout
@@ -158,7 +154,7 @@ class _TSTEncoderLayer(Module):
         # Feed-forward sublayer
         # Position-wise Feed-Forward
         src2 = self.ff(src)
-        ## Add & Norm
+        # Add & Norm
         src = src + self.dropout_ffn(
             src2
         )  # Add: residual connection with residual dropout
@@ -181,7 +177,6 @@ class _TSTEncoder(Module):
         activation="gelu",
         n_layers=1,
     ):
-
         self.layers = nn.ModuleList(
             [
                 _TSTEncoderLayer(
@@ -341,7 +336,6 @@ class TST(Module):
     def forward(
         self, x: Tensor, mask: Optional[Tensor] = None
     ) -> Tensor:  # x: [bs x nvars x q_len]
-
         # Input encoding
         if self.new_q_len:
             # Eq 2        # u: [bs x d_model x q_len] transposed to [bs x q_len

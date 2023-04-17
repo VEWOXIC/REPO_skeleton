@@ -29,7 +29,6 @@ class ResBlock(Module):
 
 class ResNet(Module):
     def __init__(self, cfg):
-
         c_in = cfg["model"]["c_in"]
         c_out = cfg["model"]["c_out"]
         nf = cfg["model"]["nf"]

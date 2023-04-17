@@ -25,7 +25,6 @@ class XCM(Module):
         y_range: tuple = None,
         **kwargs
     ):
-
         c_in = cfg["model"]["c_in"]
         c_out = cfg["model"]["c_out"]
         seq_len = cfg["model"]["seq_len"]
@@ -129,7 +128,6 @@ class XCM(Module):
         figsize=None,
         **kwargs
     ):
-
         att_maps = get_attribution_map(
             self,
             [self.conv2dblock, self.conv1dblock],
