@@ -1,3 +1,5 @@
+
+
 {
     "exp":{
         "train":{
@@ -52,18 +54,20 @@
         "dropout":0.05,
         "embed":"timeF",
         "activation":"gelu",
-        "pred_len":24,
-        "label_len":24,
         "output_attention":true,
         "freq": "h",
+        "label_len" : 48,
+        "pred_len" : 24,
+        "seq_len" : 96,
         "use_amp": false,
         "UseTimeFeature": true
     },
     "data": {
         "dataset_name":"ETTh1",
         "path":"./datasets/ETTh1.csv",
-        "lookback":24,
-        "horizon":48,
+        "lookback":96,
+        "horizon":96,
+        "label_len":48,
         "channel":7,
         "normalize": 3,
         "train_ratio":0.6,

@@ -30,7 +30,6 @@ class Dataset_Custom(Dataset):
         self.horizon = cfg["data"]["horizon"]
         self.timeStampFreq = cfg["data"]["freq"]  # Choose a time feature
         self.normalize = cfg["data"]["normalize"]
-
         self.__read_data__()
         # need to be implemented
         # transformer based methods have label_len
@@ -198,12 +197,11 @@ class Dataset_Custom(Dataset):
 
     def __getitem__(self, index):
         # some model use time stamp
-        x = self.data[index: index + self.lookback]
+        x = self.data[index: index + self.lookback] # seq_len->lookback, seq_len-label_len->lookback, seq_len+pred_len->horizon
         y = self.data[index +
-                      self.lookback: index +
+                      self.lookback: index + 
                       self.lookback +
                       self.horizon]
-
         if self.cfg["model"]["UseTimeFeature"]:
             timestamp_x = self.data_stamp[index: index + self.lookback]
             timestamp_y = self.data_stamp[
