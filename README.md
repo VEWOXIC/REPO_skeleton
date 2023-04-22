@@ -89,8 +89,8 @@ Install the required package first:
 
 ```
 cd REPO_skeleton
-conda create -n REPO_skeleton python=3.8
-conda activate REPO_skeleton
+conda create -n tsf_env python=3.8
+conda activate tsf_env
 pip install -r requirements.txt
 ```
 
