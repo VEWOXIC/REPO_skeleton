@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>utils.timefeatures &mdash; REPO_skeleton . documentation</title>
+  <title>utils.timefeatures &mdash; TSF-Skeleton 1.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -11,9 +11,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -26,11 +23,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> REPO_skeleton
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            TSF-Skeleton
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -38,7 +39,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">REPO_skeleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">TSF-Skeleton-Repository</a></li>
 </ul>
 
         </div>
@@ -47,14 +48,14 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">REPO_skeleton</a>
+          <a href="../../index.html">TSF-Skeleton</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
       <li class="breadcrumb-item active">utils.timefeatures</li>
       <li class="wy-breadcrumbs-aside">
@@ -86,63 +87,63 @@
 
 
 <div class="viewcode-block" id="SecondOfMinute"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.SecondOfMinute">[docs]</a><span class="k">class</span> <span class="nc">SecondOfMinute</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Minute of hour encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minute of hour encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">index</span><span class="o">.</span><span class="n">second</span> <span class="o">/</span> <span class="mf">59.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="MinuteOfHour"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.MinuteOfHour">[docs]</a><span class="k">class</span> <span class="nc">MinuteOfHour</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Minute of hour encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minute of hour encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">index</span><span class="o">.</span><span class="n">minute</span> <span class="o">/</span> <span class="mf">59.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="HourOfDay"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.HourOfDay">[docs]</a><span class="k">class</span> <span class="nc">HourOfDay</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Hour of day encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hour of day encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">index</span><span class="o">.</span><span class="n">hour</span> <span class="o">/</span> <span class="mf">23.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="DayOfWeek"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.DayOfWeek">[docs]</a><span class="k">class</span> <span class="nc">DayOfWeek</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Hour of day encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hour of day encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">index</span><span class="o">.</span><span class="n">dayofweek</span> <span class="o">/</span> <span class="mf">6.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="DayOfMonth"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.DayOfMonth">[docs]</a><span class="k">class</span> <span class="nc">DayOfMonth</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Day of month encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Day of month encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">day</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">30.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="DayOfYear"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.DayOfYear">[docs]</a><span class="k">class</span> <span class="nc">DayOfYear</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Day of year encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Day of year encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">dayofyear</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">365.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="MonthOfYear"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.MonthOfYear">[docs]</a><span class="k">class</span> <span class="nc">MonthOfYear</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Month of year encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Month of year encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">11.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="WeekOfYear"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.WeekOfYear">[docs]</a><span class="k">class</span> <span class="nc">WeekOfYear</span><span class="p">(</span><span class="n">TimeFeature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Week of year encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Week of year encoded as value between [-0.5, 0.5]&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()</span><span class="o">.</span><span class="n">week</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">52.0</span> <span class="o">-</span> <span class="mf">0.5</span></div>
 
 
 <div class="viewcode-block" id="time_features_from_frequency_str"><a class="viewcode-back" href="../../utils.html#utils.timefeatures.time_features_from_frequency_str">[docs]</a><span class="k">def</span> <span class="nf">time_features_from_frequency_str</span><span class="p">(</span><span class="n">freq_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TimeFeature</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a list of time features that will be appropriate for the given frequency string.</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -182,7 +183,7 @@
             <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="p">()</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">feature_classes</span><span class="p">]</span>
 
     <span class="n">supported_freq_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    Unsupported frequency </span><span class="si">{</span><span class="n">freq_str</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">    Unsupported frequency </span><span class="si">{</span><span class="n">freq_str</span><span class="si">}</span>
 <span class="s2">    The following frequencies are supported:</span>
 <span class="s2">        Y   - yearly</span>
 <span class="s2">            alias: A</span>
@@ -210,7 +211,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, ..</p>
+    <p>&#169; Copyright 2023, Multiple Authors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

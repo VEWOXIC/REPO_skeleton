@@ -12,6 +12,10 @@ from utils.metrics import metric
 
 
 class Exp_Basic(object):
+    """
+    This is a class for running the basic setting of experiments.
+    """
+
     def __init__(self, cfg, model_save_dir) -> None:
         self.cfg = cfg
         self.device = torch.device(cfg["exp"]["device"])

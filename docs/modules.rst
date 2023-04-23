@@ -1,4 +1,4 @@
-REPO_skeleton
+TSF-Skeleton-Repository
 =============
 
 .. toctree::
