@@ -40,8 +40,7 @@ class AutoEncoder(nn.Module):
     """
 
     def __init__(self, cfg):
-        """Constructor method
-        """
+        """Constructor method"""
         nn.Module.__init__(self)
         self.cfg = cfg
         self.num_nodes = cfg["model"]["num_nodes"]
